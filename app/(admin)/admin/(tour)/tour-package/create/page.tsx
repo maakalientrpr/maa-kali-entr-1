@@ -66,7 +66,6 @@ const tourSchema = z.object({
     .string()
     .refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }),
 
-  // coerce number ensures we accept numeric strings if any slip through
   totalSeats: z.coerce.number().min(1, "At least 1 seat required"),
   durationNights: z.coerce.number().min(0),
   durationDays: z.coerce.number().min(1),
@@ -117,7 +116,6 @@ const generateSlug = (title: string) =>
 //
 
 interface NumberInputProps {
-  // We use FieldValues generic to allow this wrapper to work with any form field
   field: ControllerRenderProps<FieldValues, any> | any;
   placeholder?: string;
   min?: number;
@@ -135,7 +133,6 @@ function NumberInputWrapper({
   return (
     <Input
       type="number"
-      // Handle potential null/undefined values gracefully
       value={
         field.value === undefined || field.value === null
           ? ""
@@ -153,14 +150,12 @@ function NumberInputWrapper({
   );
 }
 
-// Define the shape of the Cloudinary Info object
 interface CloudinaryResultInfo {
   secure_url: string;
   [key: string]: any;
 }
 
 function ImageUploader({ onUpload }: { onUpload: (url: string) => void }) {
-  // Fix: Ensure this is always a string, fallback to empty string to satisfy TS
   const UPLOAD_PRESET =
     process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
 
@@ -168,12 +163,9 @@ function ImageUploader({ onUpload }: { onUpload: (url: string) => void }) {
     <CldUploadWidget
       uploadPreset={UPLOAD_PRESET}
       onSuccess={(result: CloudinaryUploadWidgetResults) => {
-        // 1. Strict Type Check: Ensure 'info' is an object containing secure_url
-        const info = result.info as CloudinaryResultInfo; // Type assertion
-
+        const info = result.info as CloudinaryResultInfo;
         if (typeof info === "object" && info?.secure_url) {
-          const url = info.secure_url;
-          onUpload(url);
+          onUpload(info.secure_url);
           toast.success("Image uploaded successfully");
         }
       }}
@@ -203,7 +195,7 @@ export default function CreateTourPage() {
   const [isSamePrice, setIsSamePrice] = useState(false);
   const [slugTouched, setSlugTouched] = useState(false);
 
-  const form = useForm<TourFormValues>({
+  const form = useForm({
     resolver: zodResolver(tourSchema),
     defaultValues: {
       title: "",
@@ -229,21 +221,19 @@ export default function CreateTourPage() {
     handleSubmit,
     setValue,
     watch,
+    getValues, // <--- CHANGED: Destructured getValues here
     formState: { isSubmitting },
   } = form;
 
-  // Field arrays
-  const pickup = useFieldArray({ control, name: "pickupPoints" });
-  const inc = useFieldArray({ control, name: "inclusions" });
-  const exc = useFieldArray({ control, name: "exclusions" });
-  const imgs = useFieldArray({ control, name: "images" });
-  const itin = useFieldArray({ control, name: "itinerary" });
+  const pickup = useFieldArray({ control, name: "pickupPoints" } as any);
+  const inc = useFieldArray({ control, name: "inclusions" } as any);
+  const exc = useFieldArray({ control, name: "exclusions" } as any);
+  const imgs = useFieldArray({ control, name: "images" } as any);
+  const itin = useFieldArray({ control, name: "itinerary" } as any);
 
-  // watch fields
   const watchedTitle = watch("title");
   const watchedDoublePrice = watch("priceDoubleSharing");
 
-  // Auto-generate slug unless user has manually edited it
   useEffect(() => {
     if (!slugTouched) {
       const slug = generateSlug(watchedTitle || "");
@@ -251,33 +241,27 @@ export default function CreateTourPage() {
         setValue("slug", slug, { shouldTouch: false, shouldValidate: true });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchedTitle]);
+  }, [watchedTitle, slugTouched, setValue]);
 
-  // Sync triple price when checkbox enabled
   useEffect(() => {
     if (isSamePrice) {
-      setValue("priceTripleSharing", parseNumber(watchedDoublePrice), {
+      setValue("priceTripleSharing", Number(watchedDoublePrice), {
         shouldValidate: true,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSamePrice, watchedDoublePrice]);
+  }, [isSamePrice, watchedDoublePrice, setValue]);
 
-  // Helper to append itinerary day
-  const appendDay = (data?: Partial<TourFormValues["itinerary"][number]>) => {
+  const appendDay = () => {
     const nextDay = itin.fields.length + 1;
     itin.append({
-      day: data?.day ?? nextDay,
-      title: data?.title ?? "",
-      description: data?.description ?? "",
+      day: nextDay,
+      title: "",
+      description: "",
     });
   };
 
-  // On submit: format and POST
   const onSubmit = async (data: TourFormValues) => {
     try {
-      // Prepare payload
       const payload = {
         ...data,
         startDate: new Date(data.startDate).toISOString(),
@@ -304,9 +288,6 @@ export default function CreateTourPage() {
     }
   };
 
-  //
-  // ---------------------- Render ----------------------
-  //
   return (
     <div className="min-h-screen bg-slate-50/50 py-12 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
@@ -322,7 +303,6 @@ export default function CreateTourPage() {
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left column */}
               <div className="lg:col-span-2 space-y-8">
                 {/* Basic Details */}
                 <Card className="shadow-sm border-t-4 border-t-orange-600">
@@ -346,9 +326,6 @@ export default function CreateTourPage() {
                             <Input
                               placeholder="e.g. Dubai Extravaganza Dec 25th"
                               {...field}
-                              onChange={(e) => {
-                                field.onChange(e);
-                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -477,10 +454,13 @@ export default function CreateTourPage() {
                                 className="h-8 w-8 text-slate-400 hover:text-red-500 -mt-2 -mr-2"
                                 onClick={() => {
                                   itin.remove(idx);
-                                  // re-number remaining days
-                                  const remaining = itin.getValues();
-                                  remaining.forEach((_, i) => {
-                                    setValue(`itinerary.${i}.day`, i + 1);
+                                  // CHANGED: Use getValues from form, not from field array
+                                  const remaining = getValues("itinerary");
+                                  remaining.forEach((_: any, i: number) => {
+                                    setValue(
+                                      `itinerary.${i}.day` as any,
+                                      i + 1
+                                    );
                                   });
                                 }}
                               >
@@ -538,7 +518,7 @@ export default function CreateTourPage() {
                   </CardContent>
                 </Card>
 
-                {/* Images (Cloudinary + manual) */}
+                {/* Images */}
                 <Card className="shadow-sm border-t-4 border-t-orange-600">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -550,14 +530,12 @@ export default function CreateTourPage() {
                   <CardContent className="space-y-3">
                     <ImageUploader
                       onUpload={(url) => {
-                        // Logic: If the first image slot is empty, update it. Otherwise, append new.
-                        const currentImages = form.getValues("images");
+                        const currentImages = getValues("images");
                         if (
                           currentImages.length === 1 &&
                           !currentImages[0].value
                         ) {
-                          // RHF setValue for array items using dot notation
-                          setValue("images.0.value", url, {
+                          setValue("images.0.value" as any, url, {
                             shouldValidate: true,
                           });
                         } else {
@@ -568,9 +546,9 @@ export default function CreateTourPage() {
 
                     {imgs.fields.map((field, index) => (
                       <div key={field.id} className="flex gap-2 items-center">
-                        {watch(`images.${index}.value`) ? (
+                        {watch(`images.${index}.value` as any) ? (
                           <img
-                            src={watch(`images.${index}.value`)}
+                            src={watch(`images.${index}.value` as any)}
                             className="w-14 h-14 rounded object-cover border"
                             alt={`preview-${index}`}
                           />
