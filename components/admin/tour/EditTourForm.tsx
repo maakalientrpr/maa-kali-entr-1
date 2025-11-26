@@ -107,7 +107,7 @@ type TourDBType = {
   slug: string;
   destination: string;
   description: string;
-  startDate: string;
+  startDate: Date;
   totalSeats: number;
   durationDays: number;
   durationNights: number;
