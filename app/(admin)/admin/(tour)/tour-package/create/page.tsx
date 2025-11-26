@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import {
+  useForm,
+  useFieldArray,
+  ControllerRenderProps,
+  FieldValues,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -111,22 +116,26 @@ const generateSlug = (title: string) =>
 // ---------------------- Small components ----------------------
 //
 
+interface NumberInputProps {
+  // We use FieldValues generic to allow this wrapper to work with any form field
+  field: ControllerRenderProps<FieldValues, any> | any;
+  placeholder?: string;
+  min?: number;
+  disabled?: boolean;
+  className?: string;
+}
+
 function NumberInputWrapper({
   field,
   placeholder,
   min,
   disabled = false,
   className = "",
-}: {
-  field: any;
-  placeholder?: string;
-  min?: number;
-  disabled?: boolean;
-  className?: string;
-}) {
+}: NumberInputProps) {
   return (
     <Input
       type="number"
+      // Handle potential null/undefined values gracefully
       value={
         field.value === undefined || field.value === null
           ? ""
@@ -144,16 +153,26 @@ function NumberInputWrapper({
   );
 }
 
+// Define the shape of the Cloudinary Info object
+interface CloudinaryResultInfo {
+  secure_url: string;
+  [key: string]: any;
+}
+
 function ImageUploader({ onUpload }: { onUpload: (url: string) => void }) {
-  const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+  // Fix: Ensure this is always a string, fallback to empty string to satisfy TS
+  const UPLOAD_PRESET =
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
 
   return (
     <CldUploadWidget
       uploadPreset={UPLOAD_PRESET}
       onSuccess={(result: CloudinaryUploadWidgetResults) => {
         // 1. Strict Type Check: Ensure 'info' is an object containing secure_url
-        if (typeof result.info === "object" && result.info?.secure_url) {
-          const url = result.info.secure_url;
+        const info = result.info as CloudinaryResultInfo; // Type assertion
+
+        if (typeof info === "object" && info?.secure_url) {
+          const url = info.secure_url;
           onUpload(url);
           toast.success("Image uploaded successfully");
         }
@@ -179,10 +198,10 @@ function ImageUploader({ onUpload }: { onUpload: (url: string) => void }) {
 //
 // ---------------------- Main Component ----------------------
 //
-export default function CreateTourPage(): JSX.Element {
+export default function CreateTourPage() {
   const router = useRouter();
   const [isSamePrice, setIsSamePrice] = useState(false);
-  const [slugTouched, setSlugTouched] = useState(false); // if user edited slug manually, stop auto-updating
+  const [slugTouched, setSlugTouched] = useState(false);
 
   const form = useForm<TourFormValues>({
     resolver: zodResolver(tourSchema),
@@ -245,7 +264,7 @@ export default function CreateTourPage(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSamePrice, watchedDoublePrice]);
 
-  // Helper to append itinerary day with correct day number
+  // Helper to append itinerary day
   const appendDay = (data?: Partial<TourFormValues["itinerary"][number]>) => {
     const nextDay = itin.fields.length + 1;
     itin.append({
@@ -529,8 +548,6 @@ export default function CreateTourPage(): JSX.Element {
                   </CardHeader>
 
                   <CardContent className="space-y-3">
-                    {/* Inside your Main Component return */}
-
                     <ImageUploader
                       onUpload={(url) => {
                         // Logic: If the first image slot is empty, update it. Otherwise, append new.
@@ -539,9 +556,12 @@ export default function CreateTourPage(): JSX.Element {
                           currentImages.length === 1 &&
                           !currentImages[0].value
                         ) {
-                          form.setValue("images.0.value", url); // Fill the empty first slot
+                          // RHF setValue for array items using dot notation
+                          setValue("images.0.value", url, {
+                            shouldValidate: true,
+                          });
                         } else {
-                          imgs.append({ value: url }); // Add as new slot
+                          imgs.append({ value: url });
                         }
                       }}
                     />
