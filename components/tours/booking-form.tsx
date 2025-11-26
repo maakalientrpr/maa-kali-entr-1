@@ -199,12 +199,14 @@ const BookingForm = ({
               key={item.id}
               className="p-3 border rounded-lg bg-gray-50 flex flex-col gap-3"
             >
-              <div className="flex gap-3">
+              <div className="flex gap-3 flex-col sm:flex-row">
+
+                <div>
                 <FormField
                   control={form.control}
                   name={`passengers.${index}.name`}
                   render={({ field }) => (
-                    <FormItem className="flex-1">
+                    <FormItem className="flex-2">
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
                         <Input placeholder="John Doe" {...field} />
@@ -213,12 +215,14 @@ const BookingForm = ({
                     </FormItem>
                   )}
                 />
+                </div>
 
+<div className="flex">
                 <FormField
                   control={form.control}
                   name={`passengers.${index}.age`}
                   render={({ field }) => (
-                    <FormItem className="w-24">
+                    <FormItem className="w-24 flex-1">
                       <FormLabel>Age</FormLabel>
                       <FormControl>
                         <Input type="number" min="5" max="100" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
@@ -232,7 +236,7 @@ const BookingForm = ({
                   control={form.control}
                   name={`passengers.${index}.gender`}
                   render={({ field }) => (
-                    <FormItem className="w-32">
+                    <FormItem className="w-32 flex-1">
                       <FormLabel>Gender</FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -253,6 +257,7 @@ const BookingForm = ({
                     </FormItem>
                   )}
                 />
+</div>
               </div>
 
               {index > 0 && (
