@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { email, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,22 +21,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import axios from "axios";
 import { authClient } from "@/lib/auth-client";
-import { LoaderIcon } from "lucide-react";
+import { LoaderIcon, MapPin, Users, IndianRupee } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// Types
+type PickupOption = {
+  id: string;
+  title: string;
+  priceSingleSharing: number;
+  priceDoubleSharing: number | null;
+  priceTripleSharing: number | null;
+};
 
 const formSchema = z
   .object({
+    pickupOptionId: z.string().min(1, "Please select a pickup point"),
+
+    // ✅ FIXED: Use errorMap for custom error messages in Zod Enum
+    sharingType: z.string(),
+
     contactNumber: z
       .string()
       .min(10, "Enter valid contact number")
       .max(10, "Number must be 10 digits"),
-
     panNumber: z.string().optional(),
-
     totalAmount: z.number(),
-
     passengers: z
       .array(
         z.object({
@@ -60,12 +73,12 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 const BookingForm = ({
-  pricePerPerson,
-  id,
+  pickupOptions,
+  tourId,
   onClose,
 }: {
-  pricePerPerson: number;
-  id: string;
+  pickupOptions: PickupOption[];
+  tourId: string;
   onClose: () => void;
 }) => {
   const { data: session } = authClient.useSession();
@@ -73,48 +86,77 @@ const BookingForm = ({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      pickupOptionId: "",
+      sharingType: "DOUBLE",
       contactNumber: "",
       panNumber: "",
       passengers: [{ name: "", age: 18, gender: "Male" }],
-      totalAmount: 20000,
+      totalAmount: 0,
     },
   });
 
   const { isSubmitting } = form.formState;
-
   const { fields, append, remove } = useFieldArray({
     name: "passengers",
     control: form.control,
   });
 
+  // Watch values to calculate price
+  const selectedPickupId = form.watch("pickupOptionId");
+  const selectedSharing = form.watch("sharingType");
   const passengers = form.watch("passengers");
-  const totalAmount = passengers.length * pricePerPerson;
 
+  // Find the selected option object
+  const selectedOption = useMemo(
+    () => pickupOptions.find((p) => p.id === selectedPickupId),
+    [selectedPickupId, pickupOptions]
+  );
+
+  // Calculate Price Per Person
+  const pricePerPerson = useMemo(() => {
+    if (!selectedOption) return 0;
+    switch (selectedSharing) {
+      case "SINGLE":
+        return selectedOption.priceSingleSharing;
+      case "DOUBLE":
+        return selectedOption.priceDoubleSharing ?? 0;
+      case "TRIPLE":
+        return selectedOption.priceTripleSharing ?? 0;
+      default:
+        return 0;
+    }
+  }, [selectedOption, selectedSharing]);
+
+  // Update Total Amount
   useEffect(() => {
-    form.setValue("totalAmount", totalAmount);
-  }, [passengers]);
+    const total = passengers.length * pricePerPerson;
+    form.setValue("totalAmount", total);
+  }, [passengers.length, pricePerPerson, form]);
 
   const onSubmit = async (values: FormValues) => {
     try {
+      // 1. Create Booking on Backend
       const res = await axios.post("/api/booking", {
-        tourPackageId: id,
+        tourPackageId: tourId,
+        pickupOptionId: values.pickupOptionId,
+        sharingType: values.sharingType,
         contactNumber: values.contactNumber,
         panNumber: values.panNumber,
         passengers: values.passengers,
+        totalAmount: values.totalAmount, // Send calculated amount
       });
 
       const { orderId, amount, key, bookingId } = res.data;
 
+      // 2. Initialize Razorpay
       const options = {
         key,
         amount,
         currency: "INR",
-        name: "Maa Kali tours",
+        name: "Maa Kali Tours",
         description: "Tour Booking Payment",
         order_id: orderId,
-
         handler: async function (response: any) {
-          // ✅ Optional: frontend verification
           try {
             await axios.post("/api/payment/verify", {
               razorpay_order_id: response.razorpay_order_id,
@@ -122,21 +164,19 @@ const BookingForm = ({
               razorpay_signature: response.razorpay_signature,
               bookingId,
             });
-
             toast.success("Payment Success! Booking Confirmed");
+            onClose(); // Close modal on success
           } catch (err) {
             toast.error("Payment verification failed");
           }
         },
-
         prefill: {
           contact: values.contactNumber,
           name: session?.user.name,
           email: session?.user.email,
         },
-
         theme: {
-          color: "#FF5722",
+          color: "#ea580c", // Orange-600
         },
       };
 
@@ -147,67 +187,219 @@ const BookingForm = ({
         rzp.open();
       });
     } catch (error) {
-      console.log(error);
-      toast.error("Booking failed");
+      console.error(error);
+      toast.error("Booking failed. Please try again.");
     }
   };
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 max-h-[80vh] overflow-y-auto pr-2"
-      >
-        {/* Contact Number */}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* 1. Pickup Point Selection */}
         <FormField
           control={form.control}
-          name="contactNumber"
+          name="pickupOptionId"
           render={({ field }) => (
-            <FormItem className="mx-2">
-              <FormLabel>Contact Number *</FormLabel>
-              <FormControl>
-                <Input placeholder="9876543210" {...field} />
-              </FormControl>
+            <FormItem>
+              <FormLabel className="flex items-center gap-2 text-base">
+                <MapPin size={18} className="text-orange-600" /> Pickup Point
+              </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="h-11">
+                    <SelectValue placeholder="Select where you want to start" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {pickupOptions.map((opt) => (
+                    <SelectItem key={opt.id} value={opt.id}>
+                      {opt.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* PAN Number */}
-        <FormField
-          control={form.control}
-          name="panNumber"
-          render={({ field }) => (
-            <FormItem className="mx-2">
-              <FormLabel>
-                PAN Number {totalAmount > 50000 ? "(Required)" : "(Optional)"}
-              </FormLabel>
-              <FormControl>
-                <Input placeholder="ABCDE1234F" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* 2. Sharing Type Selection (Conditional on Pickup) */}
+        {selectedOption && (
+          <FormField
+            control={form.control}
+            name="sharingType"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel className="flex items-center gap-2 text-base">
+                  <Users size={18} className="text-orange-600" /> Select
+                  Occupancy
+                </FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+                  >
+                    {/* Double Sharing */}
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroupItem
+                          value="DOUBLE"
+                          id="r-double"
+                          className="peer sr-only"
+                          disabled={!selectedOption.priceDoubleSharing}
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="r-double"
+                        className={cn(
+                          "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full",
+                          !selectedOption.priceDoubleSharing &&
+                            "opacity-50 cursor-not-allowed"
+                        )}
+                      >
+                        <span className="text-sm font-medium">Double</span>
+                        <span className="text-lg font-bold mt-1 flex items-center">
+                          <IndianRupee size={14} />
+                          {selectedOption.priceDoubleSharing?.toLocaleString() ??
+                            "N/A"}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">
+                          /person
+                        </span>
+                      </FormLabel>
+                    </FormItem>
+
+                    {/* Triple Sharing */}
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroupItem
+                          value="TRIPLE"
+                          id="r-triple"
+                          className="peer sr-only"
+                          disabled={!selectedOption.priceTripleSharing}
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="r-triple"
+                        className={cn(
+                          "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full",
+                          !selectedOption.priceTripleSharing &&
+                            "opacity-50 cursor-not-allowed"
+                        )}
+                      >
+                        <span className="text-sm font-medium">Triple</span>
+                        <span className="text-lg font-bold mt-1 flex items-center">
+                          <IndianRupee size={14} />
+                          {selectedOption.priceTripleSharing?.toLocaleString() ??
+                            "N/A"}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">
+                          /person
+                        </span>
+                      </FormLabel>
+                    </FormItem>
+
+                    {/* Single Sharing */}
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroupItem
+                          value="SINGLE"
+                          id="r-single"
+                          className="peer sr-only"
+                          disabled={!selectedOption.priceSingleSharing}
+                        />
+                      </FormControl>
+                      <FormLabel
+                        htmlFor="r-single"
+                        className={cn(
+                          "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full",
+                          !selectedOption.priceSingleSharing &&
+                            "opacity-50 cursor-not-allowed"
+                        )}
+                      >
+                        <span className="text-sm font-medium">Single</span>
+                        <span className="text-lg font-bold mt-1 flex items-center">
+                          <IndianRupee size={14} />
+                          {selectedOption.priceSingleSharing?.toLocaleString() ??
+                            "N/A"}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">
+                          /person
+                        </span>
+                      </FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Contact Number */}
+          <FormField
+            control={form.control}
+            name="contactNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contact Number *</FormLabel>
+                <FormControl>
+                  <Input placeholder="9876543210" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* PAN Number */}
+          <FormField
+            control={form.control}
+            name="panNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  PAN Number{" "}
+                  {form.watch("totalAmount") > 50000 && (
+                    <span className="text-red-500">*</span>
+                  )}
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="ABCDE1234F" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* Passengers */}
-        <div className="space-y-3">
-          <h3 className="font-semibold text-lg">Passengers</h3>
+        <div className="space-y-3 border-t pt-4">
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-lg">Passengers</h3>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => append({ name: "", age: 18, gender: "Male" })}
+            >
+              + Add Passenger
+            </Button>
+          </div>
 
           {fields.map((item, index) => (
             <div
               key={item.id}
-              className="p-3 border rounded-lg bg-gray-50 flex flex-col gap-3"
+              className="p-3 border rounded-lg bg-gray-50 flex flex-col gap-3 relative group"
             >
               <div className="flex gap-3 flex-col sm:flex-row">
-
-                <div>
                 <FormField
                   control={form.control}
                   name={`passengers.${index}.name`}
                   render={({ field }) => (
                     <FormItem className="flex-2">
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel className="text-xs">Name</FormLabel>
                       <FormControl>
                         <Input placeholder="John Doe" {...field} />
                       </FormControl>
@@ -215,17 +407,23 @@ const BookingForm = ({
                     </FormItem>
                   )}
                 />
-                </div>
 
-<div className="flex">
                 <FormField
                   control={form.control}
                   name={`passengers.${index}.age`}
                   render={({ field }) => (
-                    <FormItem className="w-24 flex-1">
-                      <FormLabel>Age</FormLabel>
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-xs">Age</FormLabel>
                       <FormControl>
-                        <Input type="number" min="5" max="100" {...field} onChange={(e) => field.onChange(Number(e.target.value))} />
+                        <Input
+                          type="number"
+                          min="5"
+                          max="100"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -236,8 +434,8 @@ const BookingForm = ({
                   control={form.control}
                   name={`passengers.${index}.gender`}
                   render={({ field }) => (
-                    <FormItem className="w-32 flex-1">
-                      <FormLabel>Gender</FormLabel>
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-xs">Gender</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -257,51 +455,49 @@ const BookingForm = ({
                     </FormItem>
                   )}
                 />
-</div>
               </div>
 
               {index > 0 && (
                 <Button
                   type="button"
                   variant="ghost"
-                  className="text-red-600 self-end"
+                  size="sm"
+                  className="text-red-500 hover:text-red-700 hover:bg-red-50 self-end h-6 text-xs"
                   onClick={() => remove(index)}
                 >
-                  Remove Passenger
+                  Remove
                 </Button>
               )}
             </div>
           ))}
+        </div>
+
+        {/* Total & Submit */}
+        <div className="sticky bottom-0 bg-white pt-4 border-t mt-4">
+          <div className="flex justify-between items-center mb-4 bg-orange-50 p-3 rounded-lg border border-orange-100">
+            <span className="text-sm font-medium text-orange-800">
+              Total Payable
+            </span>
+            <span className="text-xl font-bold text-orange-700 flex items-center">
+              <IndianRupee size={18} />{" "}
+              {form.watch("totalAmount").toLocaleString("en-IN")}
+            </span>
+          </div>
 
           <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={() => append({ name: "", age: 18, gender: "Male" })}
+            type="submit"
+            className="w-full bg-orange-600 hover:bg-orange-700 flex justify-center items-center gap-2 h-12 text-lg"
+            disabled={isSubmitting || pricePerPerson === 0}
           >
-            + Add Passenger
+            {isSubmitting ? (
+              <>
+                <LoaderIcon className="animate-spin" /> Processing...
+              </>
+            ) : (
+              "Confirm Booking"
+            )}
           </Button>
         </div>
-
-        {/* ✅ Total Amount */}
-        <div className="text-xl font-bold bg-orange-50 p-3 rounded-lg text-orange-700 border border-orange-200">
-          Total Amount: ₹{totalAmount.toLocaleString()}
-        </div>
-
-        <Button
-          type="submit"
-          className="w-full bg-orange-600 hover:bg-orange-700 flex justify-center items-center gap-2 h-12 text-lg"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
-            <>
-              <LoaderIcon className="animate-spin" />
-              Redirecting to Payment...
-            </>
-          ) : (
-            "Confirm Booking"
-          )}
-        </Button>
       </form>
     </Form>
   );

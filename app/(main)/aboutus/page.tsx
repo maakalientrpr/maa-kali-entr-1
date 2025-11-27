@@ -23,12 +23,12 @@ const Page = () => {
     },
     {
       icon: <MapPinIcon className="text-orange-600 size-10" />,
-      value: "50+",
+      value: "100+",
       label: "Destinations",
     },
     {
       icon: <BookmarkIcon className="text-orange-600 size-10" />,
-      value: "100+",
+      value: "50+",
       label: "Events Organised",
     },
     {

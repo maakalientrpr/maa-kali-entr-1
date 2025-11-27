@@ -129,7 +129,7 @@ const CateringServices = () => {
               </div>
 
               <p className="text-gray-500 mt-4 text-center">
-                Starting at just ₹500 per plate
+                Starting at just ₹750 per plate
               </p>
             </TabsContent>
 

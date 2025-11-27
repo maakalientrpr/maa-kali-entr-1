@@ -65,6 +65,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type TourPackage = Prisma.TourPackageModel
 /**
+ * Model PickupOption
+ * 
+ */
+export type PickupOption = Prisma.PickupOptionModel
+/**
  * Model Itinerary
  * 
  */
@@ -79,3 +84,18 @@ export type Booking = Prisma.BookingModel
  * 
  */
 export type Passenger = Prisma.PassengerModel
+/**
+ * Model Year
+ * 
+ */
+export type Year = Prisma.YearModel
+/**
+ * Model TripAlbum
+ * 
+ */
+export type TripAlbum = Prisma.TripAlbumModel
+/**
+ * Model Image
+ * 
+ */
+export type Image = Prisma.ImageModel

@@ -9,6 +9,24 @@
 * 🟢 You can import this file directly.
 */
 
+export const TourCategory = {
+  DOMESTIC: 'DOMESTIC',
+  INTERNATIONAL: 'INTERNATIONAL',
+  WEEKEND: 'WEEKEND'
+} as const
+
+export type TourCategory = (typeof TourCategory)[keyof typeof TourCategory]
+
+
+export const SharingType = {
+  SINGLE: 'SINGLE',
+  DOUBLE: 'DOUBLE',
+  TRIPLE: 'TRIPLE'
+} as const
+
+export type SharingType = (typeof SharingType)[keyof typeof SharingType]
+
+
 export const BookingStatus = {
   PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',

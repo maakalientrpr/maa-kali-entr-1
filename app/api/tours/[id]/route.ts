@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/auth-utils";
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,50 +7,81 @@ export async function PUT(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    // 🔥 FIX: await params
+    await requireAdmin();
+    
     const { id } = await context.params;
-
     const body = await req.json();
 
-    const { itinerary, ...tourData } = body;
+    // 1. Destructure relations and scalar fields
+    const {
+      itinerary,
+      pickupOptions,
+      category,
+      // Extract fields that need simple updates
+      title,
+      slug,
+      destination,
+      description,
+      startDate,
+      totalSeats,
+      availableSeats,
+      durationNights,
+      durationDays,
+      inclusions,
+      exclusions,
+      images,
+    } = body;
 
-    const updated = await prisma.tourPackage.update({
+    // 2. Perform the update using a transaction or nested writes
+    // We delete existing relations and re-create them to ensure the DB matches the form state.
+    const updatedTour = await prisma.tourPackage.update({
       where: { id },
       data: {
-        title: tourData.title,
-        slug: tourData.slug,
-        destination: tourData.destination,
-        description: tourData.description,
-        startDate: tourData.startDate,
-        totalSeats: tourData.totalSeats,
-        durationNights: tourData.durationNights,
-        durationDays: tourData.durationDays,
-        pickupPoints: tourData.pickupPoints,
-        priceDoubleSharing: tourData.priceDoubleSharing,
-        priceTripleSharing: tourData.priceTripleSharing,
-        inclusions: tourData.inclusions,
-        exclusions: tourData.exclusions,
-        images: tourData.images,
+        // Scalars
+        title,
+        slug,
+        destination,
+        description,
+        category, // New Enum Field
+        startDate: new Date(startDate),
+        totalSeats,
+        // availableSeats: availableSeats, // Usually you don't reset available seats on edit unless logic dictates
+        durationNights,
+        durationDays,
+        inclusions,
+        exclusions,
+        images,
 
-        // FIXED RELATION HANDLING
-        itineraries: {
-          deleteMany: {
-            tourPackageId: id,
-          },
-          create: itinerary.map(
-            (item: { day: Date; title: string; description: string }) => ({
-              day: item.day,
-              title: item.title,
-              description: item.description,
-            })
-          ),
+        // Relations: Pickup Options
+        pickupOptions: {
+          deleteMany: {}, // Remove old options
+          create: pickupOptions.map((opt: any) => ({
+            title: opt.title,
+            priceSingleSharing: Number(opt.priceSingleSharing),
+            priceDoubleSharing: Number(opt.priceDoubleSharing),
+            priceTripleSharing: Number(opt.priceTripleSharing),
+          })),
         },
+
+        // Relations: Itineraries
+        itineraries: {
+          deleteMany: {}, // Remove old itinerary days
+          create: itinerary.map((item: any) => ({
+            day: Number(item.day),
+            title: item.title,
+            description: item.description,
+          })),
+        },
+      },
+      include: {
+        pickupOptions: true,
+        itineraries: true,
       },
     });
 
-    return NextResponse.json(updated);
+    return NextResponse.json(updatedTour);
   } catch (error) {
-    console.error(error);
+    console.error("UPDATE TOUR ERROR:", error);
     return NextResponse.json({ error: "Update failed" }, { status: 500 });
   }
 }

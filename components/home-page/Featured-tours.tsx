@@ -12,13 +12,35 @@ const FeaturedTorus = async () => {
     orderBy: {
       createdAt: "desc",
     },
-    take: 3, // ✅ fetch max 3
+    take: 3,
+    include: {
+      pickupOptions: true, // ✅ Fetch pickup options to calculate price
+    },
   });
 
   // ✅ If no tours available
   if (!tours || tours.length === 0) {
-    return null; // or return <p>No tours available</p>
+    return null;
   }
+
+  // ✅ Transform data to calculate "Starting From" price
+  const formattedTours = tours.map((tour) => {
+    let minPrice = Infinity;
+
+    if (tour.pickupOptions && tour.pickupOptions.length > 0) {
+      tour.pickupOptions.forEach((opt) => {
+        if (opt.priceSingleSharing) minPrice = Math.min(minPrice, opt.priceSingleSharing);
+        if (opt.priceDoubleSharing) minPrice = Math.min(minPrice, opt.priceDoubleSharing);
+        if (opt.priceTripleSharing) minPrice = Math.min(minPrice, opt.priceTripleSharing);
+      });
+    }
+
+    return {
+      ...tour,
+      // If no price found (infinity), default to 0
+      price: minPrice === Infinity ? 0 : minPrice,
+    };
+  });
 
   return (
     <div>
@@ -30,7 +52,9 @@ const FeaturedTorus = async () => {
           Handpicked destinations for unforgettable experiences
         </p>
       </div>
-      <TourPackages tours={tours} />
+      
+      {/* Pass the transformed tours with 'price' */}
+      <TourPackages tours={formattedTours} />
 
       <div className="w-full flex justify-center my-3">
         <Link href={"/tours"}>

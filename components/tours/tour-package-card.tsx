@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Users, Clock, PhoneCallIcon } from "lucide-react";
+import { Users, Clock, PhoneCallIcon, IndianRupee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
@@ -18,6 +18,15 @@ import BookingForm from "./booking-form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+// Define the shape of PickupOption
+type PickupOption = {
+  id: string;
+  title: string;
+  priceSingleSharing: number;
+  priceDoubleSharing: number | null;
+  priceTripleSharing: number | null;
+};
+
 type TourPackageCardProps = {
   image: string;
   title: string;
@@ -25,7 +34,8 @@ type TourPackageCardProps = {
   people: number;
   slug: string;
   id: string;
-  price: number;
+  price: number; // This is the starting price
+  pickupOptions: PickupOption[]; // ✅ Added pickupOptions
 };
 
 const TourPackageCard = ({
@@ -36,17 +46,34 @@ const TourPackageCard = ({
   slug,
   price,
   id,
+  pickupOptions = [],
 }: TourPackageCardProps) => {
   const [open, setOpen] = useState(false);
   const { data: session } = authClient.useSession();
   const router = useRouter();
 
+  // Helper to find min price for a specific sharing type across all pickup options
+  const getMinSharingPrice = (type: "priceDoubleSharing" | "priceTripleSharing") => {
+    if (!pickupOptions || pickupOptions.length === 0) return null;
+    let min = Infinity;
+    pickupOptions.forEach((opt) => {
+      const val = opt[type];
+      if (val && val > 0) {
+        min = Math.min(min, val);
+      }
+    });
+    return min === Infinity ? null : min;
+  };
+
+  const minDouble = getMinSharingPrice("priceDoubleSharing");
+  const minTriple = getMinSharingPrice("priceTripleSharing");
+
   return (
-    <Card className="overflow-hidden rounded-xl shadow-md p-0 hover:shadow-xl transition-all cursor-pointer group">
+    <Card className="overflow-hidden rounded-xl shadow-md p-0 hover:shadow-xl transition-all cursor-pointer group flex flex-col h-full">
       {/* Clickable Section */}
-      <Link href={`/tours/${slug}`} className="block">
+      <Link href={`/tours/${slug}`} className="block flex-1">
         {/* Image */}
-        <div className="relative w-full h-52">
+        <div className="relative w-full h-52 overflow-hidden">
           <Image
             src={image}
             alt={title}
@@ -57,7 +84,7 @@ const TourPackageCard = ({
 
         {/* Content */}
         <CardContent className="p-4 space-y-3">
-          <h2 className="text-lg font-semibold">{title}</h2>
+          <h2 className="text-lg font-semibold line-clamp-1">{title}</h2>
 
           {/* Info */}
           <div className="flex items-center justify-between text-gray-600 text-sm">
@@ -66,48 +93,66 @@ const TourPackageCard = ({
             </p>
 
             <p className="flex items-center gap-1">
-              <Users size={16} /> {people} People
+              <Users size={16} /> {people} Seats
             </p>
           </div>
 
-          {/* Price */}
-          <p className="text-xl font-bold text-orange-600">
-            ₹{price}{" "}
-            <span className="text-gray-600 font-light text-base">/person</span>
-          </p>
+          {/* Price Section */}
+          <div className="pt-1 space-y-1">
+            <div>
+              <p className="text-xs text-gray-500 font-medium uppercase">Starts at</p>
+              <p className="text-xl font-bold text-orange-600 flex items-center">
+                <IndianRupee size={18} strokeWidth={3} />
+                {price.toLocaleString("en-IN")}
+                <span className="text-gray-600 font-light text-base ml-1">/person</span>
+              </p>
+            </div>
+
+            {/* ✅ Additional Price Info (Double/Triple) */}
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-500">
+              {minDouble && (
+                <span className="flex items-center">
+                  Dbl: <IndianRupee size={10} className="ml-0.5" />
+                  {minDouble.toLocaleString("en-IN")}
+                </span>
+              )}
+              {minTriple && (
+                <span className="flex items-center">
+                  Tpl: <IndianRupee size={10} className="ml-0.5" />
+                  {minTriple.toLocaleString("en-IN")}
+                </span>
+              )}
+            </div>
+          </div>
         </CardContent>
       </Link>
 
       {/* Footer */}
-      <CardFooter className="p-4 flex justify-between items-center gap-2">
+      <CardFooter className="p-4 pt-0 flex justify-between items-center gap-2 mt-auto">
         {/* Enquire Button */}
         <Button
           onClick={(e) => e.stopPropagation()}
           className="flex-1 bg-white hover:bg-gray-100 text-black border border-black"
+          asChild
         >
-          <>
-            <Link className="flex items-center gap-2" href="tel:+919330942690">
-              <PhoneCallIcon />
-              Enquire
-            </Link>
-          </>
+          <Link className="flex items-center gap-2" href="tel:+919330942690">
+            <PhoneCallIcon size={16} />
+            Enquire
+          </Link>
         </Button>
 
-        {/* If user NOT logged in */}
-        {!session && (
+        {/* Booking Action */}
+        {!session ? (
           <Button
             className="flex-1 bg-orange-600 hover:bg-orange-700"
             onClick={(e) => {
               e.stopPropagation();
-              router.push("/login"); 
+              router.push("/login");
             }}
           >
             Book Now
           </Button>
-        )}
-
-        {/* If user is logged in */}
-        {session && (
+        ) : (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button
@@ -118,19 +163,19 @@ const TourPackageCard = ({
               </Button>
             </DialogTrigger>
 
-            <DialogContent>
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
                   Book <span className="text-orange-500">{title}</span> tour
                 </DialogTitle>
                 <DialogDescription>
-                  Fill up the form to book this tour package
+                  Fill up the form to book this tour package.
                 </DialogDescription>
               </DialogHeader>
 
               <BookingForm
-                pricePerPerson={price}
-                id={id}
+                pickupOptions={pickupOptions} // ✅ Passing updated options
+                tourId={id}
                 onClose={() => setOpen(false)}
               />
             </DialogContent>

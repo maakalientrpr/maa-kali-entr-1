@@ -52,7 +52,7 @@ const Footer = () => {
               { name: "Events & Catering", link: "/events&catering" },
               { name: "Bookings", link: "/bookings&assistance" },
               { name: "Gallery", link: "/gallery" },
-              { name: "About", link: "/about" },
+              { name: "About", link: "/aboutus" },
               { name: "Contact", link: "/contact" },
             ].map((item) => (
               <li key={item.link}>

@@ -7,6 +7,8 @@ datasource db {
   provider = "postgresql"
 }
 
+// ... [User, Session, Account, Verification models remain unchanged] ...
+
 model User {
   id            String    @id
   name          String
@@ -77,34 +79,37 @@ model Verification {
   @@map("verification")
 }
 
+// ---------------------------------------------------------
+// TOUR PACKAGE UPDATES
+// ---------------------------------------------------------
+
 model TourPackage {
-  id          String @id @default(cuid())
-  slug        String @unique
+  id          String       @id @default(cuid())
+  slug        String       @unique
   title       String
-  description String @db.Text
+  description String       @db.Text
   destination String
+  
+  // CATEGORY (New)
+  category    TourCategory @default(DOMESTIC)
 
   // DATE & SEATS
-  startDate DateTime
-  // End date is optional (can be calculated via duration)
-  endDate   DateTime?
-
-  totalSeats     Int @default(20)
-  availableSeats Int // Initialize this with totalSeats when creating
+  startDate      DateTime
+  endDate        DateTime?
+  totalSeats     Int       @default(20)
+  availableSeats Int
 
   // LOGISTICS
   durationNights Int
   durationDays   Int
-  pickupPoints   String[] // Stores ["ex-Kolkata", "Airport"] directly
 
-  // PRICING (Simplified)
-  priceDoubleSharing Float
-  priceTripleSharing Float
+  // PRICING & PICKUP (Moved to PickupOption model)
+  pickupOptions PickupOption[]
 
   // MEDIA & LISTS
   inclusions String[]
   exclusions String[]
-  images     String[] // Array of URLs
+  images     String[]
 
   // RELATIONS
   itineraries Itinerary[]
@@ -117,6 +122,25 @@ model TourPackage {
   @@map("tour_package")
 }
 
+// New Model to handle variable pricing per location
+model PickupOption {
+  id String @id @default(cuid())
+
+  title String // e.g. "Ex-Kolkata", "Ex-Mumbai", "Airport Pickup"
+
+  // Prices specific to this pickup location
+  priceSingleSharing Float
+  priceDoubleSharing Float?
+  priceTripleSharing Float?
+
+  tourPackageId String
+  tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id], onDelete: Cascade)
+
+  bookings Booking[] // Relation to track which option was chosen
+
+  @@map("pickup_option")
+}
+
 model Itinerary {
   id String @id @default(cuid())
 
@@ -124,7 +148,6 @@ model Itinerary {
   title       String
   description String @db.Text
 
-  // Relation
   tourPackageId String
   tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id], onDelete: Cascade)
 
@@ -139,15 +162,19 @@ model Booking {
 
   tourPackageId String
   tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id], onDelete: Restrict)
+  
+  // SELECTION DETAILS (New)
+  pickupOptionId String
+  pickupOption   PickupOption @relation(fields: [pickupOptionId], references: [id], onDelete: Restrict)
+  
+  sharingType    SharingType  @default(DOUBLE) // To know which price tier was applied
 
   bookingDate DateTime @default(now())
-
   totalAmount Float
-
   contactNumber String
 
-  // --- COMPLIANCE & BILLING (New Fields) ---
-  panNumber String? // Mandatory if totalAmount > 50000
+  // COMPLIANCE
+  panNumber String?
 
   status        BookingStatus @default(PENDING)
   paymentId     String?
@@ -169,6 +196,22 @@ model Passenger {
   booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
+// ---------------------------------------------------------
+// ENUMS
+// ---------------------------------------------------------
+
+enum TourCategory {
+  DOMESTIC
+  INTERNATIONAL
+  WEEKEND
+}
+
+enum SharingType {
+  SINGLE
+  DOUBLE
+  TRIPLE
+}
+
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -182,4 +225,41 @@ enum PaymentStatus {
   PAID
   REFUND
   FAILED
+}
+
+// Add/Update these models
+
+model Year {
+  id         String      @id @default(cuid())
+  yearNumber Int         @unique // ✅ Unique so we group albums under one year entry
+  albums     TripAlbum[]
+  createdAt  DateTime    @default(now())
+}
+
+model TripAlbum {
+  id        String   @id @default(cuid())
+  title     String
+  location  String?  // Optional: e.g., "Manali"
+  
+  yearId    String
+  year      Year     @relation(fields: [yearId], references: [id], onDelete: Cascade)
+  
+  images    Image[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([yearId])
+}
+
+model Image {
+  id          String    @id @default(cuid())
+  imageUrl    String
+  
+  tripAlbumId String
+  tripAlbum   TripAlbum @relation(fields: [tripAlbumId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+
+  @@index([tripAlbumId])
 }

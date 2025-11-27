@@ -13,14 +13,13 @@ export async function POST(req: NextRequest) {
       slug,
       destination,
       description,
+      category, // New Field
       startDate,
       totalSeats,
       availableSeats,
       durationNights,
       durationDays,
-      pickupPoints,
-      priceDoubleSharing,
-      priceTripleSharing,
+      pickupOptions, // Array of objects
       inclusions,
       exclusions,
       images,
@@ -28,31 +27,49 @@ export async function POST(req: NextRequest) {
     } = body;
 
     // ✅ Basic Validation
-    if (!title || !slug || !destination || !description) {
+    if (!title || !slug || !destination || !description || !category) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    //Create tour
+    if (!pickupOptions || !Array.isArray(pickupOptions) || pickupOptions.length === 0) {
+      return NextResponse.json(
+        { error: "At least one pickup option is required" },
+        { status: 400 }
+      );
+    }
+
+    // Create tour
     const tour = await prisma.tourPackage.create({
       data: {
         title,
         slug,
         destination,
         description,
+        category, // DOMESTIC, INTERNATIONAL, WEEKEND
         startDate: new Date(startDate),
         totalSeats,
         availableSeats,
         durationNights,
         durationDays,
-        pickupPoints, // string[]
-        priceDoubleSharing,
-        priceTripleSharing,
+        
+        // Nested write for PickupOptions
+        pickupOptions: {
+          create: pickupOptions.map((opt: any) => ({
+            title: opt.title,
+            priceSingleSharing: Number(opt.priceSingleSharing),
+            priceDoubleSharing: Number(opt.priceDoubleSharing),
+            priceTripleSharing: Number(opt.priceTripleSharing),
+          }))
+        },
+
         inclusions, // string[]
         exclusions, // string[]
-        images, // string[]
+        images,     // string[]
+        
+        // Nested write for Itinerary
         itineraries: {
           create: itinerary.map((day: any) => ({
             day: day.day,
@@ -62,6 +79,7 @@ export async function POST(req: NextRequest) {
         },
       },
       include: {
+        pickupOptions: true,
         itineraries: true,
       },
     });

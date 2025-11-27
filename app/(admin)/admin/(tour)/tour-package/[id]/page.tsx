@@ -1,20 +1,27 @@
 import EditTourForm from "@/components/admin/tour/EditTourForm";
 import prisma from "@/lib/db";
+import { notFound } from "next/navigation";
 
 export default async function EditTourPackagePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
+
+  // Fetch tour with all relations needed for the form
   const tour = await prisma.tourPackage.findUnique({
-    where: { id: (await params).id },
+    where: { id },
     include: {
-      itineraries: true,
+      itineraries: {
+        orderBy: { day: "asc" }, // Ensure days are in order
+      },
+      pickupOptions: true, // Fetch the nested pickup options
     },
   });
 
   if (!tour) {
-    return <div className="p-6 text-red-500">Tour package not found.</div>;
+    return notFound();
   }
 
   return <EditTourForm tour={tour} />;

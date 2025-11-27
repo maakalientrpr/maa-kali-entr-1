@@ -10,12 +10,34 @@ const page = async () => {
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      pickupOptions: true
+    }
   });
 
   // ✅ If no tours available
   if (!tours || tours.length === 0) {
     return <p>No tours available</p>;
   }
+
+   // ✅ Transform data to calculate "Starting From" price
+  const formattedTours = tours.map((tour) => {
+    let minPrice = Infinity;
+
+    if (tour.pickupOptions && tour.pickupOptions.length > 0) {
+      tour.pickupOptions.forEach((opt) => {
+        if (opt.priceSingleSharing) minPrice = Math.min(minPrice, opt.priceSingleSharing);
+        if (opt.priceDoubleSharing) minPrice = Math.min(minPrice, opt.priceDoubleSharing);
+        if (opt.priceTripleSharing) minPrice = Math.min(minPrice, opt.priceTripleSharing);
+      });
+    }
+
+    return {
+      ...tour,
+      // If no price found (infinity), default to 0
+      price: minPrice === Infinity ? 0 : minPrice,
+    };
+  });
 
   return (
     <div>
@@ -28,7 +50,7 @@ const page = async () => {
        Explore our curated tour packages designed for comfort, convenience, and unforgettable travel experiences.
         </p>
       </div>
-      <TourPackages tours={tours} />
+      <TourPackages tours={formattedTours} />
     </div>
   );
 };

@@ -31,8 +31,6 @@ export type TourPackageAvgAggregateOutputType = {
   availableSeats: number | null
   durationNights: number | null
   durationDays: number | null
-  priceDoubleSharing: number | null
-  priceTripleSharing: number | null
 }
 
 export type TourPackageSumAggregateOutputType = {
@@ -40,8 +38,6 @@ export type TourPackageSumAggregateOutputType = {
   availableSeats: number | null
   durationNights: number | null
   durationDays: number | null
-  priceDoubleSharing: number | null
-  priceTripleSharing: number | null
 }
 
 export type TourPackageMinAggregateOutputType = {
@@ -50,14 +46,13 @@ export type TourPackageMinAggregateOutputType = {
   title: string | null
   description: string | null
   destination: string | null
+  category: $Enums.TourCategory | null
   startDate: Date | null
   endDate: Date | null
   totalSeats: number | null
   availableSeats: number | null
   durationNights: number | null
   durationDays: number | null
-  priceDoubleSharing: number | null
-  priceTripleSharing: number | null
   isPublished: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -69,14 +64,13 @@ export type TourPackageMaxAggregateOutputType = {
   title: string | null
   description: string | null
   destination: string | null
+  category: $Enums.TourCategory | null
   startDate: Date | null
   endDate: Date | null
   totalSeats: number | null
   availableSeats: number | null
   durationNights: number | null
   durationDays: number | null
-  priceDoubleSharing: number | null
-  priceTripleSharing: number | null
   isPublished: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -88,15 +82,13 @@ export type TourPackageCountAggregateOutputType = {
   title: number
   description: number
   destination: number
+  category: number
   startDate: number
   endDate: number
   totalSeats: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints: number
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions: number
   exclusions: number
   images: number
@@ -112,8 +104,6 @@ export type TourPackageAvgAggregateInputType = {
   availableSeats?: true
   durationNights?: true
   durationDays?: true
-  priceDoubleSharing?: true
-  priceTripleSharing?: true
 }
 
 export type TourPackageSumAggregateInputType = {
@@ -121,8 +111,6 @@ export type TourPackageSumAggregateInputType = {
   availableSeats?: true
   durationNights?: true
   durationDays?: true
-  priceDoubleSharing?: true
-  priceTripleSharing?: true
 }
 
 export type TourPackageMinAggregateInputType = {
@@ -131,14 +119,13 @@ export type TourPackageMinAggregateInputType = {
   title?: true
   description?: true
   destination?: true
+  category?: true
   startDate?: true
   endDate?: true
   totalSeats?: true
   availableSeats?: true
   durationNights?: true
   durationDays?: true
-  priceDoubleSharing?: true
-  priceTripleSharing?: true
   isPublished?: true
   createdAt?: true
   updatedAt?: true
@@ -150,14 +137,13 @@ export type TourPackageMaxAggregateInputType = {
   title?: true
   description?: true
   destination?: true
+  category?: true
   startDate?: true
   endDate?: true
   totalSeats?: true
   availableSeats?: true
   durationNights?: true
   durationDays?: true
-  priceDoubleSharing?: true
-  priceTripleSharing?: true
   isPublished?: true
   createdAt?: true
   updatedAt?: true
@@ -169,15 +155,13 @@ export type TourPackageCountAggregateInputType = {
   title?: true
   description?: true
   destination?: true
+  category?: true
   startDate?: true
   endDate?: true
   totalSeats?: true
   availableSeats?: true
   durationNights?: true
   durationDays?: true
-  pickupPoints?: true
-  priceDoubleSharing?: true
-  priceTripleSharing?: true
   inclusions?: true
   exclusions?: true
   images?: true
@@ -279,15 +263,13 @@ export type TourPackageGroupByOutputType = {
   title: string
   description: string
   destination: string
+  category: $Enums.TourCategory
   startDate: Date
   endDate: Date | null
   totalSeats: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints: string[]
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions: string[]
   exclusions: string[]
   images: string[]
@@ -325,21 +307,20 @@ export type TourPackageWhereInput = {
   title?: Prisma.StringFilter<"TourPackage"> | string
   description?: Prisma.StringFilter<"TourPackage"> | string
   destination?: Prisma.StringFilter<"TourPackage"> | string
+  category?: Prisma.EnumTourCategoryFilter<"TourPackage"> | $Enums.TourCategory
   startDate?: Prisma.DateTimeFilter<"TourPackage"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"TourPackage"> | Date | string | null
   totalSeats?: Prisma.IntFilter<"TourPackage"> | number
   availableSeats?: Prisma.IntFilter<"TourPackage"> | number
   durationNights?: Prisma.IntFilter<"TourPackage"> | number
   durationDays?: Prisma.IntFilter<"TourPackage"> | number
-  pickupPoints?: Prisma.StringNullableListFilter<"TourPackage">
-  priceDoubleSharing?: Prisma.FloatFilter<"TourPackage"> | number
-  priceTripleSharing?: Prisma.FloatFilter<"TourPackage"> | number
   inclusions?: Prisma.StringNullableListFilter<"TourPackage">
   exclusions?: Prisma.StringNullableListFilter<"TourPackage">
   images?: Prisma.StringNullableListFilter<"TourPackage">
   isPublished?: Prisma.BoolFilter<"TourPackage"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TourPackage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TourPackage"> | Date | string
+  pickupOptions?: Prisma.PickupOptionListRelationFilter
   itineraries?: Prisma.ItineraryListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
 }
@@ -350,21 +331,20 @@ export type TourPackageOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   destination?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   durationNights?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
-  pickupPoints?: Prisma.SortOrder
-  priceDoubleSharing?: Prisma.SortOrder
-  priceTripleSharing?: Prisma.SortOrder
   inclusions?: Prisma.SortOrder
   exclusions?: Prisma.SortOrder
   images?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  pickupOptions?: Prisma.PickupOptionOrderByRelationAggregateInput
   itineraries?: Prisma.ItineraryOrderByRelationAggregateInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
 }
@@ -378,21 +358,20 @@ export type TourPackageWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"TourPackage"> | string
   description?: Prisma.StringFilter<"TourPackage"> | string
   destination?: Prisma.StringFilter<"TourPackage"> | string
+  category?: Prisma.EnumTourCategoryFilter<"TourPackage"> | $Enums.TourCategory
   startDate?: Prisma.DateTimeFilter<"TourPackage"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"TourPackage"> | Date | string | null
   totalSeats?: Prisma.IntFilter<"TourPackage"> | number
   availableSeats?: Prisma.IntFilter<"TourPackage"> | number
   durationNights?: Prisma.IntFilter<"TourPackage"> | number
   durationDays?: Prisma.IntFilter<"TourPackage"> | number
-  pickupPoints?: Prisma.StringNullableListFilter<"TourPackage">
-  priceDoubleSharing?: Prisma.FloatFilter<"TourPackage"> | number
-  priceTripleSharing?: Prisma.FloatFilter<"TourPackage"> | number
   inclusions?: Prisma.StringNullableListFilter<"TourPackage">
   exclusions?: Prisma.StringNullableListFilter<"TourPackage">
   images?: Prisma.StringNullableListFilter<"TourPackage">
   isPublished?: Prisma.BoolFilter<"TourPackage"> | boolean
   createdAt?: Prisma.DateTimeFilter<"TourPackage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TourPackage"> | Date | string
+  pickupOptions?: Prisma.PickupOptionListRelationFilter
   itineraries?: Prisma.ItineraryListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
 }, "id" | "slug">
@@ -403,15 +382,13 @@ export type TourPackageOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   destination?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   durationNights?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
-  pickupPoints?: Prisma.SortOrder
-  priceDoubleSharing?: Prisma.SortOrder
-  priceTripleSharing?: Prisma.SortOrder
   inclusions?: Prisma.SortOrder
   exclusions?: Prisma.SortOrder
   images?: Prisma.SortOrder
@@ -434,15 +411,13 @@ export type TourPackageScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"TourPackage"> | string
   description?: Prisma.StringWithAggregatesFilter<"TourPackage"> | string
   destination?: Prisma.StringWithAggregatesFilter<"TourPackage"> | string
+  category?: Prisma.EnumTourCategoryWithAggregatesFilter<"TourPackage"> | $Enums.TourCategory
   startDate?: Prisma.DateTimeWithAggregatesFilter<"TourPackage"> | Date | string
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"TourPackage"> | Date | string | null
   totalSeats?: Prisma.IntWithAggregatesFilter<"TourPackage"> | number
   availableSeats?: Prisma.IntWithAggregatesFilter<"TourPackage"> | number
   durationNights?: Prisma.IntWithAggregatesFilter<"TourPackage"> | number
   durationDays?: Prisma.IntWithAggregatesFilter<"TourPackage"> | number
-  pickupPoints?: Prisma.StringNullableListFilter<"TourPackage">
-  priceDoubleSharing?: Prisma.FloatWithAggregatesFilter<"TourPackage"> | number
-  priceTripleSharing?: Prisma.FloatWithAggregatesFilter<"TourPackage"> | number
   inclusions?: Prisma.StringNullableListFilter<"TourPackage">
   exclusions?: Prisma.StringNullableListFilter<"TourPackage">
   images?: Prisma.StringNullableListFilter<"TourPackage">
@@ -457,21 +432,20 @@ export type TourPackageCreateInput = {
   title: string
   description: string
   destination: string
+  category?: $Enums.TourCategory
   startDate: Date | string
   endDate?: Date | string | null
   totalSeats?: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints?: Prisma.TourPackageCreatepickupPointsInput | string[]
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
   images?: Prisma.TourPackageCreateimagesInput | string[]
   isPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  pickupOptions?: Prisma.PickupOptionCreateNestedManyWithoutTourPackageInput
   itineraries?: Prisma.ItineraryCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingCreateNestedManyWithoutTourPackageInput
 }
@@ -482,21 +456,20 @@ export type TourPackageUncheckedCreateInput = {
   title: string
   description: string
   destination: string
+  category?: $Enums.TourCategory
   startDate: Date | string
   endDate?: Date | string | null
   totalSeats?: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints?: Prisma.TourPackageCreatepickupPointsInput | string[]
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
   images?: Prisma.TourPackageCreateimagesInput | string[]
   isPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  pickupOptions?: Prisma.PickupOptionUncheckedCreateNestedManyWithoutTourPackageInput
   itineraries?: Prisma.ItineraryUncheckedCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTourPackageInput
 }
@@ -507,21 +480,20 @@ export type TourPackageUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   durationNights?: Prisma.IntFieldUpdateOperationsInput | number
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
-  pickupPoints?: Prisma.TourPackageUpdatepickupPointsInput | string[]
-  priceDoubleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
-  priceTripleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
   inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
   images?: Prisma.TourPackageUpdateimagesInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupOptions?: Prisma.PickupOptionUpdateManyWithoutTourPackageNestedInput
   itineraries?: Prisma.ItineraryUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutTourPackageNestedInput
 }
@@ -532,21 +504,20 @@ export type TourPackageUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   durationNights?: Prisma.IntFieldUpdateOperationsInput | number
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
-  pickupPoints?: Prisma.TourPackageUpdatepickupPointsInput | string[]
-  priceDoubleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
-  priceTripleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
   inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
   images?: Prisma.TourPackageUpdateimagesInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupOptions?: Prisma.PickupOptionUncheckedUpdateManyWithoutTourPackageNestedInput
   itineraries?: Prisma.ItineraryUncheckedUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTourPackageNestedInput
 }
@@ -557,15 +528,13 @@ export type TourPackageCreateManyInput = {
   title: string
   description: string
   destination: string
+  category?: $Enums.TourCategory
   startDate: Date | string
   endDate?: Date | string | null
   totalSeats?: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints?: Prisma.TourPackageCreatepickupPointsInput | string[]
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
   images?: Prisma.TourPackageCreateimagesInput | string[]
@@ -580,15 +549,13 @@ export type TourPackageUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   durationNights?: Prisma.IntFieldUpdateOperationsInput | number
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
-  pickupPoints?: Prisma.TourPackageUpdatepickupPointsInput | string[]
-  priceDoubleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
-  priceTripleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
   inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
   images?: Prisma.TourPackageUpdateimagesInput | string[]
@@ -603,15 +570,13 @@ export type TourPackageUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   durationNights?: Prisma.IntFieldUpdateOperationsInput | number
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
-  pickupPoints?: Prisma.TourPackageUpdatepickupPointsInput | string[]
-  priceDoubleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
-  priceTripleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
   inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
   images?: Prisma.TourPackageUpdateimagesInput | string[]
@@ -634,15 +599,13 @@ export type TourPackageCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   destination?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   durationNights?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
-  pickupPoints?: Prisma.SortOrder
-  priceDoubleSharing?: Prisma.SortOrder
-  priceTripleSharing?: Prisma.SortOrder
   inclusions?: Prisma.SortOrder
   exclusions?: Prisma.SortOrder
   images?: Prisma.SortOrder
@@ -656,8 +619,6 @@ export type TourPackageAvgOrderByAggregateInput = {
   availableSeats?: Prisma.SortOrder
   durationNights?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
-  priceDoubleSharing?: Prisma.SortOrder
-  priceTripleSharing?: Prisma.SortOrder
 }
 
 export type TourPackageMaxOrderByAggregateInput = {
@@ -666,14 +627,13 @@ export type TourPackageMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   destination?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   durationNights?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
-  priceDoubleSharing?: Prisma.SortOrder
-  priceTripleSharing?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -685,14 +645,13 @@ export type TourPackageMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   destination?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   availableSeats?: Prisma.SortOrder
   durationNights?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
-  priceDoubleSharing?: Prisma.SortOrder
-  priceTripleSharing?: Prisma.SortOrder
   isPublished?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -703,17 +662,11 @@ export type TourPackageSumOrderByAggregateInput = {
   availableSeats?: Prisma.SortOrder
   durationNights?: Prisma.SortOrder
   durationDays?: Prisma.SortOrder
-  priceDoubleSharing?: Prisma.SortOrder
-  priceTripleSharing?: Prisma.SortOrder
 }
 
 export type TourPackageScalarRelationFilter = {
   is?: Prisma.TourPackageWhereInput
   isNot?: Prisma.TourPackageWhereInput
-}
-
-export type TourPackageCreatepickupPointsInput = {
-  set: string[]
 }
 
 export type TourPackageCreateinclusionsInput = {
@@ -728,20 +681,11 @@ export type TourPackageCreateimagesInput = {
   set: string[]
 }
 
+export type EnumTourCategoryFieldUpdateOperationsInput = {
+  set?: $Enums.TourCategory
+}
+
 export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type TourPackageUpdatepickupPointsInput = {
-  set?: string[]
-  push?: string | string[]
-}
-
-export type FloatFieldUpdateOperationsInput = {
   set?: number
   increment?: number
   decrement?: number
@@ -762,6 +706,20 @@ export type TourPackageUpdateexclusionsInput = {
 export type TourPackageUpdateimagesInput = {
   set?: string[]
   push?: string | string[]
+}
+
+export type TourPackageCreateNestedOneWithoutPickupOptionsInput = {
+  create?: Prisma.XOR<Prisma.TourPackageCreateWithoutPickupOptionsInput, Prisma.TourPackageUncheckedCreateWithoutPickupOptionsInput>
+  connectOrCreate?: Prisma.TourPackageCreateOrConnectWithoutPickupOptionsInput
+  connect?: Prisma.TourPackageWhereUniqueInput
+}
+
+export type TourPackageUpdateOneRequiredWithoutPickupOptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TourPackageCreateWithoutPickupOptionsInput, Prisma.TourPackageUncheckedCreateWithoutPickupOptionsInput>
+  connectOrCreate?: Prisma.TourPackageCreateOrConnectWithoutPickupOptionsInput
+  upsert?: Prisma.TourPackageUpsertWithoutPickupOptionsInput
+  connect?: Prisma.TourPackageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TourPackageUpdateToOneWithWhereWithoutPickupOptionsInput, Prisma.TourPackageUpdateWithoutPickupOptionsInput>, Prisma.TourPackageUncheckedUpdateWithoutPickupOptionsInput>
 }
 
 export type TourPackageCreateNestedOneWithoutItinerariesInput = {
@@ -792,27 +750,134 @@ export type TourPackageUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TourPackageUpdateToOneWithWhereWithoutBookingsInput, Prisma.TourPackageUpdateWithoutBookingsInput>, Prisma.TourPackageUncheckedUpdateWithoutBookingsInput>
 }
 
-export type TourPackageCreateWithoutItinerariesInput = {
+export type TourPackageCreateWithoutPickupOptionsInput = {
   id?: string
   slug: string
   title: string
   description: string
   destination: string
+  category?: $Enums.TourCategory
   startDate: Date | string
   endDate?: Date | string | null
   totalSeats?: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints?: Prisma.TourPackageCreatepickupPointsInput | string[]
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
   images?: Prisma.TourPackageCreateimagesInput | string[]
   isPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  itineraries?: Prisma.ItineraryCreateNestedManyWithoutTourPackageInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutTourPackageInput
+}
+
+export type TourPackageUncheckedCreateWithoutPickupOptionsInput = {
+  id?: string
+  slug: string
+  title: string
+  description: string
+  destination: string
+  category?: $Enums.TourCategory
+  startDate: Date | string
+  endDate?: Date | string | null
+  totalSeats?: number
+  availableSeats: number
+  durationNights: number
+  durationDays: number
+  inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
+  exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
+  images?: Prisma.TourPackageCreateimagesInput | string[]
+  isPublished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  itineraries?: Prisma.ItineraryUncheckedCreateNestedManyWithoutTourPackageInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTourPackageInput
+}
+
+export type TourPackageCreateOrConnectWithoutPickupOptionsInput = {
+  where: Prisma.TourPackageWhereUniqueInput
+  create: Prisma.XOR<Prisma.TourPackageCreateWithoutPickupOptionsInput, Prisma.TourPackageUncheckedCreateWithoutPickupOptionsInput>
+}
+
+export type TourPackageUpsertWithoutPickupOptionsInput = {
+  update: Prisma.XOR<Prisma.TourPackageUpdateWithoutPickupOptionsInput, Prisma.TourPackageUncheckedUpdateWithoutPickupOptionsInput>
+  create: Prisma.XOR<Prisma.TourPackageCreateWithoutPickupOptionsInput, Prisma.TourPackageUncheckedCreateWithoutPickupOptionsInput>
+  where?: Prisma.TourPackageWhereInput
+}
+
+export type TourPackageUpdateToOneWithWhereWithoutPickupOptionsInput = {
+  where?: Prisma.TourPackageWhereInput
+  data: Prisma.XOR<Prisma.TourPackageUpdateWithoutPickupOptionsInput, Prisma.TourPackageUncheckedUpdateWithoutPickupOptionsInput>
+}
+
+export type TourPackageUpdateWithoutPickupOptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  durationNights?: Prisma.IntFieldUpdateOperationsInput | number
+  durationDays?: Prisma.IntFieldUpdateOperationsInput | number
+  inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
+  exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
+  images?: Prisma.TourPackageUpdateimagesInput | string[]
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itineraries?: Prisma.ItineraryUpdateManyWithoutTourPackageNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutTourPackageNestedInput
+}
+
+export type TourPackageUncheckedUpdateWithoutPickupOptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  durationNights?: Prisma.IntFieldUpdateOperationsInput | number
+  durationDays?: Prisma.IntFieldUpdateOperationsInput | number
+  inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
+  exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
+  images?: Prisma.TourPackageUpdateimagesInput | string[]
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itineraries?: Prisma.ItineraryUncheckedUpdateManyWithoutTourPackageNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutTourPackageNestedInput
+}
+
+export type TourPackageCreateWithoutItinerariesInput = {
+  id?: string
+  slug: string
+  title: string
+  description: string
+  destination: string
+  category?: $Enums.TourCategory
+  startDate: Date | string
+  endDate?: Date | string | null
+  totalSeats?: number
+  availableSeats: number
+  durationNights: number
+  durationDays: number
+  inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
+  exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
+  images?: Prisma.TourPackageCreateimagesInput | string[]
+  isPublished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pickupOptions?: Prisma.PickupOptionCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingCreateNestedManyWithoutTourPackageInput
 }
 
@@ -822,21 +887,20 @@ export type TourPackageUncheckedCreateWithoutItinerariesInput = {
   title: string
   description: string
   destination: string
+  category?: $Enums.TourCategory
   startDate: Date | string
   endDate?: Date | string | null
   totalSeats?: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints?: Prisma.TourPackageCreatepickupPointsInput | string[]
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
   images?: Prisma.TourPackageCreateimagesInput | string[]
   isPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  pickupOptions?: Prisma.PickupOptionUncheckedCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTourPackageInput
 }
 
@@ -862,21 +926,20 @@ export type TourPackageUpdateWithoutItinerariesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   durationNights?: Prisma.IntFieldUpdateOperationsInput | number
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
-  pickupPoints?: Prisma.TourPackageUpdatepickupPointsInput | string[]
-  priceDoubleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
-  priceTripleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
   inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
   images?: Prisma.TourPackageUpdateimagesInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupOptions?: Prisma.PickupOptionUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutTourPackageNestedInput
 }
 
@@ -886,21 +949,20 @@ export type TourPackageUncheckedUpdateWithoutItinerariesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   durationNights?: Prisma.IntFieldUpdateOperationsInput | number
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
-  pickupPoints?: Prisma.TourPackageUpdatepickupPointsInput | string[]
-  priceDoubleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
-  priceTripleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
   inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
   images?: Prisma.TourPackageUpdateimagesInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupOptions?: Prisma.PickupOptionUncheckedUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTourPackageNestedInput
 }
 
@@ -910,21 +972,20 @@ export type TourPackageCreateWithoutBookingsInput = {
   title: string
   description: string
   destination: string
+  category?: $Enums.TourCategory
   startDate: Date | string
   endDate?: Date | string | null
   totalSeats?: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints?: Prisma.TourPackageCreatepickupPointsInput | string[]
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
   images?: Prisma.TourPackageCreateimagesInput | string[]
   isPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  pickupOptions?: Prisma.PickupOptionCreateNestedManyWithoutTourPackageInput
   itineraries?: Prisma.ItineraryCreateNestedManyWithoutTourPackageInput
 }
 
@@ -934,21 +995,20 @@ export type TourPackageUncheckedCreateWithoutBookingsInput = {
   title: string
   description: string
   destination: string
+  category?: $Enums.TourCategory
   startDate: Date | string
   endDate?: Date | string | null
   totalSeats?: number
   availableSeats: number
   durationNights: number
   durationDays: number
-  pickupPoints?: Prisma.TourPackageCreatepickupPointsInput | string[]
-  priceDoubleSharing: number
-  priceTripleSharing: number
   inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
   images?: Prisma.TourPackageCreateimagesInput | string[]
   isPublished?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  pickupOptions?: Prisma.PickupOptionUncheckedCreateNestedManyWithoutTourPackageInput
   itineraries?: Prisma.ItineraryUncheckedCreateNestedManyWithoutTourPackageInput
 }
 
@@ -974,21 +1034,20 @@ export type TourPackageUpdateWithoutBookingsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   durationNights?: Prisma.IntFieldUpdateOperationsInput | number
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
-  pickupPoints?: Prisma.TourPackageUpdatepickupPointsInput | string[]
-  priceDoubleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
-  priceTripleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
   inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
   images?: Prisma.TourPackageUpdateimagesInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupOptions?: Prisma.PickupOptionUpdateManyWithoutTourPackageNestedInput
   itineraries?: Prisma.ItineraryUpdateManyWithoutTourPackageNestedInput
 }
 
@@ -998,21 +1057,20 @@ export type TourPackageUncheckedUpdateWithoutBookingsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
   durationNights?: Prisma.IntFieldUpdateOperationsInput | number
   durationDays?: Prisma.IntFieldUpdateOperationsInput | number
-  pickupPoints?: Prisma.TourPackageUpdatepickupPointsInput | string[]
-  priceDoubleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
-  priceTripleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
   inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
   exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
   images?: Prisma.TourPackageUpdateimagesInput | string[]
   isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupOptions?: Prisma.PickupOptionUncheckedUpdateManyWithoutTourPackageNestedInput
   itineraries?: Prisma.ItineraryUncheckedUpdateManyWithoutTourPackageNestedInput
 }
 
@@ -1022,11 +1080,13 @@ export type TourPackageUncheckedUpdateWithoutBookingsInput = {
  */
 
 export type TourPackageCountOutputType = {
+  pickupOptions: number
   itineraries: number
   bookings: number
 }
 
 export type TourPackageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pickupOptions?: boolean | TourPackageCountOutputTypeCountPickupOptionsArgs
   itineraries?: boolean | TourPackageCountOutputTypeCountItinerariesArgs
   bookings?: boolean | TourPackageCountOutputTypeCountBookingsArgs
 }
@@ -1039,6 +1099,13 @@ export type TourPackageCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.
    * Select specific fields to fetch from the TourPackageCountOutputType
    */
   select?: Prisma.TourPackageCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TourPackageCountOutputType without action
+ */
+export type TourPackageCountOutputTypeCountPickupOptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PickupOptionWhereInput
 }
 
 /**
@@ -1062,21 +1129,20 @@ export type TourPackageSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   title?: boolean
   description?: boolean
   destination?: boolean
+  category?: boolean
   startDate?: boolean
   endDate?: boolean
   totalSeats?: boolean
   availableSeats?: boolean
   durationNights?: boolean
   durationDays?: boolean
-  pickupPoints?: boolean
-  priceDoubleSharing?: boolean
-  priceTripleSharing?: boolean
   inclusions?: boolean
   exclusions?: boolean
   images?: boolean
   isPublished?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  pickupOptions?: boolean | Prisma.TourPackage$pickupOptionsArgs<ExtArgs>
   itineraries?: boolean | Prisma.TourPackage$itinerariesArgs<ExtArgs>
   bookings?: boolean | Prisma.TourPackage$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.TourPackageCountOutputTypeDefaultArgs<ExtArgs>
@@ -1088,15 +1154,13 @@ export type TourPackageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   title?: boolean
   description?: boolean
   destination?: boolean
+  category?: boolean
   startDate?: boolean
   endDate?: boolean
   totalSeats?: boolean
   availableSeats?: boolean
   durationNights?: boolean
   durationDays?: boolean
-  pickupPoints?: boolean
-  priceDoubleSharing?: boolean
-  priceTripleSharing?: boolean
   inclusions?: boolean
   exclusions?: boolean
   images?: boolean
@@ -1111,15 +1175,13 @@ export type TourPackageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   title?: boolean
   description?: boolean
   destination?: boolean
+  category?: boolean
   startDate?: boolean
   endDate?: boolean
   totalSeats?: boolean
   availableSeats?: boolean
   durationNights?: boolean
   durationDays?: boolean
-  pickupPoints?: boolean
-  priceDoubleSharing?: boolean
-  priceTripleSharing?: boolean
   inclusions?: boolean
   exclusions?: boolean
   images?: boolean
@@ -1134,15 +1196,13 @@ export type TourPackageSelectScalar = {
   title?: boolean
   description?: boolean
   destination?: boolean
+  category?: boolean
   startDate?: boolean
   endDate?: boolean
   totalSeats?: boolean
   availableSeats?: boolean
   durationNights?: boolean
   durationDays?: boolean
-  pickupPoints?: boolean
-  priceDoubleSharing?: boolean
-  priceTripleSharing?: boolean
   inclusions?: boolean
   exclusions?: boolean
   images?: boolean
@@ -1151,8 +1211,9 @@ export type TourPackageSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TourPackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "destination" | "startDate" | "endDate" | "totalSeats" | "availableSeats" | "durationNights" | "durationDays" | "pickupPoints" | "priceDoubleSharing" | "priceTripleSharing" | "inclusions" | "exclusions" | "images" | "isPublished" | "createdAt" | "updatedAt", ExtArgs["result"]["tourPackage"]>
+export type TourPackageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "destination" | "category" | "startDate" | "endDate" | "totalSeats" | "availableSeats" | "durationNights" | "durationDays" | "inclusions" | "exclusions" | "images" | "isPublished" | "createdAt" | "updatedAt", ExtArgs["result"]["tourPackage"]>
 export type TourPackageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pickupOptions?: boolean | Prisma.TourPackage$pickupOptionsArgs<ExtArgs>
   itineraries?: boolean | Prisma.TourPackage$itinerariesArgs<ExtArgs>
   bookings?: boolean | Prisma.TourPackage$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.TourPackageCountOutputTypeDefaultArgs<ExtArgs>
@@ -1163,6 +1224,7 @@ export type TourPackageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type $TourPackagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "TourPackage"
   objects: {
+    pickupOptions: Prisma.$PickupOptionPayload<ExtArgs>[]
     itineraries: Prisma.$ItineraryPayload<ExtArgs>[]
     bookings: Prisma.$BookingPayload<ExtArgs>[]
   }
@@ -1172,15 +1234,13 @@ export type $TourPackagePayload<ExtArgs extends runtime.Types.Extensions.Interna
     title: string
     description: string
     destination: string
+    category: $Enums.TourCategory
     startDate: Date
     endDate: Date | null
     totalSeats: number
     availableSeats: number
     durationNights: number
     durationDays: number
-    pickupPoints: string[]
-    priceDoubleSharing: number
-    priceTripleSharing: number
     inclusions: string[]
     exclusions: string[]
     images: string[]
@@ -1581,6 +1641,7 @@ readonly fields: TourPackageFieldRefs;
  */
 export interface Prisma__TourPackageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  pickupOptions<T extends Prisma.TourPackage$pickupOptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TourPackage$pickupOptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PickupOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   itineraries<T extends Prisma.TourPackage$itinerariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TourPackage$itinerariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItineraryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bookings<T extends Prisma.TourPackage$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TourPackage$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1617,15 +1678,13 @@ export interface TourPackageFieldRefs {
   readonly title: Prisma.FieldRef<"TourPackage", 'String'>
   readonly description: Prisma.FieldRef<"TourPackage", 'String'>
   readonly destination: Prisma.FieldRef<"TourPackage", 'String'>
+  readonly category: Prisma.FieldRef<"TourPackage", 'TourCategory'>
   readonly startDate: Prisma.FieldRef<"TourPackage", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"TourPackage", 'DateTime'>
   readonly totalSeats: Prisma.FieldRef<"TourPackage", 'Int'>
   readonly availableSeats: Prisma.FieldRef<"TourPackage", 'Int'>
   readonly durationNights: Prisma.FieldRef<"TourPackage", 'Int'>
   readonly durationDays: Prisma.FieldRef<"TourPackage", 'Int'>
-  readonly pickupPoints: Prisma.FieldRef<"TourPackage", 'String[]'>
-  readonly priceDoubleSharing: Prisma.FieldRef<"TourPackage", 'Float'>
-  readonly priceTripleSharing: Prisma.FieldRef<"TourPackage", 'Float'>
   readonly inclusions: Prisma.FieldRef<"TourPackage", 'String[]'>
   readonly exclusions: Prisma.FieldRef<"TourPackage", 'String[]'>
   readonly images: Prisma.FieldRef<"TourPackage", 'String[]'>
@@ -2017,6 +2076,30 @@ export type TourPackageDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many TourPackages to delete.
    */
   limit?: number
+}
+
+/**
+ * TourPackage.pickupOptions
+ */
+export type TourPackage$pickupOptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PickupOption
+   */
+  select?: Prisma.PickupOptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PickupOption
+   */
+  omit?: Prisma.PickupOptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PickupOptionInclude<ExtArgs> | null
+  where?: Prisma.PickupOptionWhereInput
+  orderBy?: Prisma.PickupOptionOrderByWithRelationInput | Prisma.PickupOptionOrderByWithRelationInput[]
+  cursor?: Prisma.PickupOptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PickupOptionScalarFieldEnum | Prisma.PickupOptionScalarFieldEnum[]
 }
 
 /**

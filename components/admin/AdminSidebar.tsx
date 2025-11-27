@@ -9,6 +9,7 @@ import {
   PlusCircle,
   BookOpen,
   Users,
+  ImageIcon,
 } from "lucide-react";
 
 const links = [
@@ -33,6 +34,11 @@ const links = [
     icon: BookOpen,
   },
   {
+    label: "Gallery",
+    href: "/admin/gallery",
+    icon: ImageIcon,
+  },
+  {
     label: "Users",
     href: "/admin/users",
     icon: Users,
@@ -51,6 +57,7 @@ export default function AdminSidebar() {
         </h2>
         <p className="text-sm text-gray-500">Admin Panel</p>
       </div>
+      
 
       {/* Links */}
       <nav className="flex-1 p-4 space-y-2">

@@ -84,13 +84,21 @@ const Navbar = () => {
 
         {/* Navigation */}
         <div className="hidden lg:flex gap-1 shrink">
-          {navLinks.map((nav) => (
-            <Link key={nav.link} href={nav.link}>
-              <Button variant={pathname === nav.link ? "default" : "ghost"}>
-                {nav.name}
-              </Button>
-            </Link>
-          ))}
+          {navLinks.map((nav) => {
+            const isActive =
+              nav.link === "/"
+                ? pathname === "/" // Home should only match exact "/"
+                : pathname.startsWith(nav.link); // others can use startsWith
+
+            return (
+              <Link key={nav.link} href={nav.link}>
+                <Button variant={isActive ? "default" : "ghost"}>
+                  {nav.name}
+                </Button>
+              </Link>
+            );
+          })}
+
           {session ? (
             <Link href={"/account"}>
               <Button variant={pathname === "/account" ? "default" : "ghost"}>

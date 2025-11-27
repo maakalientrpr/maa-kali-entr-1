@@ -1,18 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  useForm,
-  useFieldArray,
-  ControllerRenderProps,
-  FieldValues,
-} from "react-hook-form";
+import { useForm, useFieldArray, ControllerRenderProps, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import {
-  CldUploadWidget,
-  CloudinaryUploadWidgetResults,
-} from "next-cloudinary";
+import { CldUploadWidget, CloudinaryUploadWidgetResults } from "next-cloudinary";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -30,12 +22,13 @@ import {
   Image as ImageIcon,
   Map,
   Clock,
+  Globe,
+  Tag,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Card,
   CardContent,
@@ -61,6 +54,7 @@ const tourSchema = z.object({
   slug: z.string().min(5, "Slug is required"),
   destination: z.string().min(2, "Destination is required"),
   description: z.string().min(20, "Description must be detailed"),
+  category: z.enum(["DOMESTIC", "INTERNATIONAL", "WEEKEND"]),
 
   startDate: z
     .string()
@@ -70,12 +64,17 @@ const tourSchema = z.object({
   durationNights: z.coerce.number().min(0),
   durationDays: z.coerce.number().min(1),
 
-  pickupPoints: z
-    .array(z.object({ value: z.string().min(2, "Required") }))
-    .min(1, "Add at least one pickup point"),
-
-  priceDoubleSharing: z.coerce.number().min(1, "Required"),
-  priceTripleSharing: z.coerce.number().min(1, "Required"),
+  // NEW: Pickup Options now contain the pricing logic per location
+  pickupOptions: z
+    .array(
+      z.object({
+        title: z.string().min(2, "Pickup location name required"), // e.g., Ex-Mumbai
+        priceSingleSharing: z.coerce.number().min(1, "Required"),
+        priceDoubleSharing: z.coerce.number(),
+        priceTripleSharing: z.coerce.number(),
+      })
+    )
+    .min(1, "Add at least one pickup & pricing option"),
 
   inclusions: z.array(z.object({ value: z.string().min(1) })).min(1),
   exclusions: z.array(z.object({ value: z.string() })).optional(),
@@ -156,8 +155,7 @@ interface CloudinaryResultInfo {
 }
 
 function ImageUploader({ onUpload }: { onUpload: (url: string) => void }) {
-  const UPLOAD_PRESET =
-    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
+  const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
 
   return (
     <CldUploadWidget
@@ -192,7 +190,6 @@ function ImageUploader({ onUpload }: { onUpload: (url: string) => void }) {
 //
 export default function CreateTourPage() {
   const router = useRouter();
-  const [isSamePrice, setIsSamePrice] = useState(false);
   const [slugTouched, setSlugTouched] = useState(false);
 
   const form = useForm({
@@ -202,13 +199,20 @@ export default function CreateTourPage() {
       slug: "",
       destination: "",
       description: "",
+      category: "DOMESTIC" as const, // Default category
       startDate: "",
       totalSeats: 20,
       durationNights: 0,
       durationDays: 1,
-      pickupPoints: [{ value: "ex-Kolkata" }],
-      priceDoubleSharing: 0,
-      priceTripleSharing: 0,
+      // Default one pickup option
+      pickupOptions: [
+        {
+          title: "Ex-Kolkata",
+          priceSingleSharing: 0,
+          priceDoubleSharing: 0,
+          priceTripleSharing: 0,
+        },
+      ],
       inclusions: [{ value: "Accommodation" }, { value: "Breakfast" }],
       exclusions: [],
       images: [{ value: "" }],
@@ -221,19 +225,20 @@ export default function CreateTourPage() {
     handleSubmit,
     setValue,
     watch,
-    getValues, // <--- CHANGED: Destructured getValues here
+    getValues,
     formState: { isSubmitting },
   } = form;
 
-  const pickup = useFieldArray({ control, name: "pickupPoints" } as any);
+  // Field arrays
+  const pickupOpts = useFieldArray({ control, name: "pickupOptions" } as any);
   const inc = useFieldArray({ control, name: "inclusions" } as any);
   const exc = useFieldArray({ control, name: "exclusions" } as any);
   const imgs = useFieldArray({ control, name: "images" } as any);
   const itin = useFieldArray({ control, name: "itinerary" } as any);
 
   const watchedTitle = watch("title");
-  const watchedDoublePrice = watch("priceDoubleSharing");
 
+  // Auto-generate slug
   useEffect(() => {
     if (!slugTouched) {
       const slug = generateSlug(watchedTitle || "");
@@ -242,14 +247,6 @@ export default function CreateTourPage() {
       }
     }
   }, [watchedTitle, slugTouched, setValue]);
-
-  useEffect(() => {
-    if (isSamePrice) {
-      setValue("priceTripleSharing", Number(watchedDoublePrice), {
-        shouldValidate: true,
-      });
-    }
-  }, [isSamePrice, watchedDoublePrice, setValue]);
 
   const appendDay = () => {
     const nextDay = itin.fields.length + 1;
@@ -262,11 +259,12 @@ export default function CreateTourPage() {
 
   const onSubmit = async (data: TourFormValues) => {
     try {
+      // Payload matches new API structure
       const payload = {
         ...data,
         startDate: new Date(data.startDate).toISOString(),
         availableSeats: data.totalSeats,
-        pickupPoints: data.pickupPoints.map((p) => p.value),
+        // Pickup Options & Pricing are now combined in `data.pickupOptions`
         inclusions: data.inclusions.map((i) => i.value),
         exclusions: (data.exclusions || []).map((e) => e.value),
         images: data.images.map((i) => i.value),
@@ -281,7 +279,7 @@ export default function CreateTourPage() {
 
       toast.success("Tour Package Created!");
       form.reset();
-      router.push("/admin");
+      router.push("/admin/tour-package");
     } catch (err) {
       console.error(err);
       toast.error("Failed to create package");
@@ -303,6 +301,7 @@ export default function CreateTourPage() {
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left column */}
               <div className="lg:col-span-2 space-y-8">
                 {/* Basic Details */}
                 <Card className="shadow-sm border-t-4 border-t-orange-600">
@@ -370,6 +369,34 @@ export default function CreateTourPage() {
                       />
                     </div>
 
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {/* CATEGORY SELECTOR */}
+                      <FormField
+                        control={control}
+                        name="category"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="flex gap-2 items-center text-orange-800">
+                              <Tag className="w-4 h-4" /> Category
+                            </FormLabel>
+                            <FormControl>
+                              <select
+                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                {...field}
+                              >
+                                <option value="DOMESTIC">Domestic Tour</option>
+                                <option value="INTERNATIONAL">
+                                  International Tour
+                                </option>
+                                <option value="WEEKEND">Weekend Tour</option>
+                              </select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
                     <div className="grid sm:grid-cols-2 gap-4 bg-orange-50/50 p-4 rounded-xl border border-orange-100">
                       <FormField
                         control={control}
@@ -423,7 +450,7 @@ export default function CreateTourPage() {
                   </CardContent>
                 </Card>
 
-                {/* Itinerary */}
+                {/* ITINERARY */}
                 <Card className="shadow-sm border-t-4 border-t-orange-600">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-xl text-orange-700">
@@ -440,8 +467,7 @@ export default function CreateTourPage() {
                         className="relative pl-8 border-l-2 border-orange-200 pb-6 last:border-0 last:pb-0"
                       >
                         <div className="absolute -left-[9px] top-0 flex h-4 w-4 items-center justify-center rounded-full ring-4 ring-white bg-orange-500" />
-
-                        <div className="bg-slate-50 border rounded-lg p-5 relative group hover:shadow-md transition-shadow">
+                        <div className="bg-slate-50 border rounded-lg p-5 relative group">
                           <div className="flex justify-between items-start mb-4">
                             <span className="bg-orange-100 text-orange-700 text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">
                               Day {idx + 1}
@@ -454,7 +480,6 @@ export default function CreateTourPage() {
                                 className="h-8 w-8 text-slate-400 hover:text-red-500 -mt-2 -mr-2"
                                 onClick={() => {
                                   itin.remove(idx);
-                                  // CHANGED: Use getValues from form, not from field array
                                   const remaining = getValues("itinerary");
                                   remaining.forEach((_: any, i: number) => {
                                     setValue(
@@ -518,7 +543,7 @@ export default function CreateTourPage() {
                   </CardContent>
                 </Card>
 
-                {/* Images */}
+                {/* IMAGES */}
                 <Card className="shadow-sm border-t-4 border-t-orange-600">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
@@ -526,7 +551,6 @@ export default function CreateTourPage() {
                     </CardTitle>
                     <CardDescription>Upload or paste URLs</CardDescription>
                   </CardHeader>
-
                   <CardContent className="space-y-3">
                     <ImageUploader
                       onUpload={(url) => {
@@ -543,7 +567,6 @@ export default function CreateTourPage() {
                         }
                       }}
                     />
-
                     {imgs.fields.map((field, index) => (
                       <div key={field.id} className="flex gap-2 items-center">
                         {watch(`images.${index}.value` as any) ? (
@@ -575,7 +598,6 @@ export default function CreateTourPage() {
                         </Button>
                       </div>
                     ))}
-
                     <Button
                       type="button"
                       variant="outline"
@@ -591,7 +613,7 @@ export default function CreateTourPage() {
 
               {/* Right column */}
               <div className="space-y-8 h-fit">
-                {/* Logistics */}
+                {/* LOGISTICS */}
                 <Card className="shadow-sm pt-0">
                   <CardHeader className="bg-slate-100 rounded-t-xl py-4">
                     <CardTitle className="text-base font-semibold flex items-center gap-2">
@@ -632,233 +654,219 @@ export default function CreateTourPage() {
                         )}
                       />
                     </div>
-
-                    <Separator />
-
-                    <div>
-                      <FormLabel className="mb-3 block text-sm font-semibold">
-                        Pickup Points
-                      </FormLabel>
-
-                      {pickup.fields.map((field, idx) => (
-                        <div key={field.id} className="flex gap-2 mb-2">
-                          <FormField
-                            control={control}
-                            name={`pickupPoints.${idx}.value`}
-                            render={({ field }) => (
-                              <FormItem className="flex-1">
-                                <FormControl>
-                                  <div className="relative">
-                                    <MapPin className="absolute left-2.5 top-2.5 h-4 w-4 text-orange-500" />
-                                    <Input
-                                      className="pl-9"
-                                      placeholder="Pickup location"
-                                      {...field}
-                                    />
-                                  </div>
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => pickup.remove(idx)}
-                          >
-                            <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-500" />
-                          </Button>
-                        </div>
-                      ))}
-
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="w-full text-orange-600 hover:text-orange-700"
-                        onClick={() => pickup.append({ value: "" })}
-                      >
-                        <Plus className="w-4 h-4 mr-2" /> Add Point
-                      </Button>
-                    </div>
                   </CardContent>
                 </Card>
 
-                {/* Pricing */}
+                {/* PICKUP & PRICING (COMBINED) */}
                 <Card className="shadow-md border-orange-200 bg-linear-to-br from-orange-50 to-white">
                   <CardHeader className="pb-2">
                     <CardTitle className="flex items-center text-orange-800 text-lg">
-                      <IndianRupee className="w-5 h-5 mr-1" /> Pricing
+                      <IndianRupee className="w-5 h-5 mr-1" /> Pricing &
+                      Pickups
                     </CardTitle>
                     <CardDescription>
-                      Per person pricing details.
+                      Set prices for different pickup locations.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-5">
-                    <div className="flex items-center space-x-2 rounded-md border border-orange-100 bg-white p-3">
-                      <Checkbox
-                        id="samePrice"
-                        checked={isSamePrice}
-                        onCheckedChange={(c) => setIsSamePrice(Boolean(c))}
-                      />
-                      <label
-                        htmlFor="samePrice"
-                        className="text-xs font-medium leading-tight cursor-pointer"
+                  <CardContent className="space-y-6">
+                    {pickupOpts.fields.map((field, idx) => (
+                      <div
+                        key={field.id}
+                        className="p-4 bg-white border border-orange-100 rounded-lg shadow-sm space-y-4"
                       >
-                        Same price for Triple Sharing?
-                      </label>
-                    </div>
+                        <div className="flex justify-between items-center">
+                          <FormField
+                            control={control}
+                            name={`pickupOptions.${idx}.title`}
+                            render={({ field }) => (
+                              <FormItem className="flex-1">
+                                <FormLabel className="text-xs font-bold uppercase text-slate-500">
+                                  Pickup Location
+                                </FormLabel>
+                                <div className="flex gap-2">
+                                  <div className="relative flex-1">
+                                    <MapPin className="absolute left-2.5 top-2.5 h-4 w-4 text-orange-500" />
+                                    <FormControl>
+                                      <Input
+                                        className="pl-9 font-semibold"
+                                        placeholder="e.g. Ex-Mumbai"
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                  </div>
+                                </div>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          {pickupOpts.fields.length > 1 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="ml-2 mt-6 text-red-500"
+                              onClick={() => pickupOpts.remove(idx)}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
 
-                    <div className="grid gap-4">
-                      <FormField
-                        control={control}
-                        name="priceDoubleSharing"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-slate-700">
-                              Double Sharing
-                            </FormLabel>
-                            <FormControl>
-                              <NumberInputWrapper
-                                field={field}
-                                placeholder="15000"
-                                min={1}
-                                className="border-orange-200 text-lg font-medium"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        {/* Price Grid */}
+                        <div className="grid grid-cols-3 gap-2">
+                          <FormField
+                            control={control}
+                            name={`pickupOptions.${idx}.priceSingleSharing`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[10px] uppercase">
+                                  Single Share
+                                </FormLabel>
+                                <FormControl>
+                                  <NumberInputWrapper field={field} min={0} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={control}
+                            name={`pickupOptions.${idx}.priceDoubleSharing`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[10px] uppercase">
+                                  Double Share
+                                </FormLabel>
+                                <FormControl>
+                                  <NumberInputWrapper field={field} min={0} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={control}
+                            name={`pickupOptions.${idx}.priceTripleSharing`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-[10px] uppercase">
+                                  Triple Share
+                                </FormLabel>
+                                <FormControl>
+                                  <NumberInputWrapper field={field} min={0} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    ))}
 
-                      <FormField
-                        control={control}
-                        name="priceTripleSharing"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-slate-700">
-                              Triple Sharing
-                            </FormLabel>
-                            <FormControl>
-                              <NumberInputWrapper
-                                field={field}
-                                placeholder="12000"
-                                min={1}
-                                disabled={isSamePrice}
-                                className={
-                                  isSamePrice
-                                    ? "bg-slate-100 text-slate-400"
-                                    : ""
-                                }
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-dashed border-orange-300 text-orange-600"
+                      onClick={() =>
+                        pickupOpts.append({
+                          title: "",
+                          priceSingleSharing: 0,
+                          priceDoubleSharing: 0,
+                          priceTripleSharing: 0,
+                        })
+                      }
+                    >
+                      <Plus className="w-4 h-4 mr-2" /> Add Another Pickup
+                      Option
+                    </Button>
                   </CardContent>
                 </Card>
 
-                {/* Inclusions / Exclusions */}
+                {/* INCLUSIONS */}
                 <Card className="shadow-sm">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-base">
-                      <ListChecks className="w-4 h-4" /> Inclusions & Exclusions
+                      <ListChecks className="w-4 h-4" /> Inclusions
                     </CardTitle>
                   </CardHeader>
-
-                  <CardContent className="space-y-6">
-                    <div>
-                      <FormLabel className="text-green-600 font-bold mb-2 block">
-                        What's Included
-                      </FormLabel>
-                      {inc.fields.map((field, idx) => (
-                        <div key={field.id} className="flex gap-2 mb-2">
-                          <FormField
-                            control={control}
-                            name={`inclusions.${idx}.value`}
-                            render={({ field }) => (
-                              <FormItem className="flex-1">
-                                <FormControl>
-                                  <Input className="h-8 text-sm" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8"
-                            onClick={() => inc.remove(idx)}
-                          >
-                            <Trash2 className="w-3 h-3 text-slate-400 hover:text-red-500" />
-                          </Button>
-                        </div>
-                      ))}
-
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="w-full text-xs text-slate-500"
-                        onClick={() => inc.append({ value: "" })}
-                      >
-                        <Plus className="w-3 h-3 mr-1" /> Add Inclusion
-                      </Button>
-                    </div>
-
-                    <Separator />
-
-                    <div>
-                      <div className="flex justify-between items-center mb-2">
-                        <FormLabel className="text-red-500 font-bold">
-                          What's Excluded
-                        </FormLabel>
-                        <span className="text-[10px] text-slate-400 uppercase tracking-wider font-bold bg-slate-100 px-2 py-1 rounded">
-                          Optional
-                        </span>
+                  <CardContent className="space-y-4">
+                    {inc.fields.map((field, idx) => (
+                      <div key={field.id} className="flex gap-2">
+                        <FormField
+                          control={control}
+                          name={`inclusions.${idx}.value`}
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Input className="h-8 text-sm" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => inc.remove(idx)}
+                        >
+                          <Trash2 className="w-3 h-3 text-slate-400 hover:text-red-500" />
+                        </Button>
                       </div>
+                    ))}
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="w-full text-xs text-slate-500"
+                      onClick={() => inc.append({ value: "" })}
+                    >
+                      <Plus className="w-3 h-3 mr-1" /> Add Inclusion
+                    </Button>
 
-                      {exc.fields.map((field, idx) => (
-                        <div key={field.id} className="flex gap-2 mb-2">
-                          <FormField
-                            control={control}
-                            name={`exclusions.${idx}.value`}
-                            render={({ field }) => (
-                              <FormItem className="flex-1">
-                                <FormControl>
-                                  <Input className="h-8 text-sm" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8"
-                            onClick={() => exc.remove(idx)}
-                          >
-                            <Trash2 className="w-3 h-3 text-slate-400 hover:text-red-500" />
-                          </Button>
-                        </div>
-                      ))}
+                    <Separator className="my-2" />
 
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="w-full text-xs text-slate-500"
-                        onClick={() => exc.append({ value: "" })}
-                      >
-                        <Plus className="w-3 h-3 mr-1" /> Add Exclusion
-                      </Button>
+                    <div className="flex justify-between items-center mb-2">
+                      <FormLabel className="text-red-500 font-bold">
+                        Exclusions
+                      </FormLabel>
                     </div>
+
+                    {exc.fields.map((field, idx) => (
+                      <div key={field.id} className="flex gap-2">
+                        <FormField
+                          control={control}
+                          name={`exclusions.${idx}.value`}
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Input className="h-8 text-sm" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => exc.remove(idx)}
+                        >
+                          <Trash2 className="w-3 h-3 text-slate-400 hover:text-red-500" />
+                        </Button>
+                      </div>
+                    ))}
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="w-full text-xs text-slate-500"
+                      onClick={() => exc.append({ value: "" })}
+                    >
+                      <Plus className="w-3 h-3 mr-1" /> Add Exclusion
+                    </Button>
                   </CardContent>
                 </Card>
               </div>

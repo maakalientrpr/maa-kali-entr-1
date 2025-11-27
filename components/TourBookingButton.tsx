@@ -14,16 +14,25 @@ import {
 } from "@/components/ui/dialog";
 import BookingForm from "./tours/booking-form";
 
+// Define the shape based on your Prisma model
+type PickupOption = {
+  id: string;
+  title: string;
+  priceSingleSharing: number;
+  priceDoubleSharing: number | null;
+  priceTripleSharing: number | null;
+};
+
 type TourBookingButtonProps = {
   title: string;
   tourId: string;
-  price: number;
+  pickupOptions: PickupOption[];
 };
 
 export default function TourBookingButton({
   title,
   tourId,
-  price,
+  pickupOptions,
 }: TourBookingButtonProps) {
   const [open, setOpen] = useState(false);
   const { data: session } = authClient.useSession();
@@ -34,7 +43,7 @@ export default function TourBookingButton({
     return (
       <Button
         className="bg-orange-600 hover:bg-orange-700 w-full"
-        onClick={() => router.push("/")}
+        onClick={() => router.push("/login")}
       >
         Book Now
       </Button>
@@ -50,19 +59,19 @@ export default function TourBookingButton({
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             Book <span className="text-orange-500">{title}</span> tour
           </DialogTitle>
           <DialogDescription>
-            Fill up the form to book this tour package
+            Select your pickup location and sharing preference.
           </DialogDescription>
         </DialogHeader>
 
         <BookingForm
-          pricePerPerson={price}
-          id={tourId}
+          pickupOptions={pickupOptions}
+          tourId={tourId}
           onClose={() => setOpen(false)}
         />
       </DialogContent>
