@@ -1,6 +1,7 @@
 import AnnouncementBar from "@/components/AnnouncementBar";
-import TourPackages from "@/components/tours/tour-packages";
+import TourPackages from "@/components/tours/tour-packages"; // Ensure this path is correct
 import prisma from "@/lib/db";
+import { TourCategory } from "@/prisma/generated/enums";
 
 const page = async () => {
   const tours = await prisma.tourPackage.findMany({
@@ -11,16 +12,22 @@ const page = async () => {
       createdAt: "desc",
     },
     include: {
-      pickupOptions: true
-    }
+      pickupOptions: true,
+    },
   });
 
-  // ✅ If no tours available
   if (!tours || tours.length === 0) {
-    return <p>No tours available</p>;
+    return (
+      <div className="min-h-screen flex flex-col">
+        <AnnouncementBar />
+        <div className="flex-1 flex items-center justify-center">
+             <p className="text-gray-500">No tours available at the moment.</p>
+        </div>
+      </div>
+    );
   }
 
-   // ✅ Transform data to calculate "Starting From" price
+  // ✅ Transform data
   const formattedTours = tours.map((tour) => {
     let minPrice = Infinity;
 
@@ -34,7 +41,7 @@ const page = async () => {
 
     return {
       ...tour,
-      // If no price found (infinity), default to 0
+      category: tour.category as TourCategory, // Ensure category is typed correctly
       price: minPrice === Infinity ? 0 : minPrice,
     };
   });
@@ -46,10 +53,13 @@ const page = async () => {
         <h1 className="text-orange-500 font-bold text-4xl md:text-4xl">
           Tours & Travel
         </h1>
-        <p className="text-gray-700">
-       Explore our curated tour packages designed for comfort, convenience, and unforgettable travel experiences.
+        <p className="text-gray-700 max-w-2xl mx-auto px-4">
+          Explore our curated tour packages designed for comfort, convenience, and
+          unforgettable travel experiences.
         </p>
       </div>
+      
+      {/* Pass the formatted tours to the client component */}
       <TourPackages tours={formattedTours} />
     </div>
   );

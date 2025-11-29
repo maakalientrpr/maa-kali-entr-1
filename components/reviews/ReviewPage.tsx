@@ -9,7 +9,7 @@ export const revalidate = 0; // Ensure fresh data on every load
 export default async function ReviewsPage() {
   // 1. Fetch Session (to get userId)
   const session = await auth.api.getSession({
-    headers: await headers(), // you need to pass the headers object.
+    headers: await headers(), 
   });
   const userId = session?.user?.id;
 

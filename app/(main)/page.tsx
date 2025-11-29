@@ -14,8 +14,8 @@ export default async function Home() {
       <FeaturedTorus />
       <CustomizeTourForm />
       <EventsCatering />
+      <ReviewsPage />
       <TravelVideos />
-     <ReviewsPage />
     </div>
   );
 }

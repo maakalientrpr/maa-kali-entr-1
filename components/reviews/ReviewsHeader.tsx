@@ -11,6 +11,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import ReviewForm from "./ReviewForm";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 type StatsProps = {
   average: number;
@@ -23,9 +25,8 @@ export default function ReviewsHeader({ average, total, userId }: StatsProps) {
 
   const handleOpenModal = () => {
     if (!userId) {
-      // You can replace this with a proper Toast if you have one
-      alert("Please login to write a review");
-      return;
+      toast.error("Login to write review");
+      redirect("/login");
     }
     setIsOpen(true);
   };
