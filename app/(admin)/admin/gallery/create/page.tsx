@@ -9,7 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, UploadCloud, X } from "lucide-react";
 import { toast } from "sonner";
-import { createTripAlbum } from "@/actions/gallery-actions"; // Import from Step 2
+import { createAlbum } from "@/actions/gallery-actions"; 
+
+// 1. Define categories manually to avoid importing @prisma/client runtime
+const ALBUM_CATEGORIES = ["TOURS", "PILGRIMAGE", "EVENTS", "CATERING"];
 
 export default function CreateGalleryPage() {
   const router = useRouter();
@@ -18,7 +21,8 @@ export default function CreateGalleryPage() {
   // Form State
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
-  const [year, setYear] = useState(new Date().getFullYear());
+  // 2. Use string type for state instead of the Enum type
+  const [category, setCategory] = useState(ALBUM_CATEGORIES[0]);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 
   const handleUpload = (result: any) => {
@@ -41,16 +45,18 @@ export default function CreateGalleryPage() {
     setIsSubmitting(true);
 
     try {
-      const res = await createTripAlbum({
+      const res = await createAlbum({
         title,
         location,
-        year: Number(year),
+        // Cast string back to specific type if needed by the action, 
+        // though the action usually accepts string if defined as AlbumCategory
+        category: category as any, 
         images: uploadedImages,
       });
 
       if (res.success) {
-        toast.success("Trip Album Created!");
-        router.push("/admin/gallery"); // Redirect to list
+        toast.success("Album Created Successfully!");
+        router.push("/admin/gallery"); 
       } else {
         toast.error(res.error);
       }
@@ -65,14 +71,14 @@ export default function CreateGalleryPage() {
     <div className="max-w-4xl mx-auto py-10 px-4">
       <Card>
         <CardHeader>
-          <CardTitle>Upload Trip Album</CardTitle>
+          <CardTitle>Create New Album</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Trip Title</Label>
+                <Label>Album Title</Label>
                 <Input 
                   placeholder="e.g. Summer Vacation" 
                   value={title} 
@@ -91,14 +97,21 @@ export default function CreateGalleryPage() {
                 />
               </div>
 
+              {/* Category Selector */}
               <div className="space-y-2">
-                <Label>Year</Label>
-                <Input 
-                  type="number" 
-                  value={year} 
-                  onChange={(e) => setYear(Number(e.target.value))} 
-                  required 
-                />
+                <Label>Category</Label>
+                <select
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  required
+                >
+                  {ALBUM_CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -109,7 +122,7 @@ export default function CreateGalleryPage() {
               <CldUploadWidget
                 uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                 onSuccess={handleUpload}
-                options={{ multiple: true, folder: "trips" }} // 'multiple: true' allows batch selection
+                options={{ multiple: true, folder: "albums" }}
               >
                 {({ open }) => (
                   <div 

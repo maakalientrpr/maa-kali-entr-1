@@ -2,30 +2,36 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { AlbumCategory } from "@/prisma/generated/client";
 
+// Define input types
 type CreateAlbumParams = {
   title: string;
-  location: string;
-  year: number;
+  location?: string;
+  category: AlbumCategory;
   images: string[]; // Array of Cloudinary URLs
 };
 
-export async function createTripAlbum({ title, location, year, images }: CreateAlbumParams) {
-  try {
-    // 1. Find or Create the Year
-    // This ensures all 2025 albums go into the same "2025" container
-    const yearRecord = await prisma.year.upsert({
-      where: { yearNumber: year },
-      update: {}, // If exists, do nothing
-      create: { yearNumber: year },
-    });
+type UpdateAlbumParams = {
+  albumId: string;
+  title: string;
+  location?: string;
+  category: AlbumCategory;
+  newImages: string[];
+  imageIdsToDelete: string[];
+};
 
-    // 2. Create the Album and link Images in one transaction
-    await prisma.tripAlbum.create({
+/**
+ * Create a new Album
+ */
+export async function createAlbum({ title, location, category, images }: CreateAlbumParams) {
+  try {
+    // Create the Album and link Images in one transaction
+    await prisma.album.create({
       data: {
         title,
         location,
-        yearId: yearRecord.id,
+        category,
         images: {
           create: images.map((url) => ({
             imageUrl: url,
@@ -44,9 +50,12 @@ export async function createTripAlbum({ title, location, year, images }: CreateA
   }
 }
 
-export async function deleteTripAlbum(albumId: string) {
+/**
+ * Delete an Album
+ */
+export async function deleteAlbum(albumId: string) {
   try {
-    await prisma.tripAlbum.delete({
+    await prisma.album.delete({
       where: { id: albumId },
     });
 
@@ -54,61 +63,56 @@ export async function deleteTripAlbum(albumId: string) {
     revalidatePath("/admin/gallery");
     return { success: true, message: "Album deleted successfully" };
   } catch (error) {
+    console.error("Delete Error:", error);
     return { success: false, error: "Failed to delete album" };
   }
 }
 
-type UpdateAlbumParams = {
-  albumId: string;
-  title: string;
-  location: string;
-  year: number;
-  newImages: string[]; // URLs of newly uploaded images
-  imageIdsToDelete: string[]; // IDs of existing images to remove
-};
-
-export async function updateTripAlbum({
+/**
+ * Update an existing Album
+ */
+export async function updateAlbum({
   albumId,
   title,
   location,
-  year,
+  category,
   newImages,
   imageIdsToDelete,
 }: UpdateAlbumParams) {
   try {
-    // 1. Handle Year Change (Find or Create new year if needed)
-    const yearRecord = await prisma.year.upsert({
-      where: { yearNumber: year },
-      update: {},
-      create: { yearNumber: year },
-    });
-
-    // 2. Transaction to update details, add new images, remove old ones
     await prisma.$transaction([
-      // Update Album Details
-      prisma.tripAlbum.update({
+      // 1. Update Album Details
+      prisma.album.update({
         where: { id: albumId },
         data: {
           title,
           location,
-          yearId: yearRecord.id,
+          category,
         },
       }),
 
-      // Create New Images
-      prisma.image.createMany({
-        data: newImages.map((url) => ({
-          imageUrl: url,
-          tripAlbumId: albumId,
-        })),
-      }),
+      // 2. Create New Images (if any)
+      ...(newImages.length > 0
+        ? [
+            prisma.image.createMany({
+              data: newImages.map((url) => ({
+                imageUrl: url,
+                albumId: albumId, // Note: field is albumId, not tripAlbumId
+              })),
+            }),
+          ]
+        : []),
 
-      // Delete Removed Images
-      prisma.image.deleteMany({
-        where: {
-          id: { in: imageIdsToDelete },
-        },
-      }),
+      // 3. Delete Removed Images (if any)
+      ...(imageIdsToDelete.length > 0
+        ? [
+            prisma.image.deleteMany({
+              where: {
+                id: { in: imageIdsToDelete },
+              },
+            }),
+          ]
+        : []),
     ]);
 
     revalidatePath("/gallery");

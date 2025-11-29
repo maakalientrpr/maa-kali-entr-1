@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const PollStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED',
+  PLANNED: 'PLANNED'
+} as const
+
+export type PollStatus = (typeof PollStatus)[keyof typeof PollStatus]
+
+
 export const TourCategory = {
   DOMESTIC: 'DOMESTIC',
   INTERNATIONAL: 'INTERNATIONAL',
@@ -46,3 +55,13 @@ export const PaymentStatus = {
 } as const
 
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const AlbumCategory = {
+  TOURS: 'TOURS',
+  PILGRIMAGE: 'PILGRIMAGE',
+  EVENTS: 'EVENTS',
+  CATERING: 'CATERING'
+} as const
+
+export type AlbumCategory = (typeof AlbumCategory)[keyof typeof AlbumCategory]

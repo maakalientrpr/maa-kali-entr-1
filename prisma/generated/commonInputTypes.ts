@@ -205,6 +205,23 @@ export type IntWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntFilter<$PrismaModel>
 }
 
+export type EnumPollStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.PollStatus | Prisma.EnumPollStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PollStatus[] | Prisma.ListEnumPollStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PollStatus[] | Prisma.ListEnumPollStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPollStatusFilter<$PrismaModel> | $Enums.PollStatus
+}
+
+export type EnumPollStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PollStatus | Prisma.EnumPollStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PollStatus[] | Prisma.ListEnumPollStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PollStatus[] | Prisma.ListEnumPollStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPollStatusWithAggregatesFilter<$PrismaModel> | $Enums.PollStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPollStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPollStatusFilter<$PrismaModel>
+}
+
 export type FloatFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
@@ -308,6 +325,23 @@ export type EnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPaymentStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPaymentStatusFilter<$PrismaModel>
+}
+
+export type EnumAlbumCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlbumCategory | Prisma.EnumAlbumCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.AlbumCategory[] | Prisma.ListEnumAlbumCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlbumCategory[] | Prisma.ListEnumAlbumCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlbumCategoryFilter<$PrismaModel> | $Enums.AlbumCategory
+}
+
+export type EnumAlbumCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlbumCategory | Prisma.EnumAlbumCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.AlbumCategory[] | Prisma.ListEnumAlbumCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlbumCategory[] | Prisma.ListEnumAlbumCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlbumCategoryWithAggregatesFilter<$PrismaModel> | $Enums.AlbumCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAlbumCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAlbumCategoryFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -514,6 +548,23 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
 }
 
+export type NestedEnumPollStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.PollStatus | Prisma.EnumPollStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PollStatus[] | Prisma.ListEnumPollStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PollStatus[] | Prisma.ListEnumPollStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPollStatusFilter<$PrismaModel> | $Enums.PollStatus
+}
+
+export type NestedEnumPollStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PollStatus | Prisma.EnumPollStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.PollStatus[] | Prisma.ListEnumPollStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PollStatus[] | Prisma.ListEnumPollStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPollStatusWithAggregatesFilter<$PrismaModel> | $Enums.PollStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPollStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPollStatusFilter<$PrismaModel>
+}
+
 export type NestedFloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -606,6 +657,23 @@ export type NestedEnumPaymentStatusWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPaymentStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPaymentStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumAlbumCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlbumCategory | Prisma.EnumAlbumCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.AlbumCategory[] | Prisma.ListEnumAlbumCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlbumCategory[] | Prisma.ListEnumAlbumCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlbumCategoryFilter<$PrismaModel> | $Enums.AlbumCategory
+}
+
+export type NestedEnumAlbumCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlbumCategory | Prisma.EnumAlbumCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.AlbumCategory[] | Prisma.ListEnumAlbumCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlbumCategory[] | Prisma.ListEnumAlbumCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlbumCategoryWithAggregatesFilter<$PrismaModel> | $Enums.AlbumCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAlbumCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAlbumCategoryFilter<$PrismaModel>
 }
 
 

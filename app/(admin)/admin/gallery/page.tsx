@@ -3,16 +3,15 @@ import Image from "next/image";
 import prisma from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Edit, MapPin, Plus, Trash2 } from "lucide-react";
+import { Edit, MapPin, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DeleteAlbumButton } from "@/components/admin/gallery/DeleteAlbumButton";
 
 export const revalidate = 0;
 
 export default async function AdminGalleryPage() {
-  const albums = await prisma.tripAlbum.findMany({
+  const albums = await prisma.album.findMany({
     include: {
-      year: true,
       images: {
         take: 1, // Get cover image
       },
@@ -49,7 +48,7 @@ export default async function AdminGalleryPage() {
               )}
               <div className="absolute top-2 right-2">
                 <Badge variant="secondary" className="font-bold">
-                  {album.year.yearNumber}
+                  {album.category}
                 </Badge>
               </div>
             </div>

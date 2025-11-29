@@ -21,6 +21,7 @@ const Sidebar = () => {
   const navLinks = [
     { name: "Home", link: "/" },
     { name: "Tours & Travel", link: "/tours" },
+    { name: "Vote Destinations", link: "/vote" },
     { name: "Events & Catering", link: "/events&catering" },
     { name: "Bookings & Assistance", link: "/bookings&assistance" },
     { name: "Gallery", link: "/gallery" },

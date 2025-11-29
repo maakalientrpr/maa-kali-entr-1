@@ -9,15 +9,19 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, UploadCloud, X, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateTripAlbum } from "@/actions/gallery-actions";
+import { updateAlbum } from "@/actions/gallery-actions";
+// 1. USE 'import type' so the runtime code is not bundled
+import type { AlbumCategory, Image as PrismaImage } from "@/prisma/generated/client";
 
-// Type matching the Prisma include
+// 2. Define categories manually here as well
+const ALBUM_CATEGORIES = ["TOURS", "PILGRIMAGE", "EVENTS", "CATERING"];
+
 type AlbumData = {
   id: string;
   title: string;
   location: string | null;
-  year: { yearNumber: number };
-  images: { id: string; imageUrl: string }[];
+  category: AlbumCategory; 
+  images: PrismaImage[];
 };
 
 export default function EditGalleryForm({ album }: { album: AlbumData }) {
@@ -27,27 +31,25 @@ export default function EditGalleryForm({ album }: { album: AlbumData }) {
   // Form State
   const [title, setTitle] = useState(album.title);
   const [location, setLocation] = useState(album.location || "");
-  const [year, setYear] = useState(album.year.yearNumber);
+  const [category, setCategory] = useState<string>(album.category);
 
   // State for Images
   const [existingImages, setExistingImages] = useState(album.images);
   const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
   const [newImages, setNewImages] = useState<string[]>([]);
 
-  // Handle New Uploads
+  // ... (Handle Upload, Delete Existing, Remove New - SAME AS BEFORE) ...
   const handleUpload = (result: any) => {
     if (result.info?.secure_url) {
       setNewImages((prev) => [...prev, result.info.secure_url]);
     }
   };
 
-  // Mark existing image for deletion
   const handleDeleteExisting = (imageId: string) => {
     setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
     setImagesToDelete((prev) => [...prev, imageId]);
   };
 
-  // Remove newly uploaded image (before save)
   const removeNewImage = (index: number) => {
     setNewImages((prev) => prev.filter((_, idx) => idx !== index));
   };
@@ -57,14 +59,13 @@ export default function EditGalleryForm({ album }: { album: AlbumData }) {
     setIsSubmitting(true);
 
     try {
-      const res = await updateTripAlbum({
+      const res = await updateAlbum({
         albumId: album.id,
         title,
         location,
-        year: Number(year),
+        category: category as AlbumCategory, // Cast back to type for the server action
         newImages,
-        // ✅ FIXED: Map the state variable 'imagesToDelete' to the expected prop 'imageIdsToDelete'
-        imageIdsToDelete: imagesToDelete, 
+        imageIdsToDelete: imagesToDelete,
       });
 
       if (res.success) {
@@ -109,13 +110,19 @@ export default function EditGalleryForm({ album }: { album: AlbumData }) {
               </div>
 
               <div className="space-y-2">
-                <Label>Year</Label>
-                <Input
-                  type="number"
-                  value={year}
-                  onChange={(e) => setYear(Number(e.target.value))}
+                <Label>Category</Label>
+                <select
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
                   required
-                />
+                >
+                  {ALBUM_CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -129,7 +136,6 @@ export default function EditGalleryForm({ album }: { album: AlbumData }) {
                 {existingImages.map((img) => (
                   <div key={img.id} className="relative group aspect-square rounded-md overflow-hidden border">
                     <img src={img.imageUrl} alt="trip" className="object-cover w-full h-full" />
-                    {/* Delete Button */}
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                       <Button
                         type="button"
@@ -152,7 +158,7 @@ export default function EditGalleryForm({ album }: { album: AlbumData }) {
               <CldUploadWidget
                 uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                 onSuccess={handleUpload}
-                options={{ multiple: true, folder: "trips" }}
+                options={{ multiple: true, folder: "albums" }}
               >
                 {({ open }) => (
                   <div

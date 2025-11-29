@@ -323,6 +323,7 @@ export type TourPackageWhereInput = {
   pickupOptions?: Prisma.PickupOptionListRelationFilter
   itineraries?: Prisma.ItineraryListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
+  reviews?: Prisma.ReviewListRelationFilter
 }
 
 export type TourPackageOrderByWithRelationInput = {
@@ -347,6 +348,7 @@ export type TourPackageOrderByWithRelationInput = {
   pickupOptions?: Prisma.PickupOptionOrderByRelationAggregateInput
   itineraries?: Prisma.ItineraryOrderByRelationAggregateInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
+  reviews?: Prisma.ReviewOrderByRelationAggregateInput
 }
 
 export type TourPackageWhereUniqueInput = Prisma.AtLeast<{
@@ -374,6 +376,7 @@ export type TourPackageWhereUniqueInput = Prisma.AtLeast<{
   pickupOptions?: Prisma.PickupOptionListRelationFilter
   itineraries?: Prisma.ItineraryListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
+  reviews?: Prisma.ReviewListRelationFilter
 }, "id" | "slug">
 
 export type TourPackageOrderByWithAggregationInput = {
@@ -448,6 +451,7 @@ export type TourPackageCreateInput = {
   pickupOptions?: Prisma.PickupOptionCreateNestedManyWithoutTourPackageInput
   itineraries?: Prisma.ItineraryCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingCreateNestedManyWithoutTourPackageInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutTourPackageInput
 }
 
 export type TourPackageUncheckedCreateInput = {
@@ -472,6 +476,7 @@ export type TourPackageUncheckedCreateInput = {
   pickupOptions?: Prisma.PickupOptionUncheckedCreateNestedManyWithoutTourPackageInput
   itineraries?: Prisma.ItineraryUncheckedCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTourPackageInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTourPackageInput
 }
 
 export type TourPackageUpdateInput = {
@@ -496,6 +501,7 @@ export type TourPackageUpdateInput = {
   pickupOptions?: Prisma.PickupOptionUpdateManyWithoutTourPackageNestedInput
   itineraries?: Prisma.ItineraryUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutTourPackageNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutTourPackageNestedInput
 }
 
 export type TourPackageUncheckedUpdateInput = {
@@ -520,6 +526,7 @@ export type TourPackageUncheckedUpdateInput = {
   pickupOptions?: Prisma.PickupOptionUncheckedUpdateManyWithoutTourPackageNestedInput
   itineraries?: Prisma.ItineraryUncheckedUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTourPackageNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTourPackageNestedInput
 }
 
 export type TourPackageCreateManyInput = {
@@ -664,6 +671,11 @@ export type TourPackageSumOrderByAggregateInput = {
   durationDays?: Prisma.SortOrder
 }
 
+export type TourPackageNullableScalarRelationFilter = {
+  is?: Prisma.TourPackageWhereInput | null
+  isNot?: Prisma.TourPackageWhereInput | null
+}
+
 export type TourPackageScalarRelationFilter = {
   is?: Prisma.TourPackageWhereInput
   isNot?: Prisma.TourPackageWhereInput
@@ -708,6 +720,22 @@ export type TourPackageUpdateimagesInput = {
   push?: string | string[]
 }
 
+export type TourPackageCreateNestedOneWithoutReviewsInput = {
+  create?: Prisma.XOR<Prisma.TourPackageCreateWithoutReviewsInput, Prisma.TourPackageUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.TourPackageCreateOrConnectWithoutReviewsInput
+  connect?: Prisma.TourPackageWhereUniqueInput
+}
+
+export type TourPackageUpdateOneWithoutReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.TourPackageCreateWithoutReviewsInput, Prisma.TourPackageUncheckedCreateWithoutReviewsInput>
+  connectOrCreate?: Prisma.TourPackageCreateOrConnectWithoutReviewsInput
+  upsert?: Prisma.TourPackageUpsertWithoutReviewsInput
+  disconnect?: Prisma.TourPackageWhereInput | boolean
+  delete?: Prisma.TourPackageWhereInput | boolean
+  connect?: Prisma.TourPackageWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TourPackageUpdateToOneWithWhereWithoutReviewsInput, Prisma.TourPackageUpdateWithoutReviewsInput>, Prisma.TourPackageUncheckedUpdateWithoutReviewsInput>
+}
+
 export type TourPackageCreateNestedOneWithoutPickupOptionsInput = {
   create?: Prisma.XOR<Prisma.TourPackageCreateWithoutPickupOptionsInput, Prisma.TourPackageUncheckedCreateWithoutPickupOptionsInput>
   connectOrCreate?: Prisma.TourPackageCreateOrConnectWithoutPickupOptionsInput
@@ -750,6 +778,118 @@ export type TourPackageUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TourPackageUpdateToOneWithWhereWithoutBookingsInput, Prisma.TourPackageUpdateWithoutBookingsInput>, Prisma.TourPackageUncheckedUpdateWithoutBookingsInput>
 }
 
+export type TourPackageCreateWithoutReviewsInput = {
+  id?: string
+  slug: string
+  title: string
+  description: string
+  destination: string
+  category?: $Enums.TourCategory
+  startDate: Date | string
+  endDate?: Date | string | null
+  totalSeats?: number
+  availableSeats: number
+  durationNights: number
+  durationDays: number
+  inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
+  exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
+  images?: Prisma.TourPackageCreateimagesInput | string[]
+  isPublished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pickupOptions?: Prisma.PickupOptionCreateNestedManyWithoutTourPackageInput
+  itineraries?: Prisma.ItineraryCreateNestedManyWithoutTourPackageInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutTourPackageInput
+}
+
+export type TourPackageUncheckedCreateWithoutReviewsInput = {
+  id?: string
+  slug: string
+  title: string
+  description: string
+  destination: string
+  category?: $Enums.TourCategory
+  startDate: Date | string
+  endDate?: Date | string | null
+  totalSeats?: number
+  availableSeats: number
+  durationNights: number
+  durationDays: number
+  inclusions?: Prisma.TourPackageCreateinclusionsInput | string[]
+  exclusions?: Prisma.TourPackageCreateexclusionsInput | string[]
+  images?: Prisma.TourPackageCreateimagesInput | string[]
+  isPublished?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pickupOptions?: Prisma.PickupOptionUncheckedCreateNestedManyWithoutTourPackageInput
+  itineraries?: Prisma.ItineraryUncheckedCreateNestedManyWithoutTourPackageInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTourPackageInput
+}
+
+export type TourPackageCreateOrConnectWithoutReviewsInput = {
+  where: Prisma.TourPackageWhereUniqueInput
+  create: Prisma.XOR<Prisma.TourPackageCreateWithoutReviewsInput, Prisma.TourPackageUncheckedCreateWithoutReviewsInput>
+}
+
+export type TourPackageUpsertWithoutReviewsInput = {
+  update: Prisma.XOR<Prisma.TourPackageUpdateWithoutReviewsInput, Prisma.TourPackageUncheckedUpdateWithoutReviewsInput>
+  create: Prisma.XOR<Prisma.TourPackageCreateWithoutReviewsInput, Prisma.TourPackageUncheckedCreateWithoutReviewsInput>
+  where?: Prisma.TourPackageWhereInput
+}
+
+export type TourPackageUpdateToOneWithWhereWithoutReviewsInput = {
+  where?: Prisma.TourPackageWhereInput
+  data: Prisma.XOR<Prisma.TourPackageUpdateWithoutReviewsInput, Prisma.TourPackageUncheckedUpdateWithoutReviewsInput>
+}
+
+export type TourPackageUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  durationNights?: Prisma.IntFieldUpdateOperationsInput | number
+  durationDays?: Prisma.IntFieldUpdateOperationsInput | number
+  inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
+  exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
+  images?: Prisma.TourPackageUpdateimagesInput | string[]
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupOptions?: Prisma.PickupOptionUpdateManyWithoutTourPackageNestedInput
+  itineraries?: Prisma.ItineraryUpdateManyWithoutTourPackageNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutTourPackageNestedInput
+}
+
+export type TourPackageUncheckedUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  destination?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.EnumTourCategoryFieldUpdateOperationsInput | $Enums.TourCategory
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  availableSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  durationNights?: Prisma.IntFieldUpdateOperationsInput | number
+  durationDays?: Prisma.IntFieldUpdateOperationsInput | number
+  inclusions?: Prisma.TourPackageUpdateinclusionsInput | string[]
+  exclusions?: Prisma.TourPackageUpdateexclusionsInput | string[]
+  images?: Prisma.TourPackageUpdateimagesInput | string[]
+  isPublished?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pickupOptions?: Prisma.PickupOptionUncheckedUpdateManyWithoutTourPackageNestedInput
+  itineraries?: Prisma.ItineraryUncheckedUpdateManyWithoutTourPackageNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutTourPackageNestedInput
+}
+
 export type TourPackageCreateWithoutPickupOptionsInput = {
   id?: string
   slug: string
@@ -771,6 +911,7 @@ export type TourPackageCreateWithoutPickupOptionsInput = {
   updatedAt?: Date | string
   itineraries?: Prisma.ItineraryCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingCreateNestedManyWithoutTourPackageInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutTourPackageInput
 }
 
 export type TourPackageUncheckedCreateWithoutPickupOptionsInput = {
@@ -794,6 +935,7 @@ export type TourPackageUncheckedCreateWithoutPickupOptionsInput = {
   updatedAt?: Date | string
   itineraries?: Prisma.ItineraryUncheckedCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTourPackageInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTourPackageInput
 }
 
 export type TourPackageCreateOrConnectWithoutPickupOptionsInput = {
@@ -833,6 +975,7 @@ export type TourPackageUpdateWithoutPickupOptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itineraries?: Prisma.ItineraryUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutTourPackageNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutTourPackageNestedInput
 }
 
 export type TourPackageUncheckedUpdateWithoutPickupOptionsInput = {
@@ -856,6 +999,7 @@ export type TourPackageUncheckedUpdateWithoutPickupOptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   itineraries?: Prisma.ItineraryUncheckedUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTourPackageNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTourPackageNestedInput
 }
 
 export type TourPackageCreateWithoutItinerariesInput = {
@@ -879,6 +1023,7 @@ export type TourPackageCreateWithoutItinerariesInput = {
   updatedAt?: Date | string
   pickupOptions?: Prisma.PickupOptionCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingCreateNestedManyWithoutTourPackageInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutTourPackageInput
 }
 
 export type TourPackageUncheckedCreateWithoutItinerariesInput = {
@@ -902,6 +1047,7 @@ export type TourPackageUncheckedCreateWithoutItinerariesInput = {
   updatedAt?: Date | string
   pickupOptions?: Prisma.PickupOptionUncheckedCreateNestedManyWithoutTourPackageInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutTourPackageInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTourPackageInput
 }
 
 export type TourPackageCreateOrConnectWithoutItinerariesInput = {
@@ -941,6 +1087,7 @@ export type TourPackageUpdateWithoutItinerariesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pickupOptions?: Prisma.PickupOptionUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutTourPackageNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutTourPackageNestedInput
 }
 
 export type TourPackageUncheckedUpdateWithoutItinerariesInput = {
@@ -964,6 +1111,7 @@ export type TourPackageUncheckedUpdateWithoutItinerariesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pickupOptions?: Prisma.PickupOptionUncheckedUpdateManyWithoutTourPackageNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutTourPackageNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTourPackageNestedInput
 }
 
 export type TourPackageCreateWithoutBookingsInput = {
@@ -987,6 +1135,7 @@ export type TourPackageCreateWithoutBookingsInput = {
   updatedAt?: Date | string
   pickupOptions?: Prisma.PickupOptionCreateNestedManyWithoutTourPackageInput
   itineraries?: Prisma.ItineraryCreateNestedManyWithoutTourPackageInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutTourPackageInput
 }
 
 export type TourPackageUncheckedCreateWithoutBookingsInput = {
@@ -1010,6 +1159,7 @@ export type TourPackageUncheckedCreateWithoutBookingsInput = {
   updatedAt?: Date | string
   pickupOptions?: Prisma.PickupOptionUncheckedCreateNestedManyWithoutTourPackageInput
   itineraries?: Prisma.ItineraryUncheckedCreateNestedManyWithoutTourPackageInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutTourPackageInput
 }
 
 export type TourPackageCreateOrConnectWithoutBookingsInput = {
@@ -1049,6 +1199,7 @@ export type TourPackageUpdateWithoutBookingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pickupOptions?: Prisma.PickupOptionUpdateManyWithoutTourPackageNestedInput
   itineraries?: Prisma.ItineraryUpdateManyWithoutTourPackageNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutTourPackageNestedInput
 }
 
 export type TourPackageUncheckedUpdateWithoutBookingsInput = {
@@ -1072,6 +1223,7 @@ export type TourPackageUncheckedUpdateWithoutBookingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pickupOptions?: Prisma.PickupOptionUncheckedUpdateManyWithoutTourPackageNestedInput
   itineraries?: Prisma.ItineraryUncheckedUpdateManyWithoutTourPackageNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutTourPackageNestedInput
 }
 
 
@@ -1083,12 +1235,14 @@ export type TourPackageCountOutputType = {
   pickupOptions: number
   itineraries: number
   bookings: number
+  reviews: number
 }
 
 export type TourPackageCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pickupOptions?: boolean | TourPackageCountOutputTypeCountPickupOptionsArgs
   itineraries?: boolean | TourPackageCountOutputTypeCountItinerariesArgs
   bookings?: boolean | TourPackageCountOutputTypeCountBookingsArgs
+  reviews?: boolean | TourPackageCountOutputTypeCountReviewsArgs
 }
 
 /**
@@ -1122,6 +1276,13 @@ export type TourPackageCountOutputTypeCountBookingsArgs<ExtArgs extends runtime.
   where?: Prisma.BookingWhereInput
 }
 
+/**
+ * TourPackageCountOutputType without action
+ */
+export type TourPackageCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReviewWhereInput
+}
+
 
 export type TourPackageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1145,6 +1306,7 @@ export type TourPackageSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   pickupOptions?: boolean | Prisma.TourPackage$pickupOptionsArgs<ExtArgs>
   itineraries?: boolean | Prisma.TourPackage$itinerariesArgs<ExtArgs>
   bookings?: boolean | Prisma.TourPackage$bookingsArgs<ExtArgs>
+  reviews?: boolean | Prisma.TourPackage$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.TourPackageCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tourPackage"]>
 
@@ -1216,6 +1378,7 @@ export type TourPackageInclude<ExtArgs extends runtime.Types.Extensions.Internal
   pickupOptions?: boolean | Prisma.TourPackage$pickupOptionsArgs<ExtArgs>
   itineraries?: boolean | Prisma.TourPackage$itinerariesArgs<ExtArgs>
   bookings?: boolean | Prisma.TourPackage$bookingsArgs<ExtArgs>
+  reviews?: boolean | Prisma.TourPackage$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.TourPackageCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TourPackageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1227,6 +1390,7 @@ export type $TourPackagePayload<ExtArgs extends runtime.Types.Extensions.Interna
     pickupOptions: Prisma.$PickupOptionPayload<ExtArgs>[]
     itineraries: Prisma.$ItineraryPayload<ExtArgs>[]
     bookings: Prisma.$BookingPayload<ExtArgs>[]
+    reviews: Prisma.$ReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1644,6 +1808,7 @@ export interface Prisma__TourPackageClient<T, Null = never, ExtArgs extends runt
   pickupOptions<T extends Prisma.TourPackage$pickupOptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TourPackage$pickupOptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PickupOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   itineraries<T extends Prisma.TourPackage$itinerariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TourPackage$itinerariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItineraryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bookings<T extends Prisma.TourPackage$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TourPackage$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviews<T extends Prisma.TourPackage$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TourPackage$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2148,6 +2313,30 @@ export type TourPackage$bookingsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.BookingScalarFieldEnum | Prisma.BookingScalarFieldEnum[]
+}
+
+/**
+ * TourPackage.reviews
+ */
+export type TourPackage$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Review
+   */
+  select?: Prisma.ReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Review
+   */
+  omit?: Prisma.ReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewInclude<ExtArgs> | null
+  where?: Prisma.ReviewWhereInput
+  orderBy?: Prisma.ReviewOrderByWithRelationInput | Prisma.ReviewOrderByWithRelationInput[]
+  cursor?: Prisma.ReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
 }
 
 /**

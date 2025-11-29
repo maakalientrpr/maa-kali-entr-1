@@ -10,21 +10,23 @@ datasource db {
 // ... [User, Session, Account, Verification models remain unchanged] ...
 
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean    @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          String?   @default("user")
-  banned        Boolean?  @default(false)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  role          String?    @default("user")
+  banned        Boolean?   @default(false)
   banReason     String?
   banExpires    DateTime?
   phoneNumber   String
   sessions      Session[]
   accounts      Account[]
+  votes         TourVote[]
   bookings      Booking[]
+  reviews       Review[]
 
   @@unique([email])
   @@map("user")
@@ -84,14 +86,14 @@ model Verification {
 // ---------------------------------------------------------
 
 model TourPackage {
-  id          String       @id @default(cuid())
-  slug        String       @unique
+  id          String @id @default(cuid())
+  slug        String @unique
   title       String
-  description String       @db.Text
+  description String @db.Text
   destination String
-  
+
   // CATEGORY (New)
-  category    TourCategory @default(DOMESTIC)
+  category TourCategory @default(DOMESTIC)
 
   // DATE & SEATS
   startDate      DateTime
@@ -114,12 +116,83 @@ model TourPackage {
   // RELATIONS
   itineraries Itinerary[]
   bookings    Booking[]
+  reviews     Review[]
 
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@map("tour_package")
+}
+
+// ---------------------------------------------------------
+// REVIEWS
+// ---------------------------------------------------------
+
+model Review {
+  id String @id @default(cuid())
+
+  rating  Int // 1 to 5
+  comment String @db.Text
+
+  //Moderation: Approve review before publish
+  isPublished Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  //Optional: Link to a specific tour. If null, it's a general site review.
+  tourPackageId String?
+  tourPackage   TourPackage? @relation(fields: [tourPackageId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([tourPackageId])
+  @@map("review")
+}
+
+// ---------------------------------------------------------
+// VOTING / POLLS
+// ---------------------------------------------------------
+
+model ProposedTour {
+  id          String  @id @default(cuid())
+  title       String
+  description String  @db.Text
+  location    String
+  imageUrl    String? // Optional image for the idea
+
+  status PollStatus @default(OPEN)
+
+  votes TourVote[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("proposed_tour")
+}
+
+model TourVote {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  proposedTourId String
+  proposedTour   ProposedTour @relation(fields: [proposedTourId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, proposedTourId]) // Ensures 1 user = 1 vote per tour
+  @@map("tour_vote")
+}
+
+enum PollStatus {
+  OPEN
+  CLOSED
+  PLANNED // Use this if the tour wins and you decide to create it
 }
 
 // New Model to handle variable pricing per location
@@ -162,15 +235,15 @@ model Booking {
 
   tourPackageId String
   tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id], onDelete: Restrict)
-  
+
   // SELECTION DETAILS (New)
   pickupOptionId String
   pickupOption   PickupOption @relation(fields: [pickupOptionId], references: [id], onDelete: Restrict)
-  
-  sharingType    SharingType  @default(DOUBLE) // To know which price tier was applied
 
-  bookingDate DateTime @default(now())
-  totalAmount Float
+  sharingType SharingType @default(DOUBLE) // To know which price tier was applied
+
+  bookingDate   DateTime @default(now())
+  totalAmount   Float
   contactNumber String
 
   // COMPLIANCE
@@ -227,39 +300,39 @@ enum PaymentStatus {
   FAILED
 }
 
-// Add/Update these models
-
-model Year {
-  id         String      @id @default(cuid())
-  yearNumber Int         @unique // ✅ Unique so we group albums under one year entry
-  albums     TripAlbum[]
-  createdAt  DateTime    @default(now())
+// 1. Define the Enum
+enum AlbumCategory {
+  TOURS
+  PILGRIMAGE
+  EVENTS
+  CATERING
 }
 
-model TripAlbum {
-  id        String   @id @default(cuid())
-  title     String
-  location  String?  // Optional: e.g., "Manali"
-  
-  yearId    String
-  year      Year     @relation(fields: [yearId], references: [id], onDelete: Cascade)
-  
-  images    Image[]
-  
+// 2. The Album Model
+model Album {
+  id       String  @id @default(cuid())
+  title    String
+  location String?
+
+  // Directly use the Enum here
+  category AlbumCategory @default(TOURS)
+
+  images Image[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([yearId])
+  @@index([category]) // Index for faster filtering
 }
 
 model Image {
-  id          String    @id @default(cuid())
-  imageUrl    String
-  
-  tripAlbumId String
-  tripAlbum   TripAlbum @relation(fields: [tripAlbumId], references: [id], onDelete: Cascade)
+  id       String @id @default(cuid())
+  imageUrl String
 
-  createdAt   DateTime  @default(now())
+  albumId String
+  album   Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
 
-  @@index([tripAlbumId])
+  createdAt DateTime @default(now())
+
+  @@index([albumId])
 }

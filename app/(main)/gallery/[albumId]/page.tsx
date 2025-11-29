@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 
 export default async function AlbumPage({ params }: { params: Promise<{ albumId: string }> }) {
-  const album = await prisma.tripAlbum.findUnique({
+  const album = await prisma.album.findUnique({
     where: { id: (await params).albumId },
     include: { images: true },
   });

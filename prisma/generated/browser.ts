@@ -43,6 +43,21 @@ export type Verification = Prisma.VerificationModel
  */
 export type TourPackage = Prisma.TourPackageModel
 /**
+ * Model Review
+ * 
+ */
+export type Review = Prisma.ReviewModel
+/**
+ * Model ProposedTour
+ * 
+ */
+export type ProposedTour = Prisma.ProposedTourModel
+/**
+ * Model TourVote
+ * 
+ */
+export type TourVote = Prisma.TourVoteModel
+/**
  * Model PickupOption
  * 
  */
@@ -63,15 +78,10 @@ export type Booking = Prisma.BookingModel
  */
 export type Passenger = Prisma.PassengerModel
 /**
- * Model Year
+ * Model Album
  * 
  */
-export type Year = Prisma.YearModel
-/**
- * Model TripAlbum
- * 
- */
-export type TripAlbum = Prisma.TripAlbumModel
+export type Album = Prisma.AlbumModel
 /**
  * Model Image
  * 

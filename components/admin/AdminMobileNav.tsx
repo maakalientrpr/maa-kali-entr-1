@@ -11,6 +11,11 @@ const navLinks = [
   { label: "Create Tour", href: "/admin/tour-package/create" },
   { label: "Manage Tours", href: "/admin/tour-package" },
   { label: "Bookings", href: "/admin/bookings" },
+  { label: "Gallery", href: "/admin/gallery" },
+  {
+    label: "Vote",
+    href: "/admin/vote",
+  },
   { label: "Users", href: "/admin/users" },
 ];
 

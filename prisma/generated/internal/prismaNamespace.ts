@@ -389,12 +389,14 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   TourPackage: 'TourPackage',
+  Review: 'Review',
+  ProposedTour: 'ProposedTour',
+  TourVote: 'TourVote',
   PickupOption: 'PickupOption',
   Itinerary: 'Itinerary',
   Booking: 'Booking',
   Passenger: 'Passenger',
-  Year: 'Year',
-  TripAlbum: 'TripAlbum',
+  Album: 'Album',
   Image: 'Image'
 } as const
 
@@ -411,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "tourPackage" | "pickupOption" | "itinerary" | "booking" | "passenger" | "year" | "tripAlbum" | "image"
+    modelProps: "user" | "session" | "account" | "verification" | "tourPackage" | "review" | "proposedTour" | "tourVote" | "pickupOption" | "itinerary" | "booking" | "passenger" | "album" | "image"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -785,6 +787,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Review: {
+      payload: Prisma.$ReviewPayload<ExtArgs>
+      fields: Prisma.ReviewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReviewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReviewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        findFirst: {
+          args: Prisma.ReviewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReviewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        findMany: {
+          args: Prisma.ReviewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>[]
+        }
+        create: {
+          args: Prisma.ReviewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        createMany: {
+          args: Prisma.ReviewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ReviewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>[]
+        }
+        delete: {
+          args: Prisma.ReviewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        update: {
+          args: Prisma.ReviewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReviewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReviewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ReviewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>[]
+        }
+        upsert: {
+          args: Prisma.ReviewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReviewPayload>
+        }
+        aggregate: {
+          args: Prisma.ReviewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReview>
+        }
+        groupBy: {
+          args: Prisma.ReviewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReviewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReviewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReviewCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProposedTour: {
+      payload: Prisma.$ProposedTourPayload<ExtArgs>
+      fields: Prisma.ProposedTourFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProposedTourFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProposedTourFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>
+        }
+        findFirst: {
+          args: Prisma.ProposedTourFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProposedTourFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>
+        }
+        findMany: {
+          args: Prisma.ProposedTourFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>[]
+        }
+        create: {
+          args: Prisma.ProposedTourCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>
+        }
+        createMany: {
+          args: Prisma.ProposedTourCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProposedTourCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>[]
+        }
+        delete: {
+          args: Prisma.ProposedTourDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>
+        }
+        update: {
+          args: Prisma.ProposedTourUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProposedTourDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProposedTourUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProposedTourUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProposedTourUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProposedTourPayload>
+        }
+        aggregate: {
+          args: Prisma.ProposedTourAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProposedTour>
+        }
+        groupBy: {
+          args: Prisma.ProposedTourGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProposedTourGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProposedTourCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProposedTourCountAggregateOutputType> | number
+        }
+      }
+    }
+    TourVote: {
+      payload: Prisma.$TourVotePayload<ExtArgs>
+      fields: Prisma.TourVoteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TourVoteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TourVoteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>
+        }
+        findFirst: {
+          args: Prisma.TourVoteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TourVoteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>
+        }
+        findMany: {
+          args: Prisma.TourVoteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>[]
+        }
+        create: {
+          args: Prisma.TourVoteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>
+        }
+        createMany: {
+          args: Prisma.TourVoteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TourVoteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>[]
+        }
+        delete: {
+          args: Prisma.TourVoteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>
+        }
+        update: {
+          args: Prisma.TourVoteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>
+        }
+        deleteMany: {
+          args: Prisma.TourVoteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TourVoteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TourVoteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>[]
+        }
+        upsert: {
+          args: Prisma.TourVoteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TourVotePayload>
+        }
+        aggregate: {
+          args: Prisma.TourVoteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTourVote>
+        }
+        groupBy: {
+          args: Prisma.TourVoteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TourVoteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TourVoteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TourVoteCountAggregateOutputType> | number
+        }
+      }
+    }
     PickupOption: {
       payload: Prisma.$PickupOptionPayload<ExtArgs>
       fields: Prisma.PickupOptionFieldRefs
@@ -1081,151 +1305,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Year: {
-      payload: Prisma.$YearPayload<ExtArgs>
-      fields: Prisma.YearFieldRefs
+    Album: {
+      payload: Prisma.$AlbumPayload<ExtArgs>
+      fields: Prisma.AlbumFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.YearFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload> | null
+          args: Prisma.AlbumFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.YearFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>
+          args: Prisma.AlbumFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>
         }
         findFirst: {
-          args: Prisma.YearFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload> | null
+          args: Prisma.AlbumFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.YearFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>
+          args: Prisma.AlbumFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>
         }
         findMany: {
-          args: Prisma.YearFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>[]
+          args: Prisma.AlbumFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>[]
         }
         create: {
-          args: Prisma.YearCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>
+          args: Prisma.AlbumCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>
         }
         createMany: {
-          args: Prisma.YearCreateManyArgs<ExtArgs>
+          args: Prisma.AlbumCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.YearCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>[]
+          args: Prisma.AlbumCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>[]
         }
         delete: {
-          args: Prisma.YearDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>
+          args: Prisma.AlbumDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>
         }
         update: {
-          args: Prisma.YearUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>
+          args: Prisma.AlbumUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>
         }
         deleteMany: {
-          args: Prisma.YearDeleteManyArgs<ExtArgs>
+          args: Prisma.AlbumDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.YearUpdateManyArgs<ExtArgs>
+          args: Prisma.AlbumUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.YearUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>[]
+          args: Prisma.AlbumUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>[]
         }
         upsert: {
-          args: Prisma.YearUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$YearPayload>
+          args: Prisma.AlbumUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AlbumPayload>
         }
         aggregate: {
-          args: Prisma.YearAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateYear>
+          args: Prisma.AlbumAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAlbum>
         }
         groupBy: {
-          args: Prisma.YearGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.YearGroupByOutputType>[]
+          args: Prisma.AlbumGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AlbumGroupByOutputType>[]
         }
         count: {
-          args: Prisma.YearCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.YearCountAggregateOutputType> | number
-        }
-      }
-    }
-    TripAlbum: {
-      payload: Prisma.$TripAlbumPayload<ExtArgs>
-      fields: Prisma.TripAlbumFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.TripAlbumFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.TripAlbumFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>
-        }
-        findFirst: {
-          args: Prisma.TripAlbumFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.TripAlbumFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>
-        }
-        findMany: {
-          args: Prisma.TripAlbumFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>[]
-        }
-        create: {
-          args: Prisma.TripAlbumCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>
-        }
-        createMany: {
-          args: Prisma.TripAlbumCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.TripAlbumCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>[]
-        }
-        delete: {
-          args: Prisma.TripAlbumDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>
-        }
-        update: {
-          args: Prisma.TripAlbumUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>
-        }
-        deleteMany: {
-          args: Prisma.TripAlbumDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.TripAlbumUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.TripAlbumUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>[]
-        }
-        upsert: {
-          args: Prisma.TripAlbumUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TripAlbumPayload>
-        }
-        aggregate: {
-          args: Prisma.TripAlbumAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTripAlbum>
-        }
-        groupBy: {
-          args: Prisma.TripAlbumGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TripAlbumGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.TripAlbumCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TripAlbumCountAggregateOutputType> | number
+          args: Prisma.AlbumCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AlbumCountAggregateOutputType> | number
         }
       }
     }
@@ -1430,6 +1580,44 @@ export const TourPackageScalarFieldEnum = {
 export type TourPackageScalarFieldEnum = (typeof TourPackageScalarFieldEnum)[keyof typeof TourPackageScalarFieldEnum]
 
 
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  rating: 'rating',
+  comment: 'comment',
+  isPublished: 'isPublished',
+  userId: 'userId',
+  tourPackageId: 'tourPackageId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const ProposedTourScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  imageUrl: 'imageUrl',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProposedTourScalarFieldEnum = (typeof ProposedTourScalarFieldEnum)[keyof typeof ProposedTourScalarFieldEnum]
+
+
+export const TourVoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  proposedTourId: 'proposedTourId',
+  createdAt: 'createdAt'
+} as const
+
+export type TourVoteScalarFieldEnum = (typeof TourVoteScalarFieldEnum)[keyof typeof TourVoteScalarFieldEnum]
+
+
 export const PickupOptionScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -1482,31 +1670,22 @@ export const PassengerScalarFieldEnum = {
 export type PassengerScalarFieldEnum = (typeof PassengerScalarFieldEnum)[keyof typeof PassengerScalarFieldEnum]
 
 
-export const YearScalarFieldEnum = {
-  id: 'id',
-  yearNumber: 'yearNumber',
-  createdAt: 'createdAt'
-} as const
-
-export type YearScalarFieldEnum = (typeof YearScalarFieldEnum)[keyof typeof YearScalarFieldEnum]
-
-
-export const TripAlbumScalarFieldEnum = {
+export const AlbumScalarFieldEnum = {
   id: 'id',
   title: 'title',
   location: 'location',
-  yearId: 'yearId',
+  category: 'category',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type TripAlbumScalarFieldEnum = (typeof TripAlbumScalarFieldEnum)[keyof typeof TripAlbumScalarFieldEnum]
+export type AlbumScalarFieldEnum = (typeof AlbumScalarFieldEnum)[keyof typeof AlbumScalarFieldEnum]
 
 
 export const ImageScalarFieldEnum = {
   id: 'id',
   imageUrl: 'imageUrl',
-  tripAlbumId: 'tripAlbumId',
+  albumId: 'albumId',
   createdAt: 'createdAt'
 } as const
 
@@ -1607,6 +1786,20 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'PollStatus'
+ */
+export type EnumPollStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PollStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PollStatus[]'
+ */
+export type ListEnumPollStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PollStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1659,6 +1852,20 @@ export type EnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'PaymentStatus[]'
  */
 export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AlbumCategory'
+ */
+export type EnumAlbumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AlbumCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'AlbumCategory[]'
+ */
+export type ListEnumAlbumCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AlbumCategory[]'>
     
 
 /**
@@ -1745,12 +1952,14 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   tourPackage?: Prisma.TourPackageOmit
+  review?: Prisma.ReviewOmit
+  proposedTour?: Prisma.ProposedTourOmit
+  tourVote?: Prisma.TourVoteOmit
   pickupOption?: Prisma.PickupOptionOmit
   itinerary?: Prisma.ItineraryOmit
   booking?: Prisma.BookingOmit
   passenger?: Prisma.PassengerOmit
-  year?: Prisma.YearOmit
-  tripAlbum?: Prisma.TripAlbumOmit
+  album?: Prisma.AlbumOmit
   image?: Prisma.ImageOmit
 }
 

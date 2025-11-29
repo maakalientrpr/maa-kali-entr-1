@@ -10,6 +10,7 @@ import {
   BookOpen,
   Users,
   ImageIcon,
+  VoteIcon,
 } from "lucide-react";
 
 const links = [
@@ -37,6 +38,11 @@ const links = [
     label: "Gallery",
     href: "/admin/gallery",
     icon: ImageIcon,
+  },
+  {
+    label: "Vote",
+    href: "/admin/vote",
+    icon: VoteIcon,
   },
   {
     label: "Users",

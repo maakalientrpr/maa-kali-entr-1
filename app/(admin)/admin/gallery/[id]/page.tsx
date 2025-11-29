@@ -5,10 +5,9 @@ import EditGalleryForm from "@/components/admin/gallery/EditGalleryForm";
 export default async function EditAlbumPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const album = await prisma.tripAlbum.findUnique({
+  const album = await prisma.album.findUnique({
     where: { id },
     include: {
-      year: true,
       images: true,
     },
   });

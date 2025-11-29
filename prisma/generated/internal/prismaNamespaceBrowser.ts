@@ -56,12 +56,14 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   TourPackage: 'TourPackage',
+  Review: 'Review',
+  ProposedTour: 'ProposedTour',
+  TourVote: 'TourVote',
   PickupOption: 'PickupOption',
   Itinerary: 'Itinerary',
   Booking: 'Booking',
   Passenger: 'Passenger',
-  Year: 'Year',
-  TripAlbum: 'TripAlbum',
+  Album: 'Album',
   Image: 'Image'
 } as const
 
@@ -169,6 +171,44 @@ export const TourPackageScalarFieldEnum = {
 export type TourPackageScalarFieldEnum = (typeof TourPackageScalarFieldEnum)[keyof typeof TourPackageScalarFieldEnum]
 
 
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  rating: 'rating',
+  comment: 'comment',
+  isPublished: 'isPublished',
+  userId: 'userId',
+  tourPackageId: 'tourPackageId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const ProposedTourScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  imageUrl: 'imageUrl',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProposedTourScalarFieldEnum = (typeof ProposedTourScalarFieldEnum)[keyof typeof ProposedTourScalarFieldEnum]
+
+
+export const TourVoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  proposedTourId: 'proposedTourId',
+  createdAt: 'createdAt'
+} as const
+
+export type TourVoteScalarFieldEnum = (typeof TourVoteScalarFieldEnum)[keyof typeof TourVoteScalarFieldEnum]
+
+
 export const PickupOptionScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -221,31 +261,22 @@ export const PassengerScalarFieldEnum = {
 export type PassengerScalarFieldEnum = (typeof PassengerScalarFieldEnum)[keyof typeof PassengerScalarFieldEnum]
 
 
-export const YearScalarFieldEnum = {
-  id: 'id',
-  yearNumber: 'yearNumber',
-  createdAt: 'createdAt'
-} as const
-
-export type YearScalarFieldEnum = (typeof YearScalarFieldEnum)[keyof typeof YearScalarFieldEnum]
-
-
-export const TripAlbumScalarFieldEnum = {
+export const AlbumScalarFieldEnum = {
   id: 'id',
   title: 'title',
   location: 'location',
-  yearId: 'yearId',
+  category: 'category',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type TripAlbumScalarFieldEnum = (typeof TripAlbumScalarFieldEnum)[keyof typeof TripAlbumScalarFieldEnum]
+export type AlbumScalarFieldEnum = (typeof AlbumScalarFieldEnum)[keyof typeof AlbumScalarFieldEnum]
 
 
 export const ImageScalarFieldEnum = {
   id: 'id',
   imageUrl: 'imageUrl',
-  tripAlbumId: 'tripAlbumId',
+  albumId: 'albumId',
   createdAt: 'createdAt'
 } as const
 

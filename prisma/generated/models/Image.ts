@@ -27,21 +27,21 @@ export type AggregateImage = {
 export type ImageMinAggregateOutputType = {
   id: string | null
   imageUrl: string | null
-  tripAlbumId: string | null
+  albumId: string | null
   createdAt: Date | null
 }
 
 export type ImageMaxAggregateOutputType = {
   id: string | null
   imageUrl: string | null
-  tripAlbumId: string | null
+  albumId: string | null
   createdAt: Date | null
 }
 
 export type ImageCountAggregateOutputType = {
   id: number
   imageUrl: number
-  tripAlbumId: number
+  albumId: number
   createdAt: number
   _all: number
 }
@@ -50,21 +50,21 @@ export type ImageCountAggregateOutputType = {
 export type ImageMinAggregateInputType = {
   id?: true
   imageUrl?: true
-  tripAlbumId?: true
+  albumId?: true
   createdAt?: true
 }
 
 export type ImageMaxAggregateInputType = {
   id?: true
   imageUrl?: true
-  tripAlbumId?: true
+  albumId?: true
   createdAt?: true
 }
 
 export type ImageCountAggregateInputType = {
   id?: true
   imageUrl?: true
-  tripAlbumId?: true
+  albumId?: true
   createdAt?: true
   _all?: true
 }
@@ -144,7 +144,7 @@ export type ImageGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type ImageGroupByOutputType = {
   id: string
   imageUrl: string
-  tripAlbumId: string
+  albumId: string
   createdAt: Date
   _count: ImageCountAggregateOutputType | null
   _min: ImageMinAggregateOutputType | null
@@ -172,17 +172,17 @@ export type ImageWhereInput = {
   NOT?: Prisma.ImageWhereInput | Prisma.ImageWhereInput[]
   id?: Prisma.StringFilter<"Image"> | string
   imageUrl?: Prisma.StringFilter<"Image"> | string
-  tripAlbumId?: Prisma.StringFilter<"Image"> | string
+  albumId?: Prisma.StringFilter<"Image"> | string
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
-  tripAlbum?: Prisma.XOR<Prisma.TripAlbumScalarRelationFilter, Prisma.TripAlbumWhereInput>
+  album?: Prisma.XOR<Prisma.AlbumScalarRelationFilter, Prisma.AlbumWhereInput>
 }
 
 export type ImageOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
-  tripAlbumId?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  tripAlbum?: Prisma.TripAlbumOrderByWithRelationInput
+  album?: Prisma.AlbumOrderByWithRelationInput
 }
 
 export type ImageWhereUniqueInput = Prisma.AtLeast<{
@@ -191,15 +191,15 @@ export type ImageWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ImageWhereInput[]
   NOT?: Prisma.ImageWhereInput | Prisma.ImageWhereInput[]
   imageUrl?: Prisma.StringFilter<"Image"> | string
-  tripAlbumId?: Prisma.StringFilter<"Image"> | string
+  albumId?: Prisma.StringFilter<"Image"> | string
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
-  tripAlbum?: Prisma.XOR<Prisma.TripAlbumScalarRelationFilter, Prisma.TripAlbumWhereInput>
+  album?: Prisma.XOR<Prisma.AlbumScalarRelationFilter, Prisma.AlbumWhereInput>
 }, "id">
 
 export type ImageOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
-  tripAlbumId?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ImageCountOrderByAggregateInput
   _max?: Prisma.ImageMaxOrderByAggregateInput
@@ -212,7 +212,7 @@ export type ImageScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ImageScalarWhereWithAggregatesInput | Prisma.ImageScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Image"> | string
   imageUrl?: Prisma.StringWithAggregatesFilter<"Image"> | string
-  tripAlbumId?: Prisma.StringWithAggregatesFilter<"Image"> | string
+  albumId?: Prisma.StringWithAggregatesFilter<"Image"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Image"> | Date | string
 }
 
@@ -220,13 +220,13 @@ export type ImageCreateInput = {
   id?: string
   imageUrl: string
   createdAt?: Date | string
-  tripAlbum: Prisma.TripAlbumCreateNestedOneWithoutImagesInput
+  album: Prisma.AlbumCreateNestedOneWithoutImagesInput
 }
 
 export type ImageUncheckedCreateInput = {
   id?: string
   imageUrl: string
-  tripAlbumId: string
+  albumId: string
   createdAt?: Date | string
 }
 
@@ -234,20 +234,20 @@ export type ImageUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tripAlbum?: Prisma.TripAlbumUpdateOneRequiredWithoutImagesNestedInput
+  album?: Prisma.AlbumUpdateOneRequiredWithoutImagesNestedInput
 }
 
 export type ImageUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  tripAlbumId?: Prisma.StringFieldUpdateOperationsInput | string
+  albumId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ImageCreateManyInput = {
   id?: string
   imageUrl: string
-  tripAlbumId: string
+  albumId: string
   createdAt?: Date | string
 }
 
@@ -260,7 +260,7 @@ export type ImageUpdateManyMutationInput = {
 export type ImageUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  tripAlbumId?: Prisma.StringFieldUpdateOperationsInput | string
+  albumId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -277,102 +277,102 @@ export type ImageOrderByRelationAggregateInput = {
 export type ImageCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
-  tripAlbumId?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type ImageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
-  tripAlbumId?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type ImageMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
-  tripAlbumId?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
-export type ImageCreateNestedManyWithoutTripAlbumInput = {
-  create?: Prisma.XOR<Prisma.ImageCreateWithoutTripAlbumInput, Prisma.ImageUncheckedCreateWithoutTripAlbumInput> | Prisma.ImageCreateWithoutTripAlbumInput[] | Prisma.ImageUncheckedCreateWithoutTripAlbumInput[]
-  connectOrCreate?: Prisma.ImageCreateOrConnectWithoutTripAlbumInput | Prisma.ImageCreateOrConnectWithoutTripAlbumInput[]
-  createMany?: Prisma.ImageCreateManyTripAlbumInputEnvelope
+export type ImageCreateNestedManyWithoutAlbumInput = {
+  create?: Prisma.XOR<Prisma.ImageCreateWithoutAlbumInput, Prisma.ImageUncheckedCreateWithoutAlbumInput> | Prisma.ImageCreateWithoutAlbumInput[] | Prisma.ImageUncheckedCreateWithoutAlbumInput[]
+  connectOrCreate?: Prisma.ImageCreateOrConnectWithoutAlbumInput | Prisma.ImageCreateOrConnectWithoutAlbumInput[]
+  createMany?: Prisma.ImageCreateManyAlbumInputEnvelope
   connect?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
 }
 
-export type ImageUncheckedCreateNestedManyWithoutTripAlbumInput = {
-  create?: Prisma.XOR<Prisma.ImageCreateWithoutTripAlbumInput, Prisma.ImageUncheckedCreateWithoutTripAlbumInput> | Prisma.ImageCreateWithoutTripAlbumInput[] | Prisma.ImageUncheckedCreateWithoutTripAlbumInput[]
-  connectOrCreate?: Prisma.ImageCreateOrConnectWithoutTripAlbumInput | Prisma.ImageCreateOrConnectWithoutTripAlbumInput[]
-  createMany?: Prisma.ImageCreateManyTripAlbumInputEnvelope
+export type ImageUncheckedCreateNestedManyWithoutAlbumInput = {
+  create?: Prisma.XOR<Prisma.ImageCreateWithoutAlbumInput, Prisma.ImageUncheckedCreateWithoutAlbumInput> | Prisma.ImageCreateWithoutAlbumInput[] | Prisma.ImageUncheckedCreateWithoutAlbumInput[]
+  connectOrCreate?: Prisma.ImageCreateOrConnectWithoutAlbumInput | Prisma.ImageCreateOrConnectWithoutAlbumInput[]
+  createMany?: Prisma.ImageCreateManyAlbumInputEnvelope
   connect?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
 }
 
-export type ImageUpdateManyWithoutTripAlbumNestedInput = {
-  create?: Prisma.XOR<Prisma.ImageCreateWithoutTripAlbumInput, Prisma.ImageUncheckedCreateWithoutTripAlbumInput> | Prisma.ImageCreateWithoutTripAlbumInput[] | Prisma.ImageUncheckedCreateWithoutTripAlbumInput[]
-  connectOrCreate?: Prisma.ImageCreateOrConnectWithoutTripAlbumInput | Prisma.ImageCreateOrConnectWithoutTripAlbumInput[]
-  upsert?: Prisma.ImageUpsertWithWhereUniqueWithoutTripAlbumInput | Prisma.ImageUpsertWithWhereUniqueWithoutTripAlbumInput[]
-  createMany?: Prisma.ImageCreateManyTripAlbumInputEnvelope
+export type ImageUpdateManyWithoutAlbumNestedInput = {
+  create?: Prisma.XOR<Prisma.ImageCreateWithoutAlbumInput, Prisma.ImageUncheckedCreateWithoutAlbumInput> | Prisma.ImageCreateWithoutAlbumInput[] | Prisma.ImageUncheckedCreateWithoutAlbumInput[]
+  connectOrCreate?: Prisma.ImageCreateOrConnectWithoutAlbumInput | Prisma.ImageCreateOrConnectWithoutAlbumInput[]
+  upsert?: Prisma.ImageUpsertWithWhereUniqueWithoutAlbumInput | Prisma.ImageUpsertWithWhereUniqueWithoutAlbumInput[]
+  createMany?: Prisma.ImageCreateManyAlbumInputEnvelope
   set?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
   disconnect?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
   delete?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
   connect?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
-  update?: Prisma.ImageUpdateWithWhereUniqueWithoutTripAlbumInput | Prisma.ImageUpdateWithWhereUniqueWithoutTripAlbumInput[]
-  updateMany?: Prisma.ImageUpdateManyWithWhereWithoutTripAlbumInput | Prisma.ImageUpdateManyWithWhereWithoutTripAlbumInput[]
+  update?: Prisma.ImageUpdateWithWhereUniqueWithoutAlbumInput | Prisma.ImageUpdateWithWhereUniqueWithoutAlbumInput[]
+  updateMany?: Prisma.ImageUpdateManyWithWhereWithoutAlbumInput | Prisma.ImageUpdateManyWithWhereWithoutAlbumInput[]
   deleteMany?: Prisma.ImageScalarWhereInput | Prisma.ImageScalarWhereInput[]
 }
 
-export type ImageUncheckedUpdateManyWithoutTripAlbumNestedInput = {
-  create?: Prisma.XOR<Prisma.ImageCreateWithoutTripAlbumInput, Prisma.ImageUncheckedCreateWithoutTripAlbumInput> | Prisma.ImageCreateWithoutTripAlbumInput[] | Prisma.ImageUncheckedCreateWithoutTripAlbumInput[]
-  connectOrCreate?: Prisma.ImageCreateOrConnectWithoutTripAlbumInput | Prisma.ImageCreateOrConnectWithoutTripAlbumInput[]
-  upsert?: Prisma.ImageUpsertWithWhereUniqueWithoutTripAlbumInput | Prisma.ImageUpsertWithWhereUniqueWithoutTripAlbumInput[]
-  createMany?: Prisma.ImageCreateManyTripAlbumInputEnvelope
+export type ImageUncheckedUpdateManyWithoutAlbumNestedInput = {
+  create?: Prisma.XOR<Prisma.ImageCreateWithoutAlbumInput, Prisma.ImageUncheckedCreateWithoutAlbumInput> | Prisma.ImageCreateWithoutAlbumInput[] | Prisma.ImageUncheckedCreateWithoutAlbumInput[]
+  connectOrCreate?: Prisma.ImageCreateOrConnectWithoutAlbumInput | Prisma.ImageCreateOrConnectWithoutAlbumInput[]
+  upsert?: Prisma.ImageUpsertWithWhereUniqueWithoutAlbumInput | Prisma.ImageUpsertWithWhereUniqueWithoutAlbumInput[]
+  createMany?: Prisma.ImageCreateManyAlbumInputEnvelope
   set?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
   disconnect?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
   delete?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
   connect?: Prisma.ImageWhereUniqueInput | Prisma.ImageWhereUniqueInput[]
-  update?: Prisma.ImageUpdateWithWhereUniqueWithoutTripAlbumInput | Prisma.ImageUpdateWithWhereUniqueWithoutTripAlbumInput[]
-  updateMany?: Prisma.ImageUpdateManyWithWhereWithoutTripAlbumInput | Prisma.ImageUpdateManyWithWhereWithoutTripAlbumInput[]
+  update?: Prisma.ImageUpdateWithWhereUniqueWithoutAlbumInput | Prisma.ImageUpdateWithWhereUniqueWithoutAlbumInput[]
+  updateMany?: Prisma.ImageUpdateManyWithWhereWithoutAlbumInput | Prisma.ImageUpdateManyWithWhereWithoutAlbumInput[]
   deleteMany?: Prisma.ImageScalarWhereInput | Prisma.ImageScalarWhereInput[]
 }
 
-export type ImageCreateWithoutTripAlbumInput = {
+export type ImageCreateWithoutAlbumInput = {
   id?: string
   imageUrl: string
   createdAt?: Date | string
 }
 
-export type ImageUncheckedCreateWithoutTripAlbumInput = {
+export type ImageUncheckedCreateWithoutAlbumInput = {
   id?: string
   imageUrl: string
   createdAt?: Date | string
 }
 
-export type ImageCreateOrConnectWithoutTripAlbumInput = {
+export type ImageCreateOrConnectWithoutAlbumInput = {
   where: Prisma.ImageWhereUniqueInput
-  create: Prisma.XOR<Prisma.ImageCreateWithoutTripAlbumInput, Prisma.ImageUncheckedCreateWithoutTripAlbumInput>
+  create: Prisma.XOR<Prisma.ImageCreateWithoutAlbumInput, Prisma.ImageUncheckedCreateWithoutAlbumInput>
 }
 
-export type ImageCreateManyTripAlbumInputEnvelope = {
-  data: Prisma.ImageCreateManyTripAlbumInput | Prisma.ImageCreateManyTripAlbumInput[]
+export type ImageCreateManyAlbumInputEnvelope = {
+  data: Prisma.ImageCreateManyAlbumInput | Prisma.ImageCreateManyAlbumInput[]
   skipDuplicates?: boolean
 }
 
-export type ImageUpsertWithWhereUniqueWithoutTripAlbumInput = {
+export type ImageUpsertWithWhereUniqueWithoutAlbumInput = {
   where: Prisma.ImageWhereUniqueInput
-  update: Prisma.XOR<Prisma.ImageUpdateWithoutTripAlbumInput, Prisma.ImageUncheckedUpdateWithoutTripAlbumInput>
-  create: Prisma.XOR<Prisma.ImageCreateWithoutTripAlbumInput, Prisma.ImageUncheckedCreateWithoutTripAlbumInput>
+  update: Prisma.XOR<Prisma.ImageUpdateWithoutAlbumInput, Prisma.ImageUncheckedUpdateWithoutAlbumInput>
+  create: Prisma.XOR<Prisma.ImageCreateWithoutAlbumInput, Prisma.ImageUncheckedCreateWithoutAlbumInput>
 }
 
-export type ImageUpdateWithWhereUniqueWithoutTripAlbumInput = {
+export type ImageUpdateWithWhereUniqueWithoutAlbumInput = {
   where: Prisma.ImageWhereUniqueInput
-  data: Prisma.XOR<Prisma.ImageUpdateWithoutTripAlbumInput, Prisma.ImageUncheckedUpdateWithoutTripAlbumInput>
+  data: Prisma.XOR<Prisma.ImageUpdateWithoutAlbumInput, Prisma.ImageUncheckedUpdateWithoutAlbumInput>
 }
 
-export type ImageUpdateManyWithWhereWithoutTripAlbumInput = {
+export type ImageUpdateManyWithWhereWithoutAlbumInput = {
   where: Prisma.ImageScalarWhereInput
-  data: Prisma.XOR<Prisma.ImageUpdateManyMutationInput, Prisma.ImageUncheckedUpdateManyWithoutTripAlbumInput>
+  data: Prisma.XOR<Prisma.ImageUpdateManyMutationInput, Prisma.ImageUncheckedUpdateManyWithoutAlbumInput>
 }
 
 export type ImageScalarWhereInput = {
@@ -381,29 +381,29 @@ export type ImageScalarWhereInput = {
   NOT?: Prisma.ImageScalarWhereInput | Prisma.ImageScalarWhereInput[]
   id?: Prisma.StringFilter<"Image"> | string
   imageUrl?: Prisma.StringFilter<"Image"> | string
-  tripAlbumId?: Prisma.StringFilter<"Image"> | string
+  albumId?: Prisma.StringFilter<"Image"> | string
   createdAt?: Prisma.DateTimeFilter<"Image"> | Date | string
 }
 
-export type ImageCreateManyTripAlbumInput = {
+export type ImageCreateManyAlbumInput = {
   id?: string
   imageUrl: string
   createdAt?: Date | string
 }
 
-export type ImageUpdateWithoutTripAlbumInput = {
+export type ImageUpdateWithoutAlbumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ImageUncheckedUpdateWithoutTripAlbumInput = {
+export type ImageUncheckedUpdateWithoutAlbumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ImageUncheckedUpdateManyWithoutTripAlbumInput = {
+export type ImageUncheckedUpdateManyWithoutAlbumInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -414,54 +414,54 @@ export type ImageUncheckedUpdateManyWithoutTripAlbumInput = {
 export type ImageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   imageUrl?: boolean
-  tripAlbumId?: boolean
+  albumId?: boolean
   createdAt?: boolean
-  tripAlbum?: boolean | Prisma.TripAlbumDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   imageUrl?: boolean
-  tripAlbumId?: boolean
+  albumId?: boolean
   createdAt?: boolean
-  tripAlbum?: boolean | Prisma.TripAlbumDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   imageUrl?: boolean
-  tripAlbumId?: boolean
+  albumId?: boolean
   createdAt?: boolean
-  tripAlbum?: boolean | Prisma.TripAlbumDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["image"]>
 
 export type ImageSelectScalar = {
   id?: boolean
   imageUrl?: boolean
-  tripAlbumId?: boolean
+  albumId?: boolean
   createdAt?: boolean
 }
 
-export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "imageUrl" | "tripAlbumId" | "createdAt", ExtArgs["result"]["image"]>
+export type ImageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "imageUrl" | "albumId" | "createdAt", ExtArgs["result"]["image"]>
 export type ImageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tripAlbum?: boolean | Prisma.TripAlbumDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>
 }
 export type ImageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tripAlbum?: boolean | Prisma.TripAlbumDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>
 }
 export type ImageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tripAlbum?: boolean | Prisma.TripAlbumDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.AlbumDefaultArgs<ExtArgs>
 }
 
 export type $ImagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Image"
   objects: {
-    tripAlbum: Prisma.$TripAlbumPayload<ExtArgs>
+    album: Prisma.$AlbumPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     imageUrl: string
-    tripAlbumId: string
+    albumId: string
     createdAt: Date
   }, ExtArgs["result"]["image"]>
   composites: {}
@@ -857,7 +857,7 @@ readonly fields: ImageFieldRefs;
  */
 export interface Prisma__ImageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tripAlbum<T extends Prisma.TripAlbumDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TripAlbumDefaultArgs<ExtArgs>>): Prisma.Prisma__TripAlbumClient<runtime.Types.Result.GetResult<Prisma.$TripAlbumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  album<T extends Prisma.AlbumDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AlbumDefaultArgs<ExtArgs>>): Prisma.Prisma__AlbumClient<runtime.Types.Result.GetResult<Prisma.$AlbumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -889,7 +889,7 @@ export interface Prisma__ImageClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface ImageFieldRefs {
   readonly id: Prisma.FieldRef<"Image", 'String'>
   readonly imageUrl: Prisma.FieldRef<"Image", 'String'>
-  readonly tripAlbumId: Prisma.FieldRef<"Image", 'String'>
+  readonly albumId: Prisma.FieldRef<"Image", 'String'>
   readonly createdAt: Prisma.FieldRef<"Image", 'DateTime'>
 }
     
