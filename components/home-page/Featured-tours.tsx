@@ -3,6 +3,7 @@ import TourPackages from "../tours/tour-packages";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
+import { TourCategory } from "@/prisma/generated/enums";
 
 const FeaturedTorus = async () => {
   const tours = await prisma.tourPackage.findMany({
@@ -14,16 +15,15 @@ const FeaturedTorus = async () => {
     },
     take: 3,
     include: {
-      pickupOptions: true, // ✅ Fetch pickup options to calculate price
+      pickupOptions: true,
     },
   });
 
-  // ✅ If no tours available
   if (!tours || tours.length === 0) {
     return null;
   }
 
-  // ✅ Transform data to calculate "Starting From" price
+  // ✅ Transform data
   const formattedTours = tours.map((tour) => {
     let minPrice = Infinity;
 
@@ -37,7 +37,7 @@ const FeaturedTorus = async () => {
 
     return {
       ...tour,
-      // If no price found (infinity), default to 0
+      category: tour.category as TourCategory, // ✅ Explicitly cast category
       price: minPrice === Infinity ? 0 : minPrice,
     };
   });
@@ -45,22 +45,23 @@ const FeaturedTorus = async () => {
   return (
     <div>
       <div className="text-center flex flex-col gap-2">
-        <h2 className=" text-orange-500 font-bold text-2xl md:text-4xl">
+        <h2 className="text-orange-500 font-bold text-2xl md:text-4xl">
           Featured Tours
         </h2>
         <p className="text-gray-700">
           Handpicked destinations for unforgettable experiences
         </p>
       </div>
-      
-      {/* Pass the transformed tours with 'price' */}
-      <TourPackages tours={formattedTours} />
+
+      {/* ✅ Pass showTabs={false} here 
+      */}
+      <TourPackages tours={formattedTours} showTabs={false} />
 
       <div className="w-full flex justify-center my-3">
         <Link href={"/tours"}>
           <Button className="w-fit bg-orange-600">
             View all Tours
-            <ArrowRight />
+            <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </Link>
       </div>
