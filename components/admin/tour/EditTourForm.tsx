@@ -75,7 +75,7 @@ const tourSchema = z.object({
   pickupOptions: z
     .array(
       z.object({
-        // We might need ID for updates, but usually specifically handled in backend
+        id: z.string().optional(),
         title: z.string().min(2, "Pickup location name required"),
         priceSingleSharing: z.coerce.number().min(0, "Required"),
         priceDoubleSharing: z.coerce.number().min(0, "Required"),
@@ -193,8 +193,7 @@ interface CloudinaryResultInfo {
 }
 
 function ImageUploader({ onUpload }: { onUpload: (url: string) => void }) {
-  const UPLOAD_PRESET =
-    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
+  const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "";
 
   return (
     <CldUploadWidget
@@ -247,6 +246,7 @@ export default function EditTourForm({ tour }: { tour: TourDBType }) {
 
       // Map Relations
       pickupOptions: tour.pickupOptions.map((opt) => ({
+        id: opt.id,
         title: opt.title,
         priceSingleSharing: opt.priceSingleSharing,
         priceDoubleSharing: opt.priceDoubleSharing ?? 0,
@@ -521,10 +521,7 @@ export default function EditTourForm({ tour }: { tour: TourDBType }) {
                               render={({ field }) => (
                                 <FormItem>
                                   <FormControl>
-                                    <Input
-                                      placeholder="Day Title"
-                                      {...field}
-                                    />
+                                    <Input placeholder="Day Title" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -676,8 +673,7 @@ export default function EditTourForm({ tour }: { tour: TourDBType }) {
                 <Card className="shadow-md border-orange-200 bg-linear-to-br from-orange-50 to-white">
                   <CardHeader className="pb-2">
                     <CardTitle className="flex items-center text-orange-800 text-lg">
-                      <IndianRupee className="w-5 h-5 mr-1" /> Pricing &
-                      Pickups
+                      <IndianRupee className="w-5 h-5 mr-1" /> Pricing & Pickups
                     </CardTitle>
                     <CardDescription>
                       Set prices for different pickup locations.

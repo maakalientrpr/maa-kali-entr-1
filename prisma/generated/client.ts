@@ -65,6 +65,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type TourPackage = Prisma.TourPackageModel
 /**
+ * Model Pilgrimage
+ * 
+ */
+export type Pilgrimage = Prisma.PilgrimageModel
+/**
  * Model Review
  * 
  */

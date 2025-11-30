@@ -41,6 +41,7 @@ const Navbar = () => {
     { name: "Home", link: "/" },
     { name: "Tours & Travel", link: "/tours" },
     { name: "Vote Destinations", link: "/vote" },
+    { name: "Pilgrimage", link: "/pilgrimage" },
     { name: "Events & Catering", link: "/events&catering" },
     { name: "Bookings & Assistance", link: "/bookings&assistance" },
     { name: "Gallery", link: "/gallery" },

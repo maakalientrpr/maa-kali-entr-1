@@ -11,6 +11,7 @@ import {
   Users,
   ImageIcon,
   VoteIcon,
+  SparkleIcon,
 } from "lucide-react";
 
 const links = [
@@ -28,6 +29,11 @@ const links = [
     label: "Manage Tours",
     href: "/admin/tour-package",
     icon: Package,
+  },
+  {
+    label: "Pilgrimages",
+    href: "/admin/pilgrimages",
+    icon: SparkleIcon,
   },
   {
     label: "Bookings",

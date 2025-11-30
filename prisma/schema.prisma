@@ -125,6 +125,16 @@ model TourPackage {
   @@map("tour_package")
 }
 
+model Pilgrimage {
+  id          String   @id @default(uuid())
+  title       String
+  image       String
+  description String
+  createdAt   DateTime @default(now())
+  @@map("pilgrimage")
+}
+
+
 // ---------------------------------------------------------
 // REVIEWS
 // ---------------------------------------------------------

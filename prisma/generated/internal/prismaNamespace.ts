@@ -389,6 +389,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   TourPackage: 'TourPackage',
+  Pilgrimage: 'Pilgrimage',
   Review: 'Review',
   ProposedTour: 'ProposedTour',
   TourVote: 'TourVote',
@@ -413,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "tourPackage" | "review" | "proposedTour" | "tourVote" | "pickupOption" | "itinerary" | "booking" | "passenger" | "album" | "image"
+    modelProps: "user" | "session" | "account" | "verification" | "tourPackage" | "pilgrimage" | "review" | "proposedTour" | "tourVote" | "pickupOption" | "itinerary" | "booking" | "passenger" | "album" | "image"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -784,6 +785,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.TourPackageCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.TourPackageCountAggregateOutputType> | number
+        }
+      }
+    }
+    Pilgrimage: {
+      payload: Prisma.$PilgrimagePayload<ExtArgs>
+      fields: Prisma.PilgrimageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PilgrimageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PilgrimageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>
+        }
+        findFirst: {
+          args: Prisma.PilgrimageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PilgrimageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>
+        }
+        findMany: {
+          args: Prisma.PilgrimageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>[]
+        }
+        create: {
+          args: Prisma.PilgrimageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>
+        }
+        createMany: {
+          args: Prisma.PilgrimageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PilgrimageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>[]
+        }
+        delete: {
+          args: Prisma.PilgrimageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>
+        }
+        update: {
+          args: Prisma.PilgrimageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>
+        }
+        deleteMany: {
+          args: Prisma.PilgrimageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PilgrimageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PilgrimageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>[]
+        }
+        upsert: {
+          args: Prisma.PilgrimageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PilgrimagePayload>
+        }
+        aggregate: {
+          args: Prisma.PilgrimageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePilgrimage>
+        }
+        groupBy: {
+          args: Prisma.PilgrimageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PilgrimageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PilgrimageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PilgrimageCountAggregateOutputType> | number
         }
       }
     }
@@ -1580,6 +1655,17 @@ export const TourPackageScalarFieldEnum = {
 export type TourPackageScalarFieldEnum = (typeof TourPackageScalarFieldEnum)[keyof typeof TourPackageScalarFieldEnum]
 
 
+export const PilgrimageScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  image: 'image',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type PilgrimageScalarFieldEnum = (typeof PilgrimageScalarFieldEnum)[keyof typeof PilgrimageScalarFieldEnum]
+
+
 export const ReviewScalarFieldEnum = {
   id: 'id',
   rating: 'rating',
@@ -1952,6 +2038,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   tourPackage?: Prisma.TourPackageOmit
+  pilgrimage?: Prisma.PilgrimageOmit
   review?: Prisma.ReviewOmit
   proposedTour?: Prisma.ProposedTourOmit
   tourVote?: Prisma.TourVoteOmit

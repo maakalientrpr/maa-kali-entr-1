@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Dashboard", href: "/admin" },
   { label: "Create Tour", href: "/admin/tour-package/create" },
   { label: "Manage Tours", href: "/admin/tour-package" },
+  { label: "Pilgrimages", href: "/admin/pilgrimages" },
   { label: "Bookings", href: "/admin/bookings" },
   { label: "Gallery", href: "/admin/gallery" },
   {

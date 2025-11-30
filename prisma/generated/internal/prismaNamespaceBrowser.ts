@@ -56,6 +56,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   TourPackage: 'TourPackage',
+  Pilgrimage: 'Pilgrimage',
   Review: 'Review',
   ProposedTour: 'ProposedTour',
   TourVote: 'TourVote',
@@ -169,6 +170,17 @@ export const TourPackageScalarFieldEnum = {
 } as const
 
 export type TourPackageScalarFieldEnum = (typeof TourPackageScalarFieldEnum)[keyof typeof TourPackageScalarFieldEnum]
+
+
+export const PilgrimageScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  image: 'image',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type PilgrimageScalarFieldEnum = (typeof PilgrimageScalarFieldEnum)[keyof typeof PilgrimageScalarFieldEnum]
 
 
 export const ReviewScalarFieldEnum = {
