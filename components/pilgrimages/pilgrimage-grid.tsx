@@ -39,7 +39,7 @@ const PilgrimageCard = ({ title, image, description }: PilgrimageCardProps) => {
         </p>
 
         {/* Action Button */}
-        <a href="tel:+919876543210" className="mt-auto block"> 
+        <a href="tel:+91933042690" className="mt-auto block"> 
           <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white gap-2 group-hover:translate-y-0 transition-all">
             <Phone className="w-4 h-4" /> Enquire Now
           </Button>

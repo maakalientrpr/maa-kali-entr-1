@@ -17,7 +17,6 @@ export default async function PollsPage({ searchParams }: { searchParams: Search
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  const isAdmin = session?.user?.role === "admin";
   
   // 1. Fetch Data
   const rawPolls = await getPolls();
@@ -114,8 +113,6 @@ export default async function PollsPage({ searchParams }: { searchParams: Search
              {/* Sort Dropdown */}
              <PollControls />
              
-             {/* Admin Create Button */}
-             {isAdmin && <CreatePollForm />}
           </div>
         </div>
 
