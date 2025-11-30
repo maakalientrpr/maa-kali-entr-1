@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Button } from "../ui/button";
 import { CheckIcon } from "lucide-react";
 
 export default function CateringService() {
@@ -36,7 +35,6 @@ export default function CateringService() {
           </li>
         </ul>
 
-        <Button className="w-fit mt-3">Download Menu Card</Button>
       </div>
 
       {/* Right Section */}
