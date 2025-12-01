@@ -1,64 +1,65 @@
-import { MailIcon, MapPin, PhoneIcon, Clock, User } from "lucide-react";
+import { MailIcon, MapPin, PhoneIcon, Clock, User, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="bg-linear-to-br from-gray-900 to-gray-800 text-gray-300 py-14 px-6 md:px-12">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
+    <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-gray-300 py-14 px-6 md:px-12 border-t border-gray-700">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
 
-        {/* Logo + About */}
+        {/* 1. Logo + About (Spans 2 columns) */}
         <div className="space-y-4 col-span-2 lg:col-span-2">
           <div className="flex gap-3 items-center">
-            <Image
-              src="/logo.png"
-              width={60}
-              height={90}
-              alt="Maa Kali Entr Logo"
-              className="cursor-pointer w-[60px] md:w-[70px] lg:w-20"
-            />
+            <div className="relative w-[60px] h-[60px]">
+                <Image
+                src="/logo.png"
+                fill
+                alt="Maa Kali Entr Logo"
+                className="object-contain"
+                />
+            </div>
             <div>
               <h4 className="text-xl font-bold text-white tracking-wide">MAA KALI</h4>
-              <span className="text-gray-400 text-sm">Enterprise</span>
+              <span className="text-orange-500 text-sm font-medium">Enterprise</span>
             </div>
           </div>
 
-          <p className="text-sm leading-relaxed">
+          <p className="text-sm leading-relaxed text-gray-400 max-w-sm">
             Your trusted partner for unforgettable tours, beautiful events, and
-            premium catering services.
+            premium catering services across India and Nepal.
           </p>
 
-          <div className="space-y-2 text-sm">
-            <p className="flex items-center gap-2">
-              <PhoneIcon className="w-4 h-4 text-orange-400" /> +91 98765 43210
+          <div className="space-y-3 text-sm pt-2">
+            <p className="flex items-center gap-3">
+              <PhoneIcon className="w-4 h-4 text-orange-500" /> 
+              <span className="text-white">+91 9330942690</span>
             </p>
-            <p className="flex items-center gap-2">
-              <MailIcon className="w-4 h-4 text-orange-400" /> info@maakali.com
+            <p className="flex items-center gap-3">
+              <MailIcon className="w-4 h-4 text-orange-500" /> 
+              <span className="text-white">maakalienterprise@gmail.com</span>
             </p>
-            <p className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-orange-400" />
-              123 Park Street, Kolkata, West Bengal - 700016
+            <p className="flex items-start gap-3">
+              <MapPin className="w-4 h-4 text-orange-500 mt-1 shrink-0" />
+              <span className="text-white">123 Spiritual Road, Kolkata, West Bengal - 700001</span>
             </p>
           </div>
         </div>
 
-        {/* Quick Links */}
+        {/* 2. Quick Links */}
         <div>
-          <h4 className="text-lg font-semibold text-white mb-4">Quick Links</h4>
-          <ul className="space-y-2 text-sm">
+          <h4 className="text-lg font-bold text-white mb-6 border-b-2 border-orange-500 inline-block pb-1">Quick Links</h4>
+          <ul className="space-y-3 text-sm">
             {[
               { name: "Home", link: "/" },
-              { name: "Tours & Travel", link: "/tours&travel" },
-              { name: "Events & Catering", link: "/events&catering" },
-              { name: "Bookings", link: "/bookings&assistance" },
-              { name: "Gallery", link: "/gallery" },
-              { name: "About", link: "/aboutus" },
-              { name: "Contact", link: "/contact" },
+              { name: "Tours & Travel", link: "/#packages" },
+              { name: "Events & Catering", link: "/events" },
+              { name: "About Us", link: "/about" },
+              { name: "Contact", link: "/#contact" },
             ].map((item) => (
               <li key={item.link}>
                 <Link
                   href={item.link}
-                  className="hover:text-orange-400 transition-colors"
+                  className="hover:text-orange-400 transition-colors hover:translate-x-1 inline-block"
                 >
                   {item.name}
                 </Link>
@@ -67,54 +68,77 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Our Services */}
+        {/* 3. Legal & Policies (CRITICAL FOR RAZORPAY) */}
         <div>
-          <h4 className="text-lg font-semibold text-white mb-4">Our Services</h4>
-          <ul className="space-y-2 text-sm">
-            <li>Domestic & International Tours</li>
-            <li>Destination Weddings</li>
-            <li>Event Management</li>
-            <li>Premium Catering</li>
-            <li>Travel Bookings</li>
-            <li>Visa & Passport Assistance</li>
-            <li>LIC & Mediclaim Advisory</li>
+          <h4 className="text-lg font-bold text-white mb-6 border-b-2 border-orange-500 inline-block pb-1">Policies</h4>
+          <ul className="space-y-3 text-sm">
+            <li>
+                <Link href="/terms-conditions" className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    Terms & Conditions
+                </Link>
+            </li>
+            <li>
+                <Link href="/privacy-policy" className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    Privacy Policy
+                </Link>
+            </li>
+            <li>
+                <Link href="/refund-policy" className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    Refund Policy
+                </Link>
+            </li>
+            <li>
+                <Link href="/shipping-policy" className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    Shipping Policy
+                </Link>
+            </li>
+            <li>
+                <Link href="/contact" className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    Contact Us
+                </Link>
+            </li>
+            <li>
+                <Link href="/aboutus" className="hover:text-orange-400 transition-colors flex items-center gap-2">
+                    About Us
+                </Link>
+            </li>
           </ul>
         </div>
 
-        {/* Business Info */}
+        {/* 4. Business Hours / Info */}
         <div>
-          <h4 className="text-lg font-semibold text-white mb-4">Business Info</h4>
+          <h4 className="text-lg font-bold text-white mb-6 border-b-2 border-orange-500 inline-block pb-1">Business Info</h4>
 
           <ul className="space-y-4 text-sm">
-
-            <li className="flex items-start gap-2">
-              <User className="w-4 h-4 text-orange-400 mt-1" />
+            <li className="flex items-start gap-3">
+              <User className="w-5 h-5 text-orange-500 mt-0.5" />
               <div>
                 <p className="text-white font-medium">Owners</p>
-                <p>Krishna Jaiswal & Shweta Jaiswal</p>
+                <p className="text-gray-400 text-xs">Krishna & Shweta Jaiswal</p>
               </div>
             </li>
 
-            <li className="flex items-start gap-2">
-              <Clock className="w-4 h-4 text-orange-400 mt-1" />
+            <li className="flex items-start gap-3">
+              <Clock className="w-5 h-5 text-orange-500 mt-0.5" />
               <div>
-                <p className="text-white font-medium">Business Hours</p>
-                <p>Mon - Sat: 9:00 AM – 8:00 PM</p>
-                <p>Sunday: 10:00 AM – 6:00 PM</p>
+                <p className="text-white font-medium">Opening Hours</p>
+                <p className="text-gray-400 text-xs">Mon - Sat: 9:00 AM – 8:00 PM</p>
+                <p className="text-gray-400 text-xs">Sunday: 10:00 AM – 6:00 PM</p>
               </div>
             </li>
-
           </ul>
-
-          <p className="text-sm mt-4 text-gray-400">
-            We are available 7 days a week for all bookings and assistance.
-          </p>
+          
+          <div className="mt-6 flex items-center gap-2 text-xs text-green-400 bg-green-400/10 p-2 rounded-lg border border-green-400/20">
+            <ShieldCheck className="w-4 h-4" />
+            <span>100% Secure Payments</span>
+          </div>
         </div>
 
       </div>
 
-      <div className="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-400">
-        © {new Date().getFullYear()} Maa Kali Enterprise. All Rights Reserved.
+      {/* Copyright */}
+      <div className="border-t border-gray-800 mt-14 pt-6 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto">
+        <p>© {new Date().getFullYear()} Maa Kali Enterprise. All Rights Reserved.</p>
       </div>
     </footer>
   );

@@ -258,63 +258,7 @@ Message: ${data.message}`;
         </Card>
       </div>
 
-      {/* Meet our owners */}
-      <div className="py-16 px-5">
-        {/* Heading */}
-        <h2 className="text-center text-3xl md:text-4xl font-bold text-gray-800 mb-10">
-          Meet Our <span className="text-orange-500">Owners</span>
-        </h2>
-
-        {/* Owners Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Owner 1 */}
-          <div className="bg-white shadow-lg p-6 rounded-xl border hover:shadow-xl transition">
-            <h3 className="text-xl font-semibold text-gray-900">
-              Krishna Jaiswal
-            </h3>
-            <p className="text-gray-600 mt-1">Co-founder & Director</p>
-          </div>
-
-          {/* Owner 2 */}
-          <div className="bg-white shadow-lg p-6 rounded-xl border hover:shadow-xl transition">
-            <h3 className="text-xl font-semibold text-gray-900">
-              Shweta Jaiswal
-            </h3>
-            <p className="text-gray-600 mt-1">Co-founder & Director</p>
-          </div>
-        </div>
-
-        {/* MAP SECTION */}
-        <div className="my-16 px-5">
-          <h2 className="text-2xl font-bold text-orange-600 mb-4">
-            Our Office Location
-          </h2>
-
-          <div className="w-full h-[350px] rounded-xl overflow-hidden shadow-md">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3683.7613988692397!2d88.367!3d22.5726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjLCsDM0JzIxLjQiTiA4OMKwMjInMDIuMiJF!5e0!3m2!1sen!2sin!4v1700000000000"
-              width="100%"
-              height="100%"
-              allowFullScreen={true}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-
-          {/* Get Directions Button */}
-          <div className="mt-4">
-            <Link
-              href="https://maps.google.com/?q=123+Park+Street+Kolkata"
-              target="_blank"
-              className="inline-block bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded-lg font-medium shadow"
-            >
-              Get Directions
-            </Link>
-          </div>
-
-          <FAQSection />
-        </div>
-      </div>
+      <FAQSection />
     </div>
   );
 };

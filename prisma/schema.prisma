@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client"
   output   = "./generated"
@@ -21,7 +22,7 @@ model User {
   banned        Boolean?   @default(false)
   banReason     String?
   banExpires    DateTime?
-  phoneNumber   String
+  phoneNumber   String?
   sessions      Session[]
   accounts      Account[]
   votes         TourVote[]
@@ -131,9 +132,9 @@ model Pilgrimage {
   image       String
   description String
   createdAt   DateTime @default(now())
+
   @@map("pilgrimage")
 }
-
 
 // ---------------------------------------------------------
 // REVIEWS
@@ -195,7 +196,8 @@ model TourVote {
 
   createdAt DateTime @default(now())
 
-  @@unique([userId, proposedTourId]) // Ensures 1 user = 1 vote per tour
+  // Ensures 1 user = 1 vote per tour
+  @@unique([userId, proposedTourId])
   @@map("tour_vote")
 }
 
@@ -206,6 +208,7 @@ enum PollStatus {
 }
 
 // New Model to handle variable pricing per location
+
 model PickupOption {
   id String @id @default(cuid())
 
@@ -311,6 +314,7 @@ enum PaymentStatus {
 }
 
 // 1. Define the Enum
+
 enum AlbumCategory {
   TOURS
   PILGRIMAGE
@@ -319,6 +323,7 @@ enum AlbumCategory {
 }
 
 // 2. The Album Model
+
 model Album {
   id       String  @id @default(cuid())
   title    String
@@ -332,7 +337,8 @@ model Album {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([category]) // Index for faster filtering
+  // Index for faster filtering
+  @@index([category])
 }
 
 model Image {
