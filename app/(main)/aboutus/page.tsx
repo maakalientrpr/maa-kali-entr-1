@@ -131,7 +131,7 @@ const OurStory = () => {
             {" "}
             Shweta Jaiswal
           </span>{" "}
-          in 2019, Maa Kali Enterprise began with a simple vision — to make
+          in 2013, Maa Kali Enterprise began with a simple vision — to make
           travel accessible, events memorable, and every occasion special!
         </p>
 
