@@ -52,7 +52,7 @@ const Page = () => {
     },
     {
       icon: <HeartIcon className="text-orange-600 size-10" />,
-      value: "5 Years",
+      value: "12 Years",
       label: "Experience",
     },
   ];
