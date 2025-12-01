@@ -230,7 +230,7 @@ const OurFounder = () => {
             <CardHeader className="pb-0 pt-8">
               <div className="relative w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-orange-50 group-hover:border-orange-100 transition-colors">
                 <Image
-                  src="/members/krishana.jpg" // Replace with actual image
+                  src="/members/Krishana.jpg" // Replace with actual image
                   fill
                   className="object-cover"
                   alt="Krishna Kumar Jaiswal"
@@ -288,7 +288,7 @@ const OurFounder = () => {
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <div className="relative w-24 h-24 mb-4 rounded-full overflow-hidden bg-slate-100">
                     <Image
-                      src="/members/swastik.jpg"
+                      src="/members/Swastik.jpg"
                       alt="Shwastik Jaiswal"
                       fill
                       className="object-cover"
@@ -307,7 +307,7 @@ const OurFounder = () => {
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <div className="relative w-24 h-24 mb-4 rounded-full overflow-hidden bg-slate-100">
                     <Image
-                      src="/members/palak.jpg"
+                      src="/members/Palak.jpg"
                       alt="Palak Jaiswal"
                       fill
                       className="object-cover"
@@ -375,7 +375,7 @@ const OurFounder = () => {
           <Card className="flex flex-row items-center p-2 hover:shadow-md transition-shadow border-slate-200">
             <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100">
               <Image
-                src="/members/ashwini.jpg"
+                src="/members/Ashwini.jpg"
                 alt="Ashwini"
                 fill
                 className="object-cover"
