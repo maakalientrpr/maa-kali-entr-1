@@ -27,14 +27,14 @@ export default function ShippingPolicy() {
           </p>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong>Booking Confirmation:</strong> You will receive an immediate confirmation via <strong>Email</strong> and <strong>SMS/WhatsApp</strong>.</li>
-            <li><strong>Tickets & Vouchers:</strong> E-Tickets, Hotel Vouchers, and Itinerary details will be sent to your registered email address within 24-48 hours of booking confirmation.</li>
+            <li><strong>Itinerary :</strong> Itinerary details will be sent to your registered email address within 24-48 hours of booking confirmation.</li>
           </ul>
         </section>
 
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-slate-900">3. Support</h2>
           <p>
-            If you do not receive your confirmation details within the specified time, please contact our support team immediately at <strong>+91 9330942690</strong> or email <strong>maakalienterprise@gmail.com</strong>.
+            If you do not receive your confirmation details within the specified time, please contact our support team immediately at <strong>+91 9330942690</strong> or email <strong>maakalientrpr@gmail.com</strong>.
           </p>
         </section>
       </div>

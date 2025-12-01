@@ -27,6 +27,7 @@ import {
   PhoneIcon,
   SunIcon,
   TargetIcon,
+  UserIcon,
   UsersIcon,
   UtensilsIcon,
   WavesIcon,
@@ -393,10 +394,10 @@ const OurFounder = () => {
               >
                 Mumbai (Maharashtra)
               </Badge>
-              {/* <div className="flex items-center gap-2 text-sm text-slate-600 pt-1">
+              <div className="flex items-center gap-2 text-sm text-slate-600 pt-1">
                 <PhoneIcon className="w-4 h-4" />
                 <span>+91 8082101910</span>
-              </div> */}
+              </div>
             </div>
           </Card>
 
@@ -422,10 +423,42 @@ const OurFounder = () => {
               >
                 Uttar Pradesh
               </Badge>
-              {/* <div className="flex items-center gap-2 text-sm text-slate-600 pt-1">
+              <div className="flex items-center gap-2 text-sm text-slate-600 pt-1">
                 <PhoneIcon className="w-4 h-4" />
                 <span>+91 9214078757</span>
-              </div> */}
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+
+     {/* --- SECTION 4: MANAGER --- */}
+      <div className="space-y-8">
+        <div className="text-center">
+          <h3 className="text-2xl font-bold text-slate-900 inline-flex items-center gap-2">
+            <UserIcon className="w-6 h-6 text-orange-600" /> {/* Changed icon to User for semantic correctness */}
+            Manager
+          </h3>
+        </div>
+
+        <div className="grid gap-6 max-w-xl mx-auto"> {/* Centered max-width for single card */}
+          {/* Manager Card */}
+          <Card className="flex flex-row items-center p-2 hover:shadow-md transition-shadow border-slate-200">
+            <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100">
+              <Image
+                src="/members/Manager.jpg"
+                alt="Mithlesh Kumar Raut"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="p-4 flex-1 space-y-1">
+              <h4 className="font-bold text-slate-900 text-lg leading-tight">
+                Mithlesh Kumar Raut
+              </h4>
+              <p className="text-sm text-slate-500 font-medium">
+                Operations Manager
+              </p>
             </div>
           </Card>
         </div>

@@ -65,7 +65,7 @@ export default function PrivacyPolicy() {
           <h2 className="text-xl font-semibold text-slate-900">Contact Privacy Officer</h2>
           <p>
             For concerns regarding your data, contact us at:<br />
-            Email: maakalienterprise@gmail.com
+            Email: maakalientrpr@gmail.com
           </p>
         </section>
       </div>

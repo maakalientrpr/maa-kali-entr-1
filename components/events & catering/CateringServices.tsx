@@ -38,7 +38,7 @@ const CateringServices = () => {
     "Dal Makhani",
     "Mix Veg Korma",
     "Jeera Rice / Pulao",
-    "Naan / Rote",
+    "Naan / Roti",
     "Raita & Salad",
     "Gulab Jamun / Ice Cream"
   ];

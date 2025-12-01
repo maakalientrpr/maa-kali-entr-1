@@ -16,12 +16,12 @@ export default function RefundPolicy() {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-slate-900">1. Cancellation Rules</h2>
           <p>
-            If you wish to cancel your booking, you must notify us in writing via email at <strong>maakalienterprise@gmail.com</strong> or via WhatsApp. The following charges apply:
+            If you wish to cancel your booking, you must notify us in writing via email at <strong>maakalientrpr@gmail.com</strong> or via WhatsApp. The following charges apply:
           </p>
           <ul className="list-disc pl-5 space-y-2">
-            <li><strong>30 days or more before departure:</strong> 10% of total tour cost (Service Charge) will be deducted.</li>
-            <li><strong>15 to 29 days before departure:</strong> 25% of total tour cost will be deducted.</li>
-            <li><strong>7 to 14 days before departure:</strong> 50% of total tour cost will be deducted.</li>
+            <li><strong>30 days or more before departure:</strong> 25% of total tour cost (Service Charge) will be deducted.</li>
+            <li><strong>15 to 29 days before departure:</strong> 50% of total tour cost will be deducted.</li>
+            {/* <li><strong>7 to 14 days before departure:</strong> 50% of total tour cost will be deducted.</li> */}
             <li><strong>Less than 7 days before departure:</strong> No Refund (100% cancellation charge).</li>
           </ul>
         </section>
@@ -30,7 +30,6 @@ export default function RefundPolicy() {
           <h2 className="text-xl font-semibold text-slate-900">2. Refund Processing</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li>Once a cancellation is approved, the refund amount will be calculated based on the policy above.</li>
-            <li>Refunds will be processed within <strong>5-7 working days</strong>.</li>
             <li>The amount will be credited back to the <strong>original source of payment</strong> (Credit Card, Debit Card, UPI, or Bank Account).</li>
           </ul>
         </section>
@@ -46,11 +45,11 @@ export default function RefundPolicy() {
           </ul>
         </section>
 
-        <section className="space-y-4 border-t pt-6">
+        {/* <section className="space-y-4 border-t pt-6">
           <p className="text-sm text-slate-500">
             Note: In case of tour cancellation by Maa Kali Enterprise due to unavoidable circumstances (like natural calamities), a full refund or alternative tour dates will be provided.
           </p>
-        </section>
+        </section> */}
       </div>
     </div>
   );

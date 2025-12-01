@@ -39,7 +39,7 @@ const page = () => {
     },
     {
       src:'/birthday.jpg',
-      name: "Birthday & Celebrations",
+      name: "Birthday, Anniversary & Other Celebrations",
       price: "Starting ₹20,000",
       icon: "CakeIcon",
 
