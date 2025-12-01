@@ -8,10 +8,11 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-gray-300 py-14 px-6 md:px-12 border-t border-gray-700">
+    <footer className="bg-linear-to-br from-gray-900 to-gray-800 text-gray-300 py-14 px-6 md:px-12 border-t border-gray-700">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
         {/* 1. Logo + About (Spans 2 columns) */}
         <div className="space-y-4 col-span-2 lg:col-span-2">
@@ -42,18 +43,44 @@ const Footer = () => {
           <div className="space-y-3 text-sm pt-2">
             <p className="flex items-center gap-3">
               <PhoneIcon className="w-4 h-4 text-orange-500" />
-              <span className="text-white">+91 9330942690</span>
+              <span className="text-white">+91 9330942690 | 8282867771</span>
             </p>
             <p className="flex items-center gap-3">
               <MailIcon className="w-4 h-4 text-orange-500" />
-              <span className="text-white">maakalienterprise@gmail.com</span>
+              <span>maakalientrpr@gmail.com</span>
             </p>
             <p className="flex items-start gap-3">
               <MapPin className="w-4 h-4 text-orange-500 mt-1 shrink-0" />
               <span className="text-white">
-                123 Spiritual Road, Kolkata, West Bengal - 700001
+                88A/1 Bechu Chatterjee Street, Kolkata - 700009, West Bengal
               </span>
             </p>
+            <div className="flex gap-5 text-lg text-orange-500">
+              <a
+                href="https://www.facebook.com/krishnakumar.jaiswal.77"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                <FaFacebook />
+              </a>
+              <a
+                href="https://www.instagram.com/maakalientrpr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                <FaInstagram />
+              </a>
+              <a
+                href="https://www.youtube.com/@maakalitourstravelsofficial"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                <FaYoutube />
+              </a>
+            </div>
           </div>
         </div>
 
@@ -161,10 +188,7 @@ const Footer = () => {
               <div>
                 <p className="text-white font-medium">Opening Hours</p>
                 <p className="text-gray-400 text-xs">
-                  Mon - Sat: 9:00 AM – 8:00 PM
-                </p>
-                <p className="text-gray-400 text-xs">
-                  Sunday: 10:00 AM – 6:00 PM
+                  Mon - Sat: 9:00 AM – 9:00 PM
                 </p>
               </div>
             </li>

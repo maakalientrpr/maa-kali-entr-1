@@ -55,6 +55,15 @@ export default function EventsCateringCard({
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const getModalTitle = () => {
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes("birthday") || lowerName.includes("party")) {
+      return "Birthday, Anniversary & Other Event Celebration";
+    }
+    return `Get a Quote: ${name}`;
+  };
+
+  // --- NEW HANDLE SUBMIT LOGIC ---
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -62,19 +71,68 @@ export default function EventsCateringCard({
     const formData = new FormData(e.currentTarget);
     formData.append("packageName", name);
 
-    const result = await sendQuoteRequest(formData);
+    try {
+      // 1. Send Email (Server Side)
+      const result = await sendQuoteRequest(formData);
 
-    if (result.success) {
-      toast.success("Quote request sent! We will contact you soon.");
-      setIsOpen(false);
-    } else {
-      toast.error(result.error || "Something went wrong.");
+      if (result.success) {
+        toast.success("Request received! Opening WhatsApp...");
+        setIsOpen(false);
+
+        // 2. Construct WhatsApp Message (Client Side)
+        let waMessage = `*New Quote Request: ${name}*\n\n`;
+        waMessage += `*Name:* ${formData.get("name")}\n`;
+        waMessage += `*Phone:* ${formData.get("phone")}\n`;
+
+        // Loop through dynamic fields to add them to WhatsApp text
+        const skipKeys = ["name", "phone", "packageName", "email"];
+
+        // We accumulate services/cuisines into arrays to display nicely
+        const multiValues: Record<string, string[]> = {};
+
+        // @ts-ignore
+        for (const [key, value] of formData.entries()) {
+          if (skipKeys.includes(key) || !value) continue;
+
+          // Handle checkboxes (same key appearing multiple times)
+          if (key === "services" || key === "cuisines") {
+            if (!multiValues[key]) multiValues[key] = [];
+            multiValues[key].push(value.toString());
+          } else {
+            // Formatting camelCase keys to readable text
+            const label = key
+              .replace(/([A-Z])/g, " $1")
+              .replace(/^./, (str) => str.toUpperCase());
+            waMessage += `*${label}:* ${value}\n`;
+          }
+        }
+
+        // Append lists (Services/Cuisines)
+        if (multiValues["services"]) {
+          waMessage += `\n*Services:* ${multiValues["services"].join(", ")}\n`;
+        }
+        if (multiValues["cuisines"]) {
+          waMessage += `\n*Cuisines:* ${multiValues["cuisines"].join(", ")}\n`;
+        }
+
+        // 3. Open WhatsApp
+        const adminNumber = "919330942690"; // Admin Phone Number
+        const url = `https://wa.me/${adminNumber}?text=${encodeURIComponent(
+          waMessage
+        )}`;
+        window.open(url, "_blank");
+      } else {
+        toast.error(result.error || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to submit form.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
-  // --- Dynamic Form Rendering Logic ---
+  // --- Dynamic Form Rendering Logic (Unchanged) ---
   const renderDynamicFields = () => {
     const packageName = name.toLowerCase();
 
@@ -100,7 +158,7 @@ export default function EventsCateringCard({
       </div>
     );
 
-    // 1. HOUSE INAUGURATION / GRIHA PRAVESH
+    // 1. HOUSE INAUGURATION
     if (packageName.includes("house") || packageName.includes("griha")) {
       return (
         <div className="space-y-4 border-t pt-4 mt-2">
@@ -216,13 +274,10 @@ export default function EventsCateringCard({
       );
     }
 
-    // 3. BIRTHDAY CELEBRATIONS
+    // 3. BIRTHDAY & ANNIVERSARY
     if (packageName.includes("birthday") || packageName.includes("party")) {
       return (
         <div className="space-y-4 border-t pt-4 mt-2">
-          <h4 className="font-semibold text-orange-600 text-sm bg-orange-50 p-2 rounded-md">
-            Party Details
-          </h4>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Date</Label>
@@ -412,11 +467,10 @@ export default function EventsCateringCard({
             </Button>
           </DialogTrigger>
 
-          {/* --- MODAL CONTENT --- */}
           <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-orange-600">
-                Get a Quote: {name}
+              <DialogTitle className="text-orange-600 leading-tight">
+                {getModalTitle()}
               </DialogTitle>
               <DialogDescription>
                 Fill out the details below for a customized package.
@@ -456,10 +510,10 @@ export default function EventsCateringCard({
                 />
               </div>
 
-              {/* Dynamic Fields based on Package Name */}
+              {/* Dynamic Fields */}
               {renderDynamicFields()}
 
-              {/* Final Custom Request Box */}
+              {/* Final Custom Request */}
               <div className="space-y-2">
                 <Label>Additional Custom Requests</Label>
                 <Textarea
@@ -481,7 +535,7 @@ export default function EventsCateringCard({
                       Sending...
                     </>
                   ) : (
-                    "Submit Request"
+                    "Submit & Chat on WhatsApp"
                   )}
                 </Button>
               </div>

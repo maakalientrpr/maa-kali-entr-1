@@ -60,11 +60,11 @@ const Navbar = () => {
         <div className="flex gap-2 ">
           <span className="flex items-center gap-1">
             <PhoneIcon />
-            +91 98765 43210
+            +91 93309 42690 
           </span>
           <span className="flex items-center gap-1">
             <MailIcon />
-            info@maakali.com
+            maakalientrpr@gmail.com
           </span>
         </div>
         <div>Owners: Krishna Jaiswal & Shweta Jaiswal</div>

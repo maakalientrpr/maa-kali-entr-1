@@ -230,7 +230,7 @@ const OurFounder = () => {
             <CardHeader className="pb-0 pt-8">
               <div className="relative w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-orange-50 group-hover:border-orange-100 transition-colors">
                 <Image
-                  src="/logo.png" // Replace with actual image
+                  src="/members/krishana.jpg" // Replace with actual image
                   fill
                   className="object-cover"
                   alt="Krishna Kumar Jaiswal"
@@ -252,7 +252,7 @@ const OurFounder = () => {
             <CardHeader className="pb-0 pt-8">
               <div className="relative w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-orange-50 group-hover:border-orange-100 transition-colors">
                 <Image
-                  src="/logo.png" // Replace with actual image
+                  src="/members/Shweta.jpg" // Replace with actual image
                   fill
                   className="object-cover"
                   alt="Shweta Jaiswal"
@@ -288,7 +288,7 @@ const OurFounder = () => {
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <div className="relative w-24 h-24 mb-4 rounded-full overflow-hidden bg-slate-100">
                     <Image
-                      src="/logo.png"
+                      src="/members/swastik.jpg"
                       alt="Shwastik Jaiswal"
                       fill
                       className="object-cover"
@@ -307,7 +307,7 @@ const OurFounder = () => {
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <div className="relative w-24 h-24 mb-4 rounded-full overflow-hidden bg-slate-100">
                     <Image
-                      src="/logo.png"
+                      src="/members/palak.jpg"
                       alt="Palak Jaiswal"
                       fill
                       className="object-cover"
@@ -375,7 +375,7 @@ const OurFounder = () => {
           <Card className="flex flex-row items-center p-2 hover:shadow-md transition-shadow border-slate-200">
             <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100">
               <Image
-                src="/logo.png"
+                src="/members/ashwini.jpg"
                 alt="Ashwini"
                 fill
                 className="object-cover"
@@ -393,10 +393,10 @@ const OurFounder = () => {
               >
                 Mumbai (Maharashtra)
               </Badge>
-              <div className="flex items-center gap-2 text-sm text-slate-600 pt-1">
+              {/* <div className="flex items-center gap-2 text-sm text-slate-600 pt-1">
                 <PhoneIcon className="w-4 h-4" />
-                <span>+91 1234567890</span>
-              </div>
+                <span>+91 8082101910</span>
+              </div> */}
             </div>
           </Card>
 
@@ -404,7 +404,7 @@ const OurFounder = () => {
           <Card className="flex flex-row items-center p-2 hover:shadow-md transition-shadow border-slate-200">
             <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100">
               <Image
-                src="/logo.png"
+                src="/members/manager.jpg"
                 alt="Amit Jaiswal"
                 fill
                 className="object-cover"
@@ -422,10 +422,10 @@ const OurFounder = () => {
               >
                 Uttar Pradesh
               </Badge>
-              <div className="flex items-center gap-2 text-sm text-slate-600 pt-1">
+              {/* <div className="flex items-center gap-2 text-sm text-slate-600 pt-1">
                 <PhoneIcon className="w-4 h-4" />
-                <span>+91 1234567890</span>
-              </div>
+                <span>+91 9214078757</span>
+              </div> */}
             </div>
           </Card>
         </div>
@@ -466,8 +466,9 @@ const Map = () => {
                     Branch Office 1
                   </CardTitle>
                   <CardDescription className="text-gray-600 font-medium">
-                    Address Line 1, Street Name <br />
-                    Kolkata - 700000, West Bengal
+                    88A/1 Bechu Chatterjee Street
+                    <br />
+                    Kolkata - 700009, West Bengal
                   </CardDescription>
                 </div>
               </div>
@@ -497,8 +498,8 @@ const Map = () => {
                     Branch Office 2
                   </CardTitle>
                   <CardDescription className="text-gray-600 font-medium">
-                    Address Line 2, Street Name <br />
-                    Kolkata - 700000, West Bengal
+                    4/A Heaven Plaza , Anandalok , Kali Park <br />
+                    Kolkata - 700157, West Bengal
                   </CardDescription>
                 </div>
               </div>

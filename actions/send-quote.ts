@@ -94,7 +94,7 @@ export const sendQuoteRequest = async (formData: FormData) => {
 
   try {
     await sendEmail({
-      to: "pinkyjaiswal7008@gmail.com", 
+      to: process.env.ADMIN_EMAIL!, 
       subject: `New Lead: ${packageName} - ${name}`,
       html: emailHtml,
     });

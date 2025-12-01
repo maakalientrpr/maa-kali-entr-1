@@ -1,6 +1,13 @@
 "use client";
 
-import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon, Send } from "lucide-react";
+import {
+  ClockIcon,
+  Loader2Icon,
+  MailIcon,
+  MapPinIcon,
+  PhoneIcon,
+  Send,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +26,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FaWhatsapp } from "react-icons/fa";
-import Link from "next/link";
 import {
   Accordion,
   AccordionContent,
@@ -27,6 +33,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import { submitContactForm } from "@/actions/contact";
+import { useState } from "react";
+import { toast } from "sonner";
 
 // ------------------ ZOD SCHEMA ------------------
 const formSchema = z.object({
@@ -37,9 +46,12 @@ const formSchema = z.object({
   message: z.string().min(5, "Message cannot be empty"),
 });
 
-const Page = () => {
-  // ----------- React Hook Form Setup -----------
-  const form = useForm({
+type FormData = z.infer<typeof formSchema>;
+
+const ContactPage = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
@@ -50,26 +62,48 @@ const Page = () => {
     },
   });
 
-  // ------------------ ON SUBMIT ------------------
-  const onSubmit = (data: any) => {
-    const text = `New Inquiry from Website:
-Name: ${data.fullName}
-Email: ${data.email}
-Phone: ${data.phone}
-Subject: ${data.subject}
-Message: ${data.message}`;
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
 
-    const encoded = encodeURIComponent(text);
-    const whatsappNumber = "919876543210";
+    try {
+      // 1. Send Email (Server Action)
+      const result = await submitContactForm(data);
 
-    window.open(`https://wa.me/${whatsappNumber}?text=${encoded}`, "_blank");
+      if (result.success) {
+        toast.success("Message sent successfully! Opening WhatsApp...");
+
+        // 2. Open WhatsApp (Client Side)
+        const waMessage =
+          `*New Website Inquiry*%0A%0A` +
+          `*Name:* ${data.fullName}%0A` +
+          `*Phone:* ${data.phone}%0A` +
+          `*Email:* ${data.email}%0A` +
+          `*Subject:* ${data.subject}%0A` +
+          `*Message:* ${data.message}`;
+
+        const whatsappNumber = "919330942690"; // Your Number
+        window.open(
+          `https://wa.me/${whatsappNumber}?text=${waMessage}`,
+          "_blank"
+        );
+
+        form.reset();
+      } else {
+        toast.error("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div>
       <AnnouncementBar />
-      {/* Heading */}
-      <div className="text-center mt-12 flex flex-col gap-2 mb-12">
+
+      {/* Header */}
+      <div className="text-center mt-12 flex flex-col gap-2 mb-12 px-4">
         <h1 className="text-orange-500 font-bold text-3xl md:text-4xl">
           Contact Us
         </h1>
@@ -78,85 +112,111 @@ Message: ${data.message}`;
         </p>
       </div>
 
-      {/* Grid Layout */}
-      <div className="grid mx-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-        {/* ---------------- LEFT SECTION ---------------- */}
-        <div className="bg-white rounded-xl shadow p-6 space-y-5 col-span-1 lg:col-span-2">
-          <h2 className="text-xl font-bold text-gray-800">Get In Touch</h2>
+      {/* Main Grid */}
+      <div className="grid mx-5 grid-cols-1 lg:grid-cols-5 gap-8 max-w-7xl lg:mx-auto mb-16">
+        {/* --- LEFT: INFO --- */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8 space-y-8 col-span-1 lg:col-span-2 h-fit">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-6">
+              Contact Information
+            </h2>
+            <ul className="space-y-6">
+              <li className="flex gap-4">
+                <div className="p-3 bg-orange-50 text-orange-600 rounded-lg h-fit">
+                  <PhoneIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Phone</p>
+                  <p className="text-gray-600">+91 93309 42690</p>
+                  <p className="text-gray-600">+91 82828 67771</p>
+                </div>
+              </li>
 
-          <ul className="space-y-5">
-            <li className="flex gap-3">
-              <PhoneIcon className="text-orange-600" />
-              <div>
-                <p className="font-semibold">Phone</p>
-                <p>+91 98765 43210</p>
-              </div>
-            </li>
+              <li className="flex gap-4">
+                <div className="p-3 bg-orange-50 text-orange-600 rounded-lg h-fit">
+                  <MailIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Email</p>
+                  <p className="text-gray-600 break-all">
+                    maakalientrpr@gmail.com
+                  </p>
+                </div>
+              </li>
 
-            <li className="flex gap-3">
-              <MailIcon className="text-orange-600" />
-              <div>
-                <p className="font-semibold">Email</p>
-                <p>info@gmail.com</p>
-              </div>
-            </li>
+              <li className="flex gap-4">
+                <div className="p-3 bg-orange-50 text-orange-600 rounded-lg h-fit">
+                  <MapPinIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Address</p>
+                  <p className="text-gray-600">
+                    88A/1 Bechu Chatterjee Street,
+                    <br />
+                    Kolkata - 700009, West Bengal
+                  </p>
+                </div>
+              </li>
 
-            <li className="flex gap-3">
-              <MapPinIcon className="text-orange-600" />
-              <div>
-                <p className="font-semibold">Address</p>
-                <p>123 Park Street Kolkata, West Bengal 700016</p>
-              </div>
-            </li>
+              <li className="flex gap-4">
+                <div className="p-3 bg-orange-50 text-orange-600 rounded-lg h-fit">
+                  <ClockIcon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">Business Hours</p>
+                  <p className="text-gray-600">Mon - Sat: 9:00 AM - 9:00 PM</p>
+                </div>
+              </li>
+            </ul>
+          </div>
 
-            <li className="flex gap-3">
-              <ClockIcon className="text-orange-600" />
-              <div>
-                <p className="font-semibold">Business Hours</p>
-                <p>Mon - Sat: 9:00 AM - 8:00 PM</p>
-                <p>Sunday: 10:00 AM - 6:00 PM</p>
+          {/* WhatsApp Card (Moved inside left column for better layout) */}
+          <Card className="bg-linear-to-br from-green-500 to-green-600 p-6 rounded-xl text-white shadow-lg border-0">
+            <div className="flex items-center gap-4 mb-3">
+              <div className="bg-white/20 p-2 rounded-full">
+                <FaWhatsapp size={24} />
               </div>
-            </li>
-          </ul>
+              <h3 className="text-lg font-bold">Quick Chat?</h3>
+            </div>
+            <p className="text-white/90 text-sm mb-4">
+              Get instant responses. Available 24/7 for urgent queries.
+            </p>
+            <Button
+              onClick={() =>
+                window.open("https://wa.me/919330942690", "_blank")
+              }
+              className="bg-white text-green-700 hover:bg-green-50 w-full font-bold"
+            >
+              Chat on WhatsApp
+            </Button>
+          </Card>
         </div>
 
-        {/* ---------------- RIGHT SECTION ---------------- */}
-        <div className="bg-white rounded-xl shadow p-6 col-span-1 md:col-span-1 lg:col-span-3">
-          <h2 className="text-xl font-bold text-gray-800 mb-3">
-            Send Us a Message
+        {/* --- RIGHT: FORM --- */}
+        <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-8 col-span-1 lg:col-span-3">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Send Message
           </h2>
-
-          <p className="text-gray-600 mb-6">
-            Fill out the form below and we'll get back to you as soon as
-            possible.
+          <p className="text-gray-500 mb-8">
+            Fill out the form below and we'll get back to you shortly via Email
+            & WhatsApp.
           </p>
 
-          {/* ---------------- FORM START ---------------- */}
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="example@gmail.com" {...field} />
+                        <Input
+                          placeholder="John Doe"
+                          {...field}
+                          className="bg-gray-50"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -170,7 +230,49 @@ Message: ${data.message}`;
                     <FormItem>
                       <FormLabel>Phone Number</FormLabel>
                       <FormControl>
-                        <Input placeholder="9876543210" {...field} />
+                        <Input
+                          placeholder="9876543210"
+                          {...field}
+                          className="bg-gray-50"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="john@example.com"
+                          {...field}
+                          className="bg-gray-50"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="subject"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Subject</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Booking Inquiry..."
+                          {...field}
+                          className="bg-gray-50"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -180,31 +282,15 @@ Message: ${data.message}`;
 
               <FormField
                 control={form.control}
-                name="subject"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subject</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Booking / Inquiry / Question"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="message"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Message</FormLabel>
                     <FormControl>
                       <Textarea
-                        rows={4}
-                        placeholder="Describe your query..."
+                        rows={6}
+                        placeholder="Tell us about your travel plans..."
+                        className="bg-gray-50 resize-none"
                         {...field}
                       />
                     </FormControl>
@@ -215,47 +301,24 @@ Message: ${data.message}`;
 
               <Button
                 type="submit"
-                className="w-full bg-orange-600 hover:bg-orange-700"
+                size="lg"
+                className="w-full md:w-auto bg-orange-600 hover:bg-orange-700 text-white min-w-[200px]"
+                disabled={isSubmitting}
               >
-                <Send /> Send to WhatsApp
+                {isSubmitting ? (
+                  <>
+                    <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />{" "}
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-4 w-4" /> Send Message
+                  </>
+                )}
               </Button>
             </form>
           </Form>
         </div>
-      </div>
-
-      {/* Whatsapp Card */}
-      <div className="px-5">
-        <Card className="bg-linear-to-br from-green-500 to-green-700 p-6 rounded-2xl my-10  w-[50vw] text-white shadow-lg max-w-[500px] flex flex-col justify-between h-full">
-          {/* ICON + HEADING */}
-          <div className="flex items-center gap-4 mb-4">
-            <div className="bg-white text-green-600 p-3 rounded-full shadow-md">
-              <FaWhatsapp size={28} />
-            </div>
-            <h3 className="text-xl font-semibold">WhatsApp Support</h3>
-          </div>
-
-          {/* DESCRIPTION */}
-          <p className="text-white/90 text-sm mb-6 leading-relaxed">
-            Get instant responses on WhatsApp. Available 24/7 for bookings,
-            inquiries, and support.
-          </p>
-
-          {/* BUTTON */}
-          <Button
-            onClick={() => {
-              const message = "Hello! I need assistance.";
-              const encoded = encodeURIComponent(message);
-              window.open(
-                `https://wa.me/919876543210?text=${encoded}`,
-                "_blank"
-              );
-            }}
-            className="bg-white text-green-700 hover:bg-gray-100 w-full  font-semibold py-2 rounded-lg"
-          >
-            Chat on WhatsApp
-          </Button>
-        </Card>
       </div>
 
       <FAQSection />
@@ -263,7 +326,7 @@ Message: ${data.message}`;
   );
 };
 
-export default Page;
+export default ContactPage;
 
 const FAQSection = () => {
   return (
