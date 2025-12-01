@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { 
-  CalendarIcon, IndianRupeeIcon, MapPinIcon, PhoneIcon, UsersIcon, Loader2, Send 
+  CalendarIcon, IndianRupeeIcon, MapPinIcon, PhoneIcon, UsersIcon, Loader2, Send, CheckCircle
 } from "lucide-react";
 
 // UI Components
@@ -19,6 +19,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 // Server Action
 import { submitCustomizeTour } from "@/actions/customize-tour"; 
@@ -33,16 +40,17 @@ const TourSchema = z.object({
     from: z.date({ error: "Start date is required" }),
     to: z.date().optional(),
   }),
-  people: z.number().min(1, "At least 1 traveler").max(50, "Max 50 travelers"),
+  people: z.number().min(1).max(50),
   budget: z.string().optional(),
   details: z.string().optional(),
 });
 
-// Type inferred from schema
 type TourFormValues = z.infer<typeof TourSchema>;
 
 const CustomizeTourForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false); // NEW STATE
+  const [submittedData, setSubmittedData] = useState<TourFormValues | null>(null); // To show name in popup
 
   const form = useForm<TourFormValues>({
     resolver: zodResolver(TourSchema),
@@ -51,14 +59,13 @@ const CustomizeTourForm = () => {
       phone: "",
       email: "",
       destination: "",
+      dates: {
+        from: undefined, 
+        to: undefined
+      },
       people: 2,
       budget: "",
       details: "",
-      // Dates usually need explicit undefined to start empty
-      dates: {
-        from: undefined,
-        to: undefined
-      }
     },
   });
 
@@ -66,12 +73,12 @@ const CustomizeTourForm = () => {
     setIsSubmitting(true);
 
     try {
-      // 1. Send Email (Server Action)
       const result = await submitCustomizeTour(data);
 
       if (result.success) {
-        toast.success("Request received! Opening WhatsApp...");
-
+        // 1. Store data for popup message
+        setSubmittedData(data);
+        
         // 2. Open WhatsApp (Client Side)
         const dateStr = `${format(data.dates.from, "dd MMM yyyy")} - ${data.dates.to ? format(data.dates.to, "dd MMM yyyy") : "N/A"}`;
         
@@ -85,9 +92,11 @@ const CustomizeTourForm = () => {
           `*Budget:* ${data.budget || "N/A"}%0A` +
           `*Note:* ${data.details || "None"}`;
 
-        const waUrl = `https://wa.me/919330942690?text=${message}`; // Use your admin number
+        const waUrl = `https://wa.me/919330942690?text=${message}`; 
         window.open(waUrl, "_blank");
 
+        // 3. Show Success Dialog & Reset Form
+        setShowSuccessDialog(true);
         form.reset();
       } else {
         toast.error("Something went wrong. Please try again.");
@@ -102,6 +111,34 @@ const CustomizeTourForm = () => {
 
   return (
     <div className="py-12 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden" id="customize-tour">
+      
+      {/* --- SUCCESS POPUP --- */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md text-center p-8">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 mb-4">
+            <CheckCircle className="h-8 w-8 text-green-600" />
+          </div>
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-center text-gray-900">
+              Thank You, {submittedData?.name}!
+            </DialogTitle>
+            <DialogDescription className="text-center pt-2 text-gray-600">
+              Thank you for contacting <strong>Maa Kali Enterprise</strong> for your trip to <span className="font-semibold text-orange-600">{submittedData?.destination}</span>.
+              <br/><br/>
+              Your request has been received. Our team will share the quotation within <strong>24 hours</strong>.
+              <br/><br/>
+              A confirmation email has been sent to your inbox.
+            </DialogDescription>
+          </DialogHeader>
+          <Button 
+            className="mt-4 w-full bg-orange-600 hover:bg-orange-700 text-white"
+            onClick={() => setShowSuccessDialog(false)}
+          >
+            Close
+          </Button>
+        </DialogContent>
+      </Dialog>
+
       <div className="text-center flex flex-col gap-2 mb-6 px-4">
         <h2 className="text-orange-500 font-bold text-2xl md:text-4xl">
           Customize Your Dream Tour
@@ -117,11 +154,10 @@ const CustomizeTourForm = () => {
             onSubmit={form.handleSubmit(onSubmit)} 
             className="space-y-6 rounded-xl border border-l-4 border-l-gray-300 border-t-4 border-t-orange-500 shadow-lg p-6 md:p-8 w-full md:max-w-4xl mx-auto bg-gray-50/50"
           >
+            {/* ... (Rest of your form fields remain exactly the same) ... */}
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Trip Details</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
-              {/* Name */}
               <FormField 
                 control={form.control} 
                 name="name" 
@@ -135,7 +171,6 @@ const CustomizeTourForm = () => {
                 </FormItem>
               )} />
 
-              {/* Phone */}
               <FormField 
                 control={form.control} 
                 name="phone" 
@@ -149,7 +184,6 @@ const CustomizeTourForm = () => {
                 </FormItem>
               )} />
 
-              {/* Email */}
               <FormField 
                 control={form.control} 
                 name="email" 
@@ -163,7 +197,6 @@ const CustomizeTourForm = () => {
                 </FormItem>
               )} />
 
-              {/* Destination */}
               <FormField 
                 control={form.control} 
                 name="destination" 
@@ -177,7 +210,6 @@ const CustomizeTourForm = () => {
                 </FormItem>
               )} />
 
-              {/* Date Range */}
               <FormField 
                 control={form.control} 
                 name="dates" 
@@ -200,7 +232,7 @@ const CustomizeTourForm = () => {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto bg-white text-black p-0" align="start">
+                    <PopoverContent className="w-auto p-0 bg-white text-black" align="start">
                       <Calendar
                         mode="range"
                         // @ts-ignore
@@ -215,7 +247,6 @@ const CustomizeTourForm = () => {
                 </FormItem>
               )} />
 
-              {/* Travelers & Budget */}
               <div className="grid grid-cols-2 gap-4">
                 <FormField 
                   control={form.control} 
@@ -224,13 +255,12 @@ const CustomizeTourForm = () => {
                   <FormItem>
                     <FormLabel className="flex items-center gap-2"><UsersIcon className="w-4 h-4"/> Travelers</FormLabel>
                     <FormControl>
-                      {/* FIX: Explicitly handle number input */}
                       <Input 
                         type="number" 
                         min={1} 
                         {...field} 
                         onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                        value={field.value ?? ''} // Handle possible undefined/unknown
+                        value={field.value ?? ''} 
                       />
                     </FormControl>
                     <FormMessage />
@@ -252,7 +282,6 @@ const CustomizeTourForm = () => {
               </div>
             </div>
 
-            {/* Additional Details */}
             <FormField 
               control={form.control} 
               name="details" 
@@ -271,7 +300,6 @@ const CustomizeTourForm = () => {
               </FormItem>
             )} />
 
-            {/* Actions */}
             <div className="flex flex-col items-end gap-2 pt-4">
               <Button 
                 type="submit" 

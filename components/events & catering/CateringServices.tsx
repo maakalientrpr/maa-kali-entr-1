@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-// Import Dialog & Form Components
 import {
   Dialog,
   DialogContent,
@@ -28,7 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { sendQuoteRequest } from "@/actions/send-quote"; // Ensure this path is correct
+import { sendQuoteRequest } from "@/actions/send-quote"; 
 
 const CateringServices = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,18 +35,22 @@ const CateringServices = () => {
 
   const vegItems = [
     "Paneer Butter Masala",
-    "Veg Biryani",
-    "Mixed Veg Curry",
-    "Tandoori Roti",
-    "Gulab Jamun",
+    "Dal Makhani",
+    "Mix Veg Korma",
+    "Jeera Rice / Pulao",
+    "Naan / Rote",
+    "Raita & Salad",
+    "Gulab Jamun / Ice Cream"
   ];
 
   const nonVegItems = [
-    "Chicken Biryani",
-    "Mutton Curry",
-    "Chicken Tandoori",
-    "Egg Curry",
-    "Fish Fry",
+    "Butter Chicken",
+    "Mutton Rogan Josh",
+    "Fish Curry",
+    "Biryani / Pulao",
+    "Naan / Roti",
+    "Raita & Salad",
+    "Desert of choice"
   ];
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,7 +58,7 @@ const CateringServices = () => {
     setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    formData.append("packageName", "Custom Catering Service"); // Hardcoded name for this section
+    formData.append("packageName", "Custom Catering Service"); 
 
     const result = await sendQuoteRequest(formData);
 
@@ -130,6 +133,12 @@ const CateringServices = () => {
                   </p>
                 </div>
               </div>
+              {/* VEG PRICING */}
+              <div className="text-center mt-6">
+                <span className="inline-block bg-green-100 text-green-800 text-sm font-bold px-4 py-1.5 rounded-full">
+                    Starting at just ₹500 per plate
+                </span>
+              </div>
             </TabsContent>
 
             {/* NON-VEG MENU CONTENT */}
@@ -161,13 +170,14 @@ const CateringServices = () => {
                   </p>
                 </div>
               </div>
-            </TabsContent>
-
-            <div className="text-center mt-6">
+              {/* NON-VEG PRICING */}
+              <div className="text-center mt-6">
                 <span className="inline-block bg-orange-100 text-orange-800 text-sm font-bold px-4 py-1.5 rounded-full">
                     Starting at just ₹750 per plate
                 </span>
-            </div>
+              </div>
+            </TabsContent>
+
           </div>
         </Tabs>
       </div>
