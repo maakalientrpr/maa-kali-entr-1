@@ -8,8 +8,10 @@ import prisma from "@/lib/db";
 import ShareButton from "@/components/ShareButton";
 import TourBookingButton from "@/components/TourBookingButton";
 import Link from "next/link";
+import { requireAuth } from "@/lib/auth-utils";
 
 const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  await requireAuth();
   const { slug } = await params;
 
   const tour = await prisma.tourPackage.findUnique({
