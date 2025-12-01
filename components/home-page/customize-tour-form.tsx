@@ -30,20 +30,21 @@ const TourSchema = z.object({
   email: z.string().email("Invalid email address"),
   destination: z.string().min(2, "Enter a destination"),
   dates: z.object({
-    from: z.date(),
+    from: z.date({ error: "Start date is required" }),
     to: z.date().optional(),
   }),
-  people: z.coerce.number().min(1).max(50),
+  people: z.number().min(1, "At least 1 traveler").max(50, "Max 50 travelers"),
   budget: z.string().optional(),
   details: z.string().optional(),
 });
 
-type FormData = z.infer<typeof TourSchema>;
+// Type inferred from schema
+type TourFormValues = z.infer<typeof TourSchema>;
 
 const CustomizeTourForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<FormData>({
+  const form = useForm<TourFormValues>({
     resolver: zodResolver(TourSchema),
     defaultValues: {
       name: "",
@@ -53,10 +54,15 @@ const CustomizeTourForm = () => {
       people: 2,
       budget: "",
       details: "",
+      // Dates usually need explicit undefined to start empty
+      dates: {
+        from: undefined,
+        to: undefined
+      }
     },
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: TourFormValues) => {
     setIsSubmitting(true);
 
     try {
@@ -116,51 +122,66 @@ const CustomizeTourForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               {/* Name */}
-              <FormField control={form.control} name="name" render={({ field }) => (
+              <FormField 
+                control={form.control} 
+                name="name" 
+                render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your Name" {...field} />
+                    <Input placeholder="Your Name" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
 
               {/* Phone */}
-              <FormField control={form.control} name="phone" render={({ field }) => (
+              <FormField 
+                control={form.control} 
+                name="phone" 
+                render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center gap-2"><PhoneIcon className="w-4 h-4"/> Phone Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="+91 98765 43210" {...field} />
+                    <Input placeholder="+91 98765 43210" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
 
               {/* Email */}
-              <FormField control={form.control} name="email" render={({ field }) => (
+              <FormField 
+                control={form.control} 
+                name="email" 
+                render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email Address</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="you@example.com" {...field} />
+                    <Input type="email" placeholder="you@example.com" {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
 
               {/* Destination */}
-              <FormField control={form.control} name="destination" render={({ field }) => (
+              <FormField 
+                control={form.control} 
+                name="destination" 
+                render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center gap-2"><MapPinIcon className="w-4 h-4"/> Destination</FormLabel>
                   <FormControl>
-                    <Input placeholder="Bali, Kashmir, Dubai..." {...field} />
+                    <Input placeholder="Bali, Kashmir, Dubai..." {...field} value={field.value || ''} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
 
               {/* Date Range */}
-              <FormField control={form.control} name="dates" render={({ field }) => (
+              <FormField 
+                control={form.control} 
+                name="dates" 
+                render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center gap-2"><CalendarIcon className="w-4 h-4"/> Travel Dates</FormLabel>
                   <Popover>
@@ -179,9 +200,10 @@ const CustomizeTourForm = () => {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto bg-white text-black p-0" align="start">
                       <Calendar
                         mode="range"
+                        // @ts-ignore
                         selected={field.value}
                         onSelect={field.onChange}
                         numberOfMonths={2}
@@ -195,21 +217,34 @@ const CustomizeTourForm = () => {
 
               {/* Travelers & Budget */}
               <div className="grid grid-cols-2 gap-4">
-                <FormField control={form.control} name="people" render={({ field }) => (
+                <FormField 
+                  control={form.control} 
+                  name="people" 
+                  render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex items-center gap-2"><UsersIcon className="w-4 h-4"/> Travelers</FormLabel>
                     <FormControl>
-                      <Input type="number" min={1} {...field} />
+                      {/* FIX: Explicitly handle number input */}
+                      <Input 
+                        type="number" 
+                        min={1} 
+                        {...field} 
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                        value={field.value ?? ''} // Handle possible undefined/unknown
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
 
-                <FormField control={form.control} name="budget" render={({ field }) => (
+                <FormField 
+                  control={form.control} 
+                  name="budget" 
+                  render={({ field }) => (
                   <FormItem>
                     <FormLabel className="flex items-center gap-2"><IndianRupeeIcon className="w-4 h-4"/> Budget</FormLabel>
                     <FormControl>
-                      <Input placeholder="₹ Per Person" {...field} />
+                      <Input placeholder="₹ Per Person" {...field} value={field.value || ''} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -218,14 +253,18 @@ const CustomizeTourForm = () => {
             </div>
 
             {/* Additional Details */}
-            <FormField control={form.control} name="details" render={({ field }) => (
+            <FormField 
+              control={form.control} 
+              name="details" 
+              render={({ field }) => (
               <FormItem>
                 <FormLabel>Additional Requirements</FormLabel>
                 <FormControl>
                   <Textarea 
                     placeholder="Specific hotels, dietary needs, special occasions..." 
                     className="resize-none h-24" 
-                    {...field} 
+                    {...field}
+                    value={field.value || ''}
                   />
                 </FormControl>
                 <FormMessage />
@@ -237,7 +276,7 @@ const CustomizeTourForm = () => {
               <Button 
                 type="submit" 
                 size="lg" 
-                className="bg-linear-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white shadow-lg w-full md:w-auto"
+                className="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 text-white shadow-lg w-full md:w-auto"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
