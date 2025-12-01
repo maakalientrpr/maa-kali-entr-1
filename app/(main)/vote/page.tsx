@@ -1,5 +1,5 @@
 import { getPolls } from "@/actions/poll-actions";
-import { Sparkles, MapPin, Trophy, UserCheck, StarIcon } from "lucide-react";
+import {  MapPin, Trophy, UserCheck, StarIcon, VoteIcon } from "lucide-react";
 import CreatePollForm from "@/components/poll components/create-poll-form";
 import PollCard from "@/components/poll components/poll-card";
 import { auth } from "@/lib/auth";
@@ -58,7 +58,7 @@ export default async function PollsPage({ searchParams }: { searchParams: Search
         {/* Header Section */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center justify-center p-3 bg-orange-100 rounded-full mb-2">
-            <Sparkles className="h-6 w-6 text-orange-600" />
+            <VoteIcon className="h-6 w-6 text-orange-600" />
           </div>
           <h1 className="text-4xl font-bold text-orange-600">Vote for Your Dream Destination</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">

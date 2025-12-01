@@ -19,8 +19,7 @@ import {
   MountainIcon,
   PhoneCallIcon,
   PhoneIcon,
-  SparkleIcon,
-  SparklesIcon,
+  PlaneIcon,
   StarIcon,
   SunriseIcon,
   TreesIcon,
@@ -177,7 +176,7 @@ const Region = () => {
     },
     {
       id: "international",
-      icon: <SparklesIcon className="text-yellow-500 text-2xl" />,
+      icon: <PlaneIcon />,
       title: "International Pilgrimage Packages",
       color: "from-blue-600 to-purple-600",
       packages: [
@@ -186,6 +185,14 @@ const Region = () => {
           desc: "Sacred Shiva temple in Kathmandu",
         },
         { title: "Muktinath (Nepal)", desc: "High altitude temple at 3,800m" },
+        {
+          title: "BAPS Hindu Mandir (Abu Dhabi)",
+          desc: "A magnificent stone-carved traditional Hindu temple and a symbol of peace in the UAE.",
+        },
+        {
+          title: "Cambodia – Angkor Wat",
+          desc: "World’s largest temple complex, a sacred masterpiece of ancient Khmer architecture.",
+        },
       ],
     },
   ];
@@ -234,10 +241,6 @@ const Region = () => {
                     key={idx}
                     className="flex items-start gap-3 bg-gray-50 p-3 rounded-xl border hover:border-orange-500  hover:shadow-2xl"
                   >
-                    <div className="bg-orange-100 p-2 rounded-full">
-                      <SparklesIcon className="h-4 w-4 text-orange-600" />
-                    </div>
-
                     <div>
                       <p className="font-medium text-gray-800">{p.title}</p>
                       <p className="text-sm text-gray-600">{p.desc}</p>
@@ -267,7 +270,6 @@ const Region = () => {
 const HeroSection = () => {
   return (
     <div className="relative w-full h-[75vh]  overflow-hidden flex items-center justify-center">
-      
       {/* 1. Background Image with Parallax Feel */}
       <div className="absolute inset-0 select-none">
         <Image
@@ -284,10 +286,8 @@ const HeroSection = () => {
 
       {/* 3. Hero Content */}
       <div className="relative z-10 container mx-auto px-4 flex flex-col items-center text-center gap-6 mt-10">
-        
         {/* Glass Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg animate-in fade-in slide-in-from-top-4 duration-700">
-          <SparklesIcon className="w-4 h-4 text-yellow-400 fill-yellow-400" />
           <span className="text-orange-50 text-xs md:text-sm font-semibold tracking-wider uppercase">
             Divinity Awaits You
           </span>
@@ -303,8 +303,11 @@ const HeroSection = () => {
 
         {/* Subtitle */}
         <p className="text-lg md:text-2xl text-gray-200 font-light max-w-2xl leading-relaxed drop-shadow-md animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
-          Embark on sacred journeys across India & Nepal. 
-          <span className="block md:inline text-orange-100 font-medium"> Curated with devotion by Maa Kali Enterprise.</span>
+          Embark on sacred journeys across India & Nepal.
+          <span className="block md:inline text-orange-100 font-medium">
+            {" "}
+            Curated with devotion by Maa Kali Enterprise.
+          </span>
         </p>
       </div>
 
@@ -458,7 +461,6 @@ const FeaturedPilgrimage = () => {
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 grid grid-cols-1 lg:grid-cols-2">
-          
           {/* --- LEFT: IMAGE SECTION --- */}
           <div className="relative h-72 lg:h-full min-h-[400px] group">
             <Image
@@ -469,7 +471,7 @@ const FeaturedPilgrimage = () => {
             />
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-black/10" />
-            
+
             {/* Floating Badge */}
             <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full flex items-center gap-2 shadow-lg">
               <StarIcon className="w-4 h-4 text-yellow-500 fill-yellow-500" />
@@ -481,7 +483,6 @@ const FeaturedPilgrimage = () => {
 
           {/* --- RIGHT: CONTENT SECTION --- */}
           <div className="p-8 lg:p-10 flex flex-col justify-center">
-            
             {/* Header */}
             <div className="space-y-2 mb-6">
               <div className="flex items-center gap-2 text-orange-600 font-bold text-sm tracking-wide uppercase">
@@ -492,32 +493,33 @@ const FeaturedPilgrimage = () => {
                 Kailash Mansarovar Yatra
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Journey to the abode of Lord Shiva. A once-in-a-lifetime expedition 
-                through the mystical landscapes of Tibet and the Himalayas.
+                Journey to the abode of Lord Shiva. A once-in-a-lifetime
+                expedition through the mystical landscapes of Tibet and the
+                Himalayas.
               </p>
             </div>
 
             {/* Highlights Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              <FeatureItem 
-                icon={<MountainIcon className="w-5 h-5 text-blue-600" />} 
-                title="5,600m Altitude" 
-                desc="High altitude trek" 
+              <FeatureItem
+                icon={<MountainIcon className="w-5 h-5 text-blue-600" />}
+                title="5,600m Altitude"
+                desc="High altitude trek"
               />
-              <FeatureItem 
-                icon={<MapPinIcon className="w-5 h-5 text-red-500" />} 
-                title="Sacred Parikrama" 
-                desc="52km Circumambulation" 
+              <FeatureItem
+                icon={<MapPinIcon className="w-5 h-5 text-red-500" />}
+                title="Sacred Parikrama"
+                desc="52km Circumambulation"
               />
-              <FeatureItem 
-                icon={<CheckCircle2Icon className="w-5 h-5 text-green-600" />} 
-                title="Expert Support" 
-                desc="Sherpas & Medical Aid" 
+              <FeatureItem
+                icon={<CheckCircle2Icon className="w-5 h-5 text-green-600" />}
+                title="Expert Support"
+                desc="Sherpas & Medical Aid"
               />
-              <FeatureItem 
-                icon={<CheckCircle2Icon className="w-5 h-5 text-green-600" />} 
-                title="All Inclusive" 
-                desc="Meals, Visa & Permits" 
+              <FeatureItem
+                icon={<CheckCircle2Icon className="w-5 h-5 text-green-600" />}
+                title="All Inclusive"
+                desc="Meals, Visa & Permits"
               />
             </div>
 
@@ -543,7 +545,7 @@ const FeaturedPilgrimage = () => {
                   Call to Enquire
                 </Button>
               </Link>
-              
+
               <Link
                 href="https://wa.me/919330942690"
                 target="_blank"
@@ -556,7 +558,6 @@ const FeaturedPilgrimage = () => {
                 </Button>
               </Link>
             </div>
-
           </div>
         </div>
       </div>
@@ -565,11 +566,17 @@ const FeaturedPilgrimage = () => {
 };
 
 // Helper Component for the Grid
-const FeatureItem = ({ icon, title, desc }: { icon: any, title: string, desc: string }) => (
+const FeatureItem = ({
+  icon,
+  title,
+  desc,
+}: {
+  icon: any;
+  title: string;
+  desc: string;
+}) => (
   <div className="flex items-start gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100 hover:border-orange-200 transition-colors">
-    <div className="mt-0.5 bg-white p-1.5 rounded-lg shadow-sm">
-      {icon}
-    </div>
+    <div className="mt-0.5 bg-white p-1.5 rounded-lg shadow-sm">{icon}</div>
     <div>
       <h4 className="font-bold text-gray-900 text-sm">{title}</h4>
       <p className="text-xs text-gray-500">{desc}</p>
