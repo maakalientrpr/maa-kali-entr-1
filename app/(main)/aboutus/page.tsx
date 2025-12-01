@@ -404,7 +404,7 @@ const OurFounder = () => {
           <Card className="flex flex-row items-center p-2 hover:shadow-md transition-shadow border-slate-200">
             <div className="relative w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-slate-100">
               <Image
-                src="/members/Manager.jpg"
+                src="/members/Manager-new.jpg"
                 alt="Amit Jaiswal"
                 fill
                 className="object-cover"

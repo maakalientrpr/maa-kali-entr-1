@@ -1,6 +1,5 @@
 import { getPolls } from "@/actions/poll-actions";
 import {  MapPin, Trophy, UserCheck, StarIcon, VoteIcon } from "lucide-react";
-import CreatePollForm from "@/components/poll components/create-poll-form";
 import PollCard from "@/components/poll components/poll-card";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
