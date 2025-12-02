@@ -439,18 +439,6 @@ const ContactUs = () => {
             WhatsApp Us
           </Button>
         </Link>
-
-        {/* Email BUTTON */}
-        <Link
-          href="https://wa.me/919330942690"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button className="bg-blue-600 hover:bg-blue-700 hover:scale-105 cursor-pointer text-white px-6 py-3 rounded-xl flex items-center gap-2 shadow-md">
-            <MailIcon className="size-5" />
-            Email Enquiry
-          </Button>
-        </Link>
       </div>
     </div>
   );

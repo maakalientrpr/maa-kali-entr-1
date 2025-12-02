@@ -22,7 +22,7 @@ export default function RefundPolicy() {
             <li><strong>30 days or more before departure:</strong> 25% of total tour cost (Service Charge) will be deducted.</li>
             <li><strong>15 to 29 days before departure:</strong> 50% of total tour cost will be deducted.</li>
             {/* <li><strong>7 to 14 days before departure:</strong> 50% of total tour cost will be deducted.</li> */}
-            <li><strong>Less than 7 days before departure:</strong> No Refund (100% cancellation charge).</li>
+            <li><strong>Less than 15 days before departure:</strong> No Refund (100% cancellation charge).</li>
           </ul>
         </section>
 

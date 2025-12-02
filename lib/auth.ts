@@ -36,7 +36,6 @@ export const auth = betterAuth({
         subject: "Verify your email - Maa Kali Enterprise",
         html: emailHtml,
       });
-      console.log(`to ${user.email} link is for verify ${url}`)
     },
   },
 
@@ -69,8 +68,6 @@ export const auth = betterAuth({
         subject: "Reset your password - Maa Kali Enterprise",
         html: emailHtml,
       });
-            console.log(`to ${user.email} link is for rese password ${url}`)
-
     },
   },
 
