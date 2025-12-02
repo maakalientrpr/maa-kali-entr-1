@@ -11,11 +11,12 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter()
   const { data: session } = authClient.useSession();
 
   const navLinks = [
@@ -49,29 +50,35 @@ const Sidebar = () => {
         className="w-[260px] px-6 py-6 flex flex-col gap-6 bg-white"
       >
         <SheetHeader>
-          <SheetTitle className="text-xl font-bold tracking-wide text-orange-600">
+          <SheetTitle onClick={() => router.push('/')} className="text-xl font-bold tracking-wide text-orange-600">
             Maa Kali Tours
           </SheetTitle>
         </SheetHeader>
 
         {/* NAV LINKS */}
         <div className="flex flex-col gap-2">
-          {navLinks.map((nav) => (
-            <SheetClose asChild key={nav.link}>
-              <Link
-                href={nav.link}
-                className={`text-[17px] font-medium py-2 px-3 rounded-md transition-all
+          {navLinks.map((nav) => {
+            const isActive =
+              nav.link === "/"
+                ? pathname === "/"
+                : pathname.startsWith(nav.link);
+            return (
+              <SheetClose asChild key={nav.link}>
+                <Link
+                  href={nav.link}
+                  className={`text-[17px] font-medium py-2 px-3 rounded-md transition-all
                   ${
-                    pathname === nav.link
+                    isActive
                       ? "bg-orange-500 text-white shadow-sm"
                       : "text-gray-700 hover:bg-orange-100"
                   }
                 `}
-              >
-                {nav.name}
-              </Link>
-            </SheetClose>
-          ))}
+                >
+                  {nav.name}
+                </Link>
+              </SheetClose>
+            );
+          })}
         </div>
 
         {/* LOGIN / SIGNUP OR ACCOUNT */}
