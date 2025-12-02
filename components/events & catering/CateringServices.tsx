@@ -109,7 +109,7 @@ const CateringServices = () => {
               <div className="grid md:grid-cols-2 gap-8 items-center bg-gray-50 p-6 rounded-2xl border border-gray-100">
                 <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-md">
                   <Image
-                    src="/Catering-service.jpg"
+                    src="/Catering.jpg"
                     fill
                     alt="Veg Catering"
                     className="object-cover hover:scale-105 transition-transform duration-500"
@@ -146,7 +146,7 @@ const CateringServices = () => {
               <div className="grid md:grid-cols-2 gap-8 items-center bg-gray-50 p-6 rounded-2xl border border-gray-100">
                 <div className="relative h-64 w-full rounded-xl overflow-hidden shadow-md">
                   <Image
-                    src="/Catering-service.jpg"
+                    src="/Catering.jpg"
                     fill
                     alt="Non-Veg Catering"
                     className="object-cover hover:scale-105 transition-transform duration-500"

@@ -40,7 +40,7 @@ export default function CateringService() {
       {/* Right Section */}
       <div className="w-full flex justify-center">
         <Image
-          src={"/Catering-service.jpg"}
+          src={"/Catering.jpg"}
           alt="Catering Service Image"
           width={500}
           height={400}

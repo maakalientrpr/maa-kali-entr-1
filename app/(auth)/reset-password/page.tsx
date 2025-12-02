@@ -4,24 +4,31 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authClient } from "@/lib/auth-client"; 
+import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock } from "lucide-react";
 
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const schema = z.object({
-  password: z.string().min(8, "Minimum 8 characters"),
-  confirmPassword: z.string().min(8, "Minimum 8 characters"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
+const schema = z
+  .object({
+    password: z.string().min(8, "Minimum 8 characters"),
+    confirmPassword: z.string().min(8, "Minimum 8 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -30,10 +37,10 @@ export default function ResetPasswordPage() {
     defaultValues: { password: "", confirmPassword: "" },
   });
 
-  const token = new URLSearchParams(window.location.search).get("token");
-if (!token) {
-  throw new Error('No token is passed')
-}
+  const token = new URLSearchParams(window.location.search as any).get("token");
+  if (!token) {
+    throw new Error("No token is passed");
+  }
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     const { error } = await authClient.resetPassword({
@@ -57,7 +64,9 @@ if (!token) {
           <div className="mx-auto w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mb-4">
             <Lock className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900">Set New Password</h2>
+          <h2 className="text-2xl font-bold text-slate-900">
+            Set New Password
+          </h2>
           <p className="text-slate-500 text-sm mt-2">
             Please enter your new password below.
           </p>
@@ -93,13 +102,16 @@ if (!token) {
               )}
             />
 
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-orange-600 hover:bg-orange-700"
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting ? (
-                <> <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Resetting... </>
+                <>
+                  {" "}
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Resetting...{" "}
+                </>
               ) : (
                 "Reset Password"
               )}
