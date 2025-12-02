@@ -154,7 +154,7 @@ const OurStory = () => {
 
       <div className="m-5 rounded-lg shadow overflow-hidden">
         <Image
-          src={'/Family.jpg'}
+          src={'/family.jpg'}
           alt="Our Story Image"
           className="w-full h-full object-cover"
           width={500}
