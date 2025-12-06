@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
 
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #666; text-align: center;">
               <p>Please carry a valid ID proof during the journey.</p>
-              <p>Maa Kali Enterprise & Event Management</p>
+              <p>Maa Kali Enterprise</p>
             </div>
           </div>
         `;
