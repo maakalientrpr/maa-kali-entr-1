@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
     // 2. Verify Signature
     const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
+      .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET!)
       .update(body)
       .digest("hex");
 

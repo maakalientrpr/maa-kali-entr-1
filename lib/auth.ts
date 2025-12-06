@@ -13,7 +13,7 @@ export const auth = betterAuth({
     additionalFields: {
       phoneNumber: {
         type: "string",
-        required: false, // Good, keep this false for Google Login compatibility
+        required: false, 
       },
     },
   },
