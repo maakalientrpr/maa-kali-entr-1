@@ -27,6 +27,7 @@ import axios from "axios";
 import { authClient } from "@/lib/auth-client";
 import { LoaderIcon, MapPin, Users, IndianRupee } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 // Types
 type PickupOption = {
@@ -82,6 +83,7 @@ const BookingForm = ({
   onClose: () => void;
 }) => {
   const { data: session } = authClient.useSession();
+  const router = useRouter();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -165,6 +167,7 @@ const BookingForm = ({
               bookingId,
             });
             toast.success("Payment Success! Booking Confirmed");
+            router.push(`/booking/success?orderId=${response.razorpay_order_id}`);
             onClose(); // Close modal on success
           } catch (err) {
             toast.error("Payment verification failed");
