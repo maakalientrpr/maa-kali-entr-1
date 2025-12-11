@@ -64,6 +64,7 @@ export const ModelName = {
   Itinerary: 'Itinerary',
   Booking: 'Booking',
   Passenger: 'Passenger',
+  PromotionalPopup: 'PromotionalPopup',
   Album: 'Album',
   Image: 'Image'
 } as const
@@ -271,6 +272,21 @@ export const PassengerScalarFieldEnum = {
 } as const
 
 export type PassengerScalarFieldEnum = (typeof PassengerScalarFieldEnum)[keyof typeof PassengerScalarFieldEnum]
+
+
+export const PromotionalPopupScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  isActive: 'isActive',
+  imageUrl: 'imageUrl',
+  linkUrl: 'linkUrl',
+  title: 'title',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromotionalPopupScalarFieldEnum = (typeof PromotionalPopupScalarFieldEnum)[keyof typeof PromotionalPopupScalarFieldEnum]
 
 
 export const AlbumScalarFieldEnum = {

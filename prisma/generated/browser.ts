@@ -83,6 +83,11 @@ export type Booking = Prisma.BookingModel
  */
 export type Passenger = Prisma.PassengerModel
 /**
+ * Model PromotionalPopup
+ * 
+ */
+export type PromotionalPopup = Prisma.PromotionalPopupModel
+/**
  * Model Album
  * 
  */

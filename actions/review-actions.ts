@@ -10,14 +10,22 @@ type CreateReviewParams = {
   comment: string;
 };
 
-export async function createReview({ userId, tourPackageId, rating, comment }: CreateReviewParams) {
+export async function createReview({
+  userId,
+  tourPackageId,
+  rating,
+  comment,
+}: CreateReviewParams) {
   try {
     if (rating < 1 || rating > 5) {
       return { success: false, error: "Rating must be between 1 and 5" };
     }
 
     if (!comment || comment.trim().length < 10) {
-      return { success: false, error: "Review must be at least 10 characters long" };
+      return {
+        success: false,
+        error: "Review must be at least 10 characters long",
+      };
     }
 
     await prisma.review.create({
@@ -40,20 +48,29 @@ export async function createReview({ userId, tourPackageId, rating, comment }: C
   }
 }
 
-export async function getReviews(limit = 10) {
-    return await prisma.review.findMany({
-        where: { isPublished: true },
-        take: limit,
-        orderBy: { createdAt: "desc" },
-        include: {
-            user: {
-                select: { name: true, image: true }
-            },
-            tourPackage: {
-                select: { title: true }
-            }
-        }
+export async function getReviews(page = 1, limit = 6) {
+  try {
+    const skip = (page - 1) * limit;
+
+    const reviews = await prisma.review.findMany({
+      take: limit,
+      skip: skip,
+      orderBy: { createdAt: "desc" },
+      include: {
+        user: {
+          select: { name: true, image: true },
+        },
+        tourPackage: {
+          select: { title: true },
+        },
+      },
     });
+
+    return reviews;
+  } catch (error) {
+    console.error("Failed to fetch reviews:", error);
+    return [];
+  }
 }
 
 // NEW: Get Statistics

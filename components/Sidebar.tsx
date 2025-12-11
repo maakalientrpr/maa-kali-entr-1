@@ -50,8 +50,8 @@ const Sidebar = () => {
         className="w-[260px] px-6 py-6 flex flex-col gap-6 bg-white"
       >
         <SheetHeader>
-          <SheetTitle onClick={() => router.push('/')} className="text-xl font-bold tracking-wide text-orange-600">
-            Maa Kali Tours
+          <SheetTitle onClick={() => router.push('/')} className="text-xl cursor-pointer font-bold tracking-wide text-orange-600">
+            Maa Kali Enterprise
           </SheetTitle>
         </SheetHeader>
 

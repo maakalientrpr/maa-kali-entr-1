@@ -12,6 +12,8 @@ import {
   ImageIcon,
   VoteIcon,
   SparkleIcon,
+  ThumbsUpIcon,
+  MegaphoneIcon,
 } from "lucide-react";
 
 const links = [
@@ -41,6 +43,11 @@ const links = [
     icon: BookOpen,
   },
   {
+    label: "Popup",
+    href: "/admin/popup",
+    icon: MegaphoneIcon,
+  },
+  {
     label: "Gallery",
     href: "/admin/gallery",
     icon: ImageIcon,
@@ -49,6 +56,11 @@ const links = [
     label: "Vote",
     href: "/admin/vote",
     icon: VoteIcon,
+  },
+  {
+    label: "Reviews",
+    href: "/admin/reviews",
+    icon: ThumbsUpIcon,
   },
   {
     label: "Users",

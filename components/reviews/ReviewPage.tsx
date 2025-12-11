@@ -1,27 +1,27 @@
 import { getReviewStats, getReviews } from "@/actions/review-actions";
 import ReviewsHeader from "@/components/reviews/ReviewsHeader";
-import ReviewList from "@/components/reviews/ReviewList";
+import ReviewFeed from "@/components/reviews/ReviewFeed"; // Updated Import
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-export const revalidate = 0; // Ensure fresh data on every load
+export const revalidate = 0;
 
 export default async function ReviewsPage() {
-  // 1. Fetch Session (to get userId)
   const session = await auth.api.getSession({
     headers: await headers(), 
   });
   const userId = session?.user?.id;
 
-  // 2. Fetch Data in Parallel
-  const [stats, reviews] = await Promise.all([
+  // Fetch Stats and ONLY the first page (6 items)
+  const [stats, initialReviews] = await Promise.all([
     getReviewStats(),
-    getReviews(50), // Fetch top 50 reviews
+    getReviews(1, 6), 
   ]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-6xl mx-auto space-y-10">
+        
         {/* Page Title */}
         <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold text-orange-500">
@@ -37,13 +37,12 @@ export default async function ReviewsPage() {
           userId={userId}
         />
 
-        {/* List of Reviews */}
+        {/* The List with Load More Button */}
         <div className="space-y-4">
           <h3 className="text-xl font-bold text-gray-800 ml-1">
             Recent Feedback
           </h3>
-          <ReviewList />{" "}
-          {/* You might need to pass the 'reviews' prop if you modify ReviewList to accept props instead of fetching internally */}
+          <ReviewFeed initialReviews={initialReviews} />
         </div>
       </div>
     </div>

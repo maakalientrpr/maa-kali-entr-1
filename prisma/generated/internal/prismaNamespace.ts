@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.0.0
- * Query Engine version: 0c19ccc313cf9911a90d99d2ac2eb0280c76c513
+ * Prisma Client JS version: 7.1.0
+ * Query Engine version: ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.0.0",
-  engine: "0c19ccc313cf9911a90d99d2ac2eb0280c76c513"
+  client: "7.1.0",
+  engine: "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba"
 }
 
 /**
@@ -397,6 +397,7 @@ export const ModelName = {
   Itinerary: 'Itinerary',
   Booking: 'Booking',
   Passenger: 'Passenger',
+  PromotionalPopup: 'PromotionalPopup',
   Album: 'Album',
   Image: 'Image'
 } as const
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "tourPackage" | "pilgrimage" | "review" | "proposedTour" | "tourVote" | "pickupOption" | "itinerary" | "booking" | "passenger" | "album" | "image"
+    modelProps: "user" | "session" | "account" | "verification" | "tourPackage" | "pilgrimage" | "review" | "proposedTour" | "tourVote" | "pickupOption" | "itinerary" | "booking" | "passenger" | "promotionalPopup" | "album" | "image"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1380,6 +1381,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PromotionalPopup: {
+      payload: Prisma.$PromotionalPopupPayload<ExtArgs>
+      fields: Prisma.PromotionalPopupFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PromotionalPopupFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PromotionalPopupFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>
+        }
+        findFirst: {
+          args: Prisma.PromotionalPopupFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PromotionalPopupFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>
+        }
+        findMany: {
+          args: Prisma.PromotionalPopupFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>[]
+        }
+        create: {
+          args: Prisma.PromotionalPopupCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>
+        }
+        createMany: {
+          args: Prisma.PromotionalPopupCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PromotionalPopupCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>[]
+        }
+        delete: {
+          args: Prisma.PromotionalPopupDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>
+        }
+        update: {
+          args: Prisma.PromotionalPopupUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>
+        }
+        deleteMany: {
+          args: Prisma.PromotionalPopupDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PromotionalPopupUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PromotionalPopupUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>[]
+        }
+        upsert: {
+          args: Prisma.PromotionalPopupUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PromotionalPopupPayload>
+        }
+        aggregate: {
+          args: Prisma.PromotionalPopupAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePromotionalPopup>
+        }
+        groupBy: {
+          args: Prisma.PromotionalPopupGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PromotionalPopupGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PromotionalPopupCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PromotionalPopupCountAggregateOutputType> | number
+        }
+      }
+    }
     Album: {
       payload: Prisma.$AlbumPayload<ExtArgs>
       fields: Prisma.AlbumFieldRefs
@@ -1756,6 +1831,21 @@ export const PassengerScalarFieldEnum = {
 export type PassengerScalarFieldEnum = (typeof PassengerScalarFieldEnum)[keyof typeof PassengerScalarFieldEnum]
 
 
+export const PromotionalPopupScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  isActive: 'isActive',
+  imageUrl: 'imageUrl',
+  linkUrl: 'linkUrl',
+  title: 'title',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PromotionalPopupScalarFieldEnum = (typeof PromotionalPopupScalarFieldEnum)[keyof typeof PromotionalPopupScalarFieldEnum]
+
+
 export const AlbumScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -2003,7 +2093,7 @@ export type PrismaClientOptions = ({
    *  { emit: 'stdout', level: 'error' }
    * 
    * ```
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
+   * Read more in our [docs](https://pris.ly/d/logging).
    */
   log?: (LogLevel | LogDefinition)[]
   /**
@@ -2031,6 +2121,22 @@ export type PrismaClientOptions = ({
    * ```
    */
   omit?: GlobalOmitConfig
+  /**
+   * SQL commenter plugins that add metadata to SQL queries as comments.
+   * Comments follow the sqlcommenter format: https://google.github.io/sqlcommenter/
+   * 
+   * @example
+   * ```
+   * const prisma = new PrismaClient({
+   *   adapter,
+   *   comments: [
+   *     traceContext(),
+   *     queryInsights(),
+   *   ],
+   * })
+   * ```
+   */
+  comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
@@ -2046,6 +2152,7 @@ export type GlobalOmitConfig = {
   itinerary?: Prisma.ItineraryOmit
   booking?: Prisma.BookingOmit
   passenger?: Prisma.PassengerOmit
+  promotionalPopup?: Prisma.PromotionalPopupOmit
   album?: Prisma.AlbumOmit
   image?: Prisma.ImageOmit
 }

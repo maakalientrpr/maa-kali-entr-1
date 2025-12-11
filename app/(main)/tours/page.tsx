@@ -7,9 +7,12 @@ const page = async () => {
   const tours = await prisma.tourPackage.findMany({
     where: {
       isPublished: true,
+      startDate: {
+        gt: new Date()
+      }
     },
     orderBy: {
-      createdAt: "desc",
+      createdAt: "asc",
     },
     include: {
       pickupOptions: true,

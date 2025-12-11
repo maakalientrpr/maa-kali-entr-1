@@ -586,7 +586,7 @@ const OurCoverage = () => {
     },
     {
       title: "International",
-      desc: "Nepal, Bhutan, Dubai, Thailand",
+      desc: "Nepal, Bhutan, Dubai, Thailand, Bangkok, Bali, Vietnam, Europe, Australia & more",
       icon: <GlobeIcon className="w-6 h-6 text-purple-200" />,
     },
   ];

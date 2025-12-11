@@ -9,14 +9,12 @@ export async function POST(req: Request) {
   try {
     await requireAuth();
     
-    const { 
-      tourPackageId, 
-      pickupOptionId, // ✅ New Field
-      sharingType,    // ✅ New Field
+    const {
+      pickupOptionId, 
+      sharingType,    
       contactNumber, 
       panNumber, 
       passengers,
-      totalAmount // Optional: we recalculate on server for security
     } = await req.json();
 
     const session = await auth.api.getSession({
@@ -51,7 +49,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 3. Determine Price Per Person based on Sharing Type
+    // 3. Determine Price Per Person
     let pricePerPerson = 0;
 
     switch (sharingType) {
@@ -75,13 +73,31 @@ export async function POST(req: Request) {
       );
     }
 
-    // 4. Calculate Total Amount (Server-side Calculation for Security)
-    // Amount in Paise (INR * 100)
-    const amountPaise = Math.round(pricePerPerson * passengers.length * 100);
+    // 4. Calculate Total Amount
+    // Note: Storing Rupees in DB is usually safer for analytics, but sticking to your logic:
+    const totalAmountRupees = pricePerPerson * passengers.length;
+    const amountPaise = Math.round(totalAmountRupees * 100);
 
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID!,
       key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    });
+
+    // ------------------------------------------------------------------
+    // 4.5 CLEANUP JUNK: Cancel previous UNPAID bookings for this Tour
+    // ------------------------------------------------------------------
+    // This prevents a user from having 10 "Pending" bookings if they clicked 
+    // "Pay Now" multiple times without finishing payment.
+    await prisma.booking.updateMany({
+      where: {
+        userId: userId,
+        tourPackageId: pkg.id, // Only for THIS tour
+        paymentStatus: "UNPAID",
+      },
+      data: {
+        status: "CANCELLED",      // Mark as Cancelled
+        paymentStatus: "FAILED",  // Mark payment as Failed/Aborted
+      },
     });
 
     // 5. Create booking (UNPAID)
@@ -89,11 +105,11 @@ export async function POST(req: Request) {
       data: {
         userId,
         tourPackageId: pkg.id,
-        pickupOptionId: pickupOption.id, // ✅ Save Pickup Option
-        sharingType: sharingType,        // ✅ Save Sharing Type
+        pickupOptionId: pickupOption.id,
+        sharingType: sharingType,
         contactNumber,
         panNumber: panNumber || null,
-        totalAmount: amountPaise, // Store in Paise strictly or convert to Rupees if your DB expects float
+        totalAmount: amountPaise, // Storing in Paise as per your code
         paymentStatus: "UNPAID",
         status: "PENDING",
         passengers: {
@@ -113,6 +129,8 @@ export async function POST(req: Request) {
       amount: amountPaise,
       currency: "INR",
       receipt: `recept-${Date.now()}`,
+      // Use 'true' if it works for you, or '1 as any' strictly. Both are fine now.
+      payment_capture: true, 
       notes: {
         tourPackage: pkg.title,
         bookingId: booking.id.toString(),

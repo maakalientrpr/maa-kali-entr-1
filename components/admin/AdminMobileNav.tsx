@@ -12,11 +12,10 @@ const navLinks = [
   { label: "Manage Tours", href: "/admin/tour-package" },
   { label: "Pilgrimages", href: "/admin/pilgrimages" },
   { label: "Bookings", href: "/admin/bookings" },
+  { label: "Popup", href: "/admin/popup" },
   { label: "Gallery", href: "/admin/gallery" },
-  {
-    label: "Vote",
-    href: "/admin/vote",
-  },
+  { label: "Vote", href: "/admin/vote" },
+  { label: "Reviews", href: "/admin/reviews" },
   { label: "Users", href: "/admin/users" },
 ];
 

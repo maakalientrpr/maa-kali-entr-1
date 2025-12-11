@@ -9,9 +9,13 @@ const FeaturedTorus = async () => {
   const tours = await prisma.tourPackage.findMany({
     where: {
       isPublished: true,
+      // ✅ NEW: Only load tours where Start Date is in the future (Greater Than Now)
+      startDate: {
+        gt: new Date(),
+      },
     },
     orderBy: {
-      createdAt: "desc",
+      startDate: "asc", 
     },
     take: 3,
     include: {
@@ -29,6 +33,7 @@ const FeaturedTorus = async () => {
 
     if (tour.pickupOptions && tour.pickupOptions.length > 0) {
       tour.pickupOptions.forEach((opt) => {
+        // Use optional chaining or checks to ensure values exist
         if (opt.priceSingleSharing) minPrice = Math.min(minPrice, opt.priceSingleSharing);
         if (opt.priceDoubleSharing) minPrice = Math.min(minPrice, opt.priceDoubleSharing);
         if (opt.priceTripleSharing) minPrice = Math.min(minPrice, opt.priceTripleSharing);
@@ -37,7 +42,7 @@ const FeaturedTorus = async () => {
 
     return {
       ...tour,
-      category: tour.category as TourCategory, // ✅ Explicitly cast category
+      category: tour.category as TourCategory, 
       price: minPrice === Infinity ? 0 : minPrice,
     };
   });
@@ -53,8 +58,6 @@ const FeaturedTorus = async () => {
         </p>
       </div>
 
-      {/* ✅ Pass showTabs={false} here 
-      */}
       <TourPackages tours={formattedTours} showTabs={false} />
 
       <div className="w-full flex justify-center my-3">
