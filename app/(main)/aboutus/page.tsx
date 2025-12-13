@@ -53,7 +53,7 @@ const Page = () => {
     },
     {
       icon: <HeartIcon className="text-orange-600 size-10" />,
-      value: "12 Years",
+      value: "12+ Years",
       label: "Experience",
     },
   ];
@@ -68,7 +68,7 @@ const Page = () => {
         </h1>
         <p className="text-gray-700 max-w-xl mx-auto">
           Your trusted partner for tours, events, and memorable experiences
-          since 2019
+          since 2013
         </p>
       </div>
 
@@ -122,39 +122,38 @@ const OurStory = () => {
         <h2 className="text-2xl font-bold text-orange-500 mb-3">Our Story</h2>
 
         <p className="mb-3">
-          Founded by
-          <span className="text-orange-500 font-semibold">
-            {" "}
-            Krishna Jaiswal
-          </span>{" "}
-          and
-          <span className="text-orange-500 font-semibold">
-            {" "}
-            Shweta Jaiswal
-          </span>{" "}
-          in 2013, Maa Kali Enterprise began with a simple vision — to make
-          travel accessible, events memorable, and every occasion special!
+          Maa Kali Enterprise, built in 2013, began as a small tour operation
+          with a simple mission — to make every journey comfortable, memorable,
+          and stress-free. Over the years, we have grown into a comprehensive
+          service provider offering tours & travel, event management, and
+          premium catering. Our dedication to quality and customer satisfaction
+          has helped us build a loyal community of travellers across India.
         </p>
 
         <p className="mb-3">
-          What started as a small tour operation has grown into a comprehensive
-          service provider offering tours & travel, event management, premium
-          catering, and travel assistance services. Our dedication to quality
-          and customer satisfaction has helped us build a loyal community of
-          travelers and clients.
+          We welcome travellers of all generations, and a large part of our
+          cherished audience also includes elders and happily-settled couples
+          who now have the freedom to explore. For them, we ensure care-free
+          darshan experiences with complete safety & comfort.
         </p>
 
         <p className="mb-3">
-          Based in Kolkata, we serve clients across India and help them explore
-          both domestic and international destinations. Every tour we organize
-          and every event we manage carries our commitment to excellence and
-          attention to detail.
+          Our tours also bring people together. Travellers bond, enjoy a
+          friendly and supportive environment, share stories, and often return
+          home with new friendships. Every journey feels like travelling with a
+          family.
+        </p>
+        <p>
+          Based in Kolkata, we organize both domestic and international tours.
+          Every itinerary we design reflects our commitment to comfort, trust,
+          and attention to detail — helping every guest travel with peace, joy,
+          and confidence.
         </p>
       </div>
 
       <div className="m-5 rounded-lg shadow overflow-hidden">
         <Image
-          src={'/family.jpg'}
+          src={"/family.jpg"}
           alt="Our Story Image"
           className="w-full h-full object-cover"
           width={500}
