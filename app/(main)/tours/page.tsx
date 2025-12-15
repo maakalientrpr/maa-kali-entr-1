@@ -59,7 +59,7 @@ const page = async () => {
       <AnnouncementBar />
       <div className="mt-12 text-center flex flex-col gap-2 mb-6">
         <h1 className="text-orange-500 font-bold text-4xl md:text-4xl">
-          Tours & Travels
+          Tours & Travel
         </h1>
         <p className="text-gray-700 max-w-2xl mx-auto px-4">
           Explore our curated tour packages designed for comfort, convenience,
