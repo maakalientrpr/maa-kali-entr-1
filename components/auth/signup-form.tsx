@@ -22,7 +22,6 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   SparklesIcon,
-  ArrowRight,
   Loader2,
   User,
   Mail,
@@ -129,9 +128,6 @@ export default function SignupPage() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-orange-900/80 via-slate-900/60 to-slate-900/90" />
         <div className="relative z-10 max-w-lg text-center px-12 space-y-6">
-          <div className="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4">
-            <SparklesIcon className="w-8 h-8 text-orange-300" />
-          </div>
           <h1 className="text-4xl font-bold text-white tracking-tight leading-tight">
             Join Our Community
           </h1>

@@ -215,7 +215,7 @@ model PickupOption {
   title String // e.g. "Ex-Kolkata", "Ex-Mumbai", "Airport Pickup"
 
   // Prices specific to this pickup location
-  priceSingleSharing Float
+  priceSingleSharing Float?
   priceDoubleSharing Float?
   priceTripleSharing Float?
 

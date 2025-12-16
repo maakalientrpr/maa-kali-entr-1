@@ -42,8 +42,8 @@ const formSchema = z
   .object({
     pickupOptionId: z.string().min(1, "Please select a pickup point"),
 
-    // ✅ FIXED: Use errorMap for custom error messages in Zod Enum
-    sharingType: z.string(),
+    // Safest option: just use simple enum validation
+    sharingType: z.enum(["SINGLE", "DOUBLE", "TRIPLE"]),
 
     contactNumber: z
       .string()
@@ -129,6 +129,20 @@ const BookingForm = ({
     }
   }, [selectedOption, selectedSharing]);
 
+  // ✅ Auto-select a valid option when Pickup changes
+  // This ensures we default to a visible option, not a hidden one
+  useEffect(() => {
+    if (selectedOption) {
+      if ((selectedOption.priceDoubleSharing ?? 0) > 0) {
+        form.setValue("sharingType", "DOUBLE");
+      } else if ((selectedOption.priceTripleSharing ?? 0) > 0) {
+        form.setValue("sharingType", "TRIPLE");
+      } else if ((selectedOption.priceSingleSharing ?? 0) > 0) {
+        form.setValue("sharingType", "SINGLE");
+      }
+    }
+  }, [selectedOption, form]);
+
   // Update Total Amount
   useEffect(() => {
     const total = passengers.length * pricePerPerson;
@@ -137,7 +151,6 @@ const BookingForm = ({
 
   const onSubmit = async (values: FormValues) => {
     try {
-      // 1. Create Booking on Backend
       const res = await axios.post("/api/booking", {
         tourPackageId: tourId,
         pickupOptionId: values.pickupOptionId,
@@ -145,12 +158,11 @@ const BookingForm = ({
         contactNumber: values.contactNumber,
         panNumber: values.panNumber,
         passengers: values.passengers,
-        totalAmount: values.totalAmount, // Send calculated amount
+        totalAmount: values.totalAmount,
       });
 
       const { orderId, amount, key, bookingId } = res.data;
 
-      // 2. Initialize Razorpay
       const options = {
         key,
         amount,
@@ -167,8 +179,10 @@ const BookingForm = ({
               bookingId,
             });
             toast.success("Payment Success! Booking Confirmed");
-            router.push(`/booking/success?orderId=${response.razorpay_order_id}`);
-            onClose(); // Close modal on success
+            router.push(
+              `/booking/success?orderId=${response.razorpay_order_id}`
+            );
+            onClose();
           } catch (err) {
             toast.error("Payment verification failed");
           }
@@ -179,7 +193,7 @@ const BookingForm = ({
           email: session?.user.email,
         },
         theme: {
-          color: "#ea580c", // Orange-600
+          color: "#ea580c",
         },
       };
 
@@ -188,7 +202,7 @@ const BookingForm = ({
       setTimeout(() => {
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
-      });
+      }, 0);
     } catch (error) {
       console.error(error);
       toast.error("Booking failed. Please try again.");
@@ -240,98 +254,98 @@ const BookingForm = ({
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    // We removed "defaultValue" here because useEffect handles the switching now
+                    value={field.value}
                     className="grid grid-cols-1 sm:grid-cols-3 gap-4"
                   >
+                    {/* ✅ CONDITIONAL RENDERING: Only show if price > 0 */}
+
                     {/* Double Sharing */}
-                    <FormItem>
-                      <FormControl>
-                        <RadioGroupItem
-                          value="DOUBLE"
-                          id="r-double"
-                          className="peer sr-only"
-                          disabled={!selectedOption.priceDoubleSharing}
-                        />
-                      </FormControl>
-                      <FormLabel
-                        htmlFor="r-double"
-                        className={cn(
-                          "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full",
-                          !selectedOption.priceDoubleSharing &&
-                            "opacity-50 cursor-not-allowed"
-                        )}
-                      >
-                        <span className="text-sm font-medium">Double</span>
-                        <span className="text-lg font-bold mt-1 flex items-center">
-                          <IndianRupee size={14} />
-                          {selectedOption.priceDoubleSharing?.toLocaleString() ??
-                            "N/A"}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground">
-                          /person
-                        </span>
-                      </FormLabel>
-                    </FormItem>
+                    {(selectedOption.priceDoubleSharing ?? 0) > 0 && (
+                      <FormItem>
+                        <FormControl>
+                          <RadioGroupItem
+                            value="DOUBLE"
+                            id="r-double"
+                            className="peer sr-only"
+                          />
+                        </FormControl>
+                        <FormLabel
+                          htmlFor="r-double"
+                          className={cn(
+                            "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full"
+                          )}
+                        >
+                          <span className="text-sm font-medium">Double</span>
+                          <span className="text-lg font-bold mt-1 flex items-center">
+                            <IndianRupee size={14} />
+                            {selectedOption.priceDoubleSharing?.toLocaleString() ??
+                              "N/A"}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            /person
+                          </span>
+                        </FormLabel>
+                      </FormItem>
+                    )}
 
                     {/* Triple Sharing */}
-                    <FormItem>
-                      <FormControl>
-                        <RadioGroupItem
-                          value="TRIPLE"
-                          id="r-triple"
-                          className="peer sr-only"
-                          disabled={!selectedOption.priceTripleSharing}
-                        />
-                      </FormControl>
-                      <FormLabel
-                        htmlFor="r-triple"
-                        className={cn(
-                          "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full",
-                          !selectedOption.priceTripleSharing &&
-                            "opacity-50 cursor-not-allowed"
-                        )}
-                      >
-                        <span className="text-sm font-medium">Triple</span>
-                        <span className="text-lg font-bold mt-1 flex items-center">
-                          <IndianRupee size={14} />
-                          {selectedOption.priceTripleSharing?.toLocaleString() ??
-                            "N/A"}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground">
-                          /person
-                        </span>
-                      </FormLabel>
-                    </FormItem>
+                    {(selectedOption.priceTripleSharing ?? 0) > 0 && (
+                      <FormItem>
+                        <FormControl>
+                          <RadioGroupItem
+                            value="TRIPLE"
+                            id="r-triple"
+                            className="peer sr-only"
+                          />
+                        </FormControl>
+                        <FormLabel
+                          htmlFor="r-triple"
+                          className={cn(
+                            "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full"
+                          )}
+                        >
+                          <span className="text-sm font-medium">Triple</span>
+                          <span className="text-lg font-bold mt-1 flex items-center">
+                            <IndianRupee size={14} />
+                            {selectedOption.priceTripleSharing?.toLocaleString() ??
+                              "N/A"}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            /person
+                          </span>
+                        </FormLabel>
+                      </FormItem>
+                    )}
 
                     {/* Single Sharing */}
-                    <FormItem>
-                      <FormControl>
-                        <RadioGroupItem
-                          value="SINGLE"
-                          id="r-single"
-                          className="peer sr-only"
-                          disabled={!selectedOption.priceSingleSharing}
-                        />
-                      </FormControl>
-                      <FormLabel
-                        htmlFor="r-single"
-                        className={cn(
-                          "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full",
-                          !selectedOption.priceSingleSharing &&
-                            "opacity-50 cursor-not-allowed"
-                        )}
-                      >
-                        <span className="text-sm font-medium">Single</span>
-                        <span className="text-lg font-bold mt-1 flex items-center">
-                          <IndianRupee size={14} />
-                          {selectedOption.priceSingleSharing?.toLocaleString() ??
-                            "N/A"}
-                        </span>
-                        <span className="text-[10px] text-muted-foreground">
-                          /person
-                        </span>
-                      </FormLabel>
-                    </FormItem>
+                    {(selectedOption.priceSingleSharing ?? 0) > 0 && (
+                      <FormItem>
+                        <FormControl>
+                          <RadioGroupItem
+                            value="SINGLE"
+                            id="r-single"
+                            className="peer sr-only"
+                          />
+                        </FormControl>
+                        <FormLabel
+                          htmlFor="r-single"
+                          className={cn(
+                            "flex flex-col items-center justify-between rounded-md border-2 border-muted bg-transparent p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-orange-600 peer-data-[state=checked]:bg-orange-50 [&:has([data-state=checked])]:border-primary cursor-pointer h-full"
+                          )}
+                        >
+                          <span className="text-sm font-medium">Single</span>
+                          <span className="text-lg font-bold mt-1 flex items-center">
+                            <IndianRupee size={14} />
+                            {selectedOption.priceSingleSharing?.toLocaleString() ??
+                              "N/A"}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            /person
+                          </span>
+                        </FormLabel>
+                      </FormItem>
+                    )}
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />

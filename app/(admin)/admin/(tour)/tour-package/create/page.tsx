@@ -69,7 +69,7 @@ const tourSchema = z.object({
     .array(
       z.object({
         title: z.string().min(2, "Pickup location name required"), // e.g., Ex-Mumbai
-        priceSingleSharing: z.coerce.number().min(1, "Required"),
+        priceSingleSharing: z.coerce.number(),
         priceDoubleSharing: z.coerce.number(),
         priceTripleSharing: z.coerce.number(),
       })

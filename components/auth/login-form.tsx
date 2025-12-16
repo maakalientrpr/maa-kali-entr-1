@@ -97,9 +97,7 @@ export default function LoginPage() {
 
         {/* Content */}
         <div className="relative z-10 max-w-lg text-center px-12 space-y-6">
-          <div className="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4">
-            <SparklesIcon className="w-8 h-8 text-yellow-400" />
-          </div>
+       
           <h1 className="text-4xl font-bold text-white tracking-tight leading-tight">
             Begin Your Spiritual Journey
           </h1>

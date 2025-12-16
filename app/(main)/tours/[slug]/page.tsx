@@ -181,24 +181,26 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
               </CardContent>
             </Card>
 
-            <Card className="border-l-4 border-l-red-500 shadow-sm">
-              <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-4 text-red-700 flex items-center gap-2">
-                  ❌ Exclusions
-                </h3>
-                <ul className="space-y-2">
-                  {tour.exclusions.map((item, index) => (
-                    <li
-                      key={index}
-                      className="flex items-start gap-2 text-sm text-gray-700"
-                    >
-                      <span className="mt-1 block min-w-[6px] h-[6px] rounded-full bg-red-500" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+            {tour.exclusions?.length > 0 && (
+              <Card className="border-l-4 border-l-red-500 shadow-sm">
+                <CardContent className="p-6">
+                  <h3 className="font-bold text-lg mb-4 text-red-700 flex items-center gap-2">
+                    ❌ Exclusions
+                  </h3>
+                  <ul className="space-y-2">
+                    {tour.exclusions.map((item, index) => (
+                      <li
+                        key={index}
+                        className="flex items-start gap-2 text-sm text-gray-700"
+                      >
+                        <span className="mt-1 block min-w-[6px] h-[6px] rounded-full bg-red-500" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
 
@@ -236,7 +238,9 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                       <div className="grid gap-1.5 pl-2 border-l-2 border-orange-100">
                         {(opt.priceDoubleSharing ?? 0) > 0 && (
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-600 text-xs">Double Sharing</span>
+                            <span className="text-gray-600 text-xs">
+                              Double Sharing
+                            </span>
                             <span className="font-semibold">
                               ₹
                               {(opt.priceDoubleSharing ?? 0).toLocaleString(
@@ -247,7 +251,9 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                         )}
                         {(opt.priceTripleSharing ?? 0) > 0 && (
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-600 text-xs">Triple Sharing</span>
+                            <span className="text-gray-600 text-xs">
+                              Triple Sharing
+                            </span>
                             <span className="font-semibold">
                               ₹
                               {(opt.priceTripleSharing ?? 0).toLocaleString(
@@ -258,7 +264,9 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                         )}
                         {(opt.priceSingleSharing ?? 0) > 0 && (
                           <div className="flex justify-between items-center">
-                            <span className="text-gray-600 text-xs">Single Sharing</span>
+                            <span className="text-gray-600 text-xs">
+                              Single Sharing
+                            </span>
                             <span className="font-semibold">
                               ₹
                               {(opt.priceSingleSharing ?? 0).toLocaleString(
