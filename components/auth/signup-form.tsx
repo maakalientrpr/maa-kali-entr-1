@@ -126,7 +126,7 @@ export default function SignupPage() {
             priority
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-900/80 via-slate-900/60 to-slate-900/90" />
+        <div className="absolute inset-0 bg-linear-to-b from-orange-900/80 via-slate-900/60 to-slate-900/90" />
         <div className="relative z-10 max-w-lg text-center px-12 space-y-6">
           <h1 className="text-4xl font-bold text-white tracking-tight leading-tight">
             Join Our Community

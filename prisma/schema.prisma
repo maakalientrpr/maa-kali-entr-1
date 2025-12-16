@@ -232,7 +232,7 @@ model Itinerary {
 
   day         Int
   title       String
-  description String @db.Text
+  description String? @db.Text
 
   tourPackageId String
   tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id], onDelete: Cascade)

@@ -51,7 +51,7 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-4 md:p-8">
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex items-end p-4 md:p-8">
           <div className="w-full max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-end gap-4">
               <div>
@@ -151,9 +151,11 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                         {item.title}
                       </h3>
                     </div>
-                    <p className="text-gray-600 leading-relaxed">
-                      {item.description}
-                    </p>
+                    {item.description.length > 0 && (
+                      <p className="text-gray-600 leading-relaxed">
+                        {item.description}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

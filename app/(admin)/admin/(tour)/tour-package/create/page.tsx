@@ -85,7 +85,7 @@ const tourSchema = z.object({
       z.object({
         day: z.coerce.number().min(1),
         title: z.string().min(5, "Day title required"),
-        description: z.string().min(20, "Explain the day's plan"),
+        description: z.string().optional(),
       })
     )
     .min(1, "Add at least 1 day itinerary"),
@@ -518,8 +518,9 @@ export default function CreateTourPage() {
                                 <FormItem>
                                   <FormControl>
                                     <Textarea
-                                      placeholder="Detailed activities for the day..."
+                                      placeholder="Detailed activities for the day (Optional)..."
                                       {...field}
+                                      value={field.value || ''}
                                     />
                                   </FormControl>
                                   <FormMessage />
