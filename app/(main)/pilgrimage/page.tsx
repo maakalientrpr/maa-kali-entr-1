@@ -47,22 +47,6 @@ const PilgrimagePage = async () => {
     },
   });
 
-  // 2. Handle Empty State
-  if (!pilgrimages || pilgrimages.length === 0) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <AnnouncementBar />
-        <div className="flex-1 flex flex-col gap-4 items-center justify-center text-center p-4">
-          <h1 className="text-2xl font-bold text-gray-400">Pilgrimages</h1>
-          <p className="text-gray-500">
-            No pilgrimage packages are currently listed. Please check back
-            later.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   // 3. Render Page
   return (
     <div className="bg-orange-50/50">
@@ -82,7 +66,13 @@ const PilgrimagePage = async () => {
       </div>
 
       {/* Grid Section */}
-      <PilgrimageGrid pilgrimages={pilgrimages} />
+      {!pilgrimages || pilgrimages.length === 0 ? (
+        <p className="text-gray-500">
+          No pilgrimage packages are currently listed. Please check back later.
+        </p>
+      ) : (
+        <PilgrimageGrid pilgrimages={pilgrimages} />
+      )}
       <FeaturedPilgrimage />
       <Region />
       <IndiaCircuitsMap />
