@@ -67,7 +67,7 @@ const PilgrimagePage = async () => {
 
       {/* Grid Section */}
       {!pilgrimages || pilgrimages.length === 0 ? (
-        <p className="text-gray-500">
+        <p className="text-gray-500 text-center">
           No pilgrimage packages are currently listed. Please check back later.
         </p>
       ) : (
