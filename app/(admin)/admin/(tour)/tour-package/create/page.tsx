@@ -87,8 +87,7 @@ const tourSchema = z.object({
         title: z.string().min(5, "Day title required"),
         description: z.string().optional(),
       })
-    )
-    .min(1, "Add at least 1 day itinerary"),
+    ),
 });
 
 type TourFormValues = z.infer<typeof tourSchema>;

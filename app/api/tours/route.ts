@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       inclusions,
       exclusions,
       images,
-      itinerary,
+      itinerary = [],
     } = body;
 
     // ✅ Basic Validation
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
         
         // Nested write for Itinerary
         itineraries: {
-          create: itinerary.map((day: any) => ({
+          create: (itinerary || []).map((day: any) => ({
             day: day.day,
             title: day.title,
             description: day.description,

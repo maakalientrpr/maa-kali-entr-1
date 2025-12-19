@@ -13,7 +13,7 @@ export async function PUT(
     const body = await req.json();
 
     const {
-      itinerary,
+      itinerary = [],
       pickupOptions,
       category,
       title,
@@ -76,7 +76,7 @@ export async function PUT(
         // Itineraries: Safe to delete/recreate as they usually don't have foreign keys
         itineraries: {
           deleteMany: {},
-          create: itinerary.map((item: any) => ({
+          create: (itinerary || []).map((item: any) => ({
             day: Number(item.day),
             title: item.title,
             description: item.description,
