@@ -9,20 +9,36 @@ export default async function EditTourPackagePage({
 }) {
   const { id } = await params;
 
-  // Fetch tour with all relations needed for the form
-  const tour = await prisma.tourPackage.findUnique({
+  const tourData = await prisma.tourPackage.findUnique({
     where: { id },
     include: {
-      itineraries: {
-        orderBy: { day: "asc" }, // Ensure days are in order
-      },
-      pickupOptions: true, // Fetch the nested pickup options
+      itineraries: { orderBy: { day: "asc" } },
+      pickupOptions: true,
     },
   });
 
-  if (!tour) {
-    return notFound();
-  }
+  if (!tourData) return notFound();
 
-  return <EditTourForm tour={tour} />;
+  // ✅ Strictly format the data to match TourDBType
+  const formattedTour = {
+    ...tourData,
+    // 1. Fix Pickup Options (Nulls and extra fields)
+    pickupOptions: tourData.pickupOptions.map((opt) => ({
+      id: opt.id,
+      title: opt.title,
+      priceSingleSharing: opt.priceSingleSharing ?? 0,
+      priceDoubleSharing: opt.priceDoubleSharing,
+      priceTripleSharing: opt.priceTripleSharing,
+    })),
+    // 2. Fix Itineraries (Null description and extra fields)
+    itineraries: tourData.itineraries.map((it) => ({
+      id: it.id,
+      day: it.day,
+      title: it.title,
+      description: it.description ?? "", // Convert null to empty string
+    })),
+  };
+
+  // Now 'formattedTour' perfectly matches 'TourDBType'
+  return <EditTourForm tour={formattedTour} />;
 }

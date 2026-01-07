@@ -9,7 +9,6 @@ const FeaturedTorus = async () => {
   const tours = await prisma.tourPackage.findMany({
     where: {
       isPublished: true,
-      // ✅ NEW: Only load tours where Start Date is in the future (Greater Than Now)
       startDate: {
         gt: new Date(),
       },
@@ -27,29 +26,38 @@ const FeaturedTorus = async () => {
     return null;
   }
 
-  // ✅ Transform data
+  // ✅ Transform and Sanitize data
   const formattedTours = tours.map((tour) => {
     let minPrice = Infinity;
 
-    if (tour.pickupOptions && tour.pickupOptions.length > 0) {
-      tour.pickupOptions.forEach((opt) => {
-        // Use optional chaining or checks to ensure values exist
-        if (opt.priceSingleSharing) minPrice = Math.min(minPrice, opt.priceSingleSharing);
-        if (opt.priceDoubleSharing) minPrice = Math.min(minPrice, opt.priceDoubleSharing);
-        if (opt.priceTripleSharing) minPrice = Math.min(minPrice, opt.priceTripleSharing);
-      });
-    }
+    const sanitizedPickupOptions = tour.pickupOptions.map((opt) => {
+      const s = opt.priceSingleSharing ?? 0;
+      const d = opt.priceDoubleSharing ?? 0;
+      const t = opt.priceTripleSharing ?? 0;
+
+      if (s > 0) minPrice = Math.min(minPrice, s);
+      if (d > 0) minPrice = Math.min(minPrice, d);
+      if (t > 0) minPrice = Math.min(minPrice, t);
+
+      return {
+        ...opt,
+        priceSingleSharing: s,
+        priceDoubleSharing: d,
+        priceTripleSharing: t,
+      };
+    });
 
     return {
       ...tour,
       category: tour.category as TourCategory, 
       price: minPrice === Infinity ? 0 : minPrice,
+      pickupOptions: sanitizedPickupOptions,
     };
   });
 
   return (
-    <div>
-      <div className="text-center flex flex-col gap-2">
+    <div className="py-10">
+      <div className="text-center flex flex-col gap-2 mb-8">
         <h2 className="text-orange-500 font-bold text-2xl md:text-4xl">
           Featured Tours
         </h2>
@@ -60,9 +68,9 @@ const FeaturedTorus = async () => {
 
       <TourPackages tours={formattedTours} showTabs={false} />
 
-      <div className="w-full flex justify-center my-3">
+      <div className="w-full flex justify-center my-6">
         <Link href={"/tours"}>
-          <Button className="w-fit bg-orange-600">
+          <Button className="w-fit bg-orange-600 hover:bg-orange-700">
             View all Tours
             <ArrowRight className="ml-2 w-4 h-4" />
           </Button>

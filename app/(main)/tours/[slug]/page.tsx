@@ -26,7 +26,7 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   await requireAuth();
   const { slug } = await params;
 
-  const tour = await prisma.tourPackage.findUnique({
+  const rawTour = await prisma.tourPackage.findUnique({
     where: { slug },
     include: {
       itineraries: {
@@ -36,28 +36,42 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     },
   });
 
-  if (!tour || !tour.isPublished) return notFound();
+  if (!rawTour || !rawTour.isPublished) return notFound();
+
+  // ✅ SANITIZATION LOGIC: Convert nulls to safe defaults for TypeScript
+  const sanitizedPickupOptions = rawTour.pickupOptions.map((opt) => ({
+    ...opt,
+    priceSingleSharing: opt.priceSingleSharing ?? 0,
+    priceDoubleSharing: opt.priceDoubleSharing ?? 0,
+    priceTripleSharing: opt.priceTripleSharing ?? 0,
+  }));
+
+  const sanitizedItineraries = rawTour.itineraries.map((item) => ({
+    ...item,
+    description: item.description ?? "", // Fixes 'item.description is possibly null'
+  }));
+
+  // Reconstruct the tour object with sanitized data
+  const tour = {
+    ...rawTour,
+    pickupOptions: sanitizedPickupOptions,
+    itineraries: sanitizedItineraries,
+  };
 
   // Price Calculation Logic
   let minPrice = Infinity;
-  if (tour.pickupOptions && tour.pickupOptions.length > 0) {
-    tour.pickupOptions.forEach((opt) => {
-      if (opt.priceSingleSharing && opt.priceSingleSharing > 0)
-        minPrice = Math.min(minPrice, opt.priceSingleSharing);
-      if (opt.priceDoubleSharing && opt.priceDoubleSharing > 0)
-        minPrice = Math.min(minPrice, opt.priceDoubleSharing);
-      if (opt.priceTripleSharing && opt.priceTripleSharing > 0)
-        minPrice = Math.min(minPrice, opt.priceTripleSharing);
-    });
-  }
+  tour.pickupOptions.forEach((opt) => {
+    if (opt.priceSingleSharing > 0) minPrice = Math.min(minPrice, opt.priceSingleSharing);
+    if (opt.priceDoubleSharing > 0) minPrice = Math.min(minPrice, opt.priceDoubleSharing);
+    if (opt.priceTripleSharing > 0) minPrice = Math.min(minPrice, opt.priceTripleSharing);
+  });
+  
   const displayPrice = minPrice === Infinity ? 0 : minPrice;
 
   return (
     <div className="min-h-screen bg-gray-50 pb-24 lg:pb-10">
       {/* ---------------- SCROLLABLE HERO SECTION ---------------- */}
       <div className="relative w-full h-[55vh] lg:h-[70vh] group overflow-hidden bg-gray-900">
-        
-        {/* Horizontal Scroll Container (CSS Snap) */}
         <div className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth">
           {tour.images.map((img, index) => (
             <div key={index} className="min-w-full w-full h-full relative snap-center shrink-0">
@@ -68,19 +82,16 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 className="object-cover"
                 priority={index === 0}
               />
-               {/* Subtle Dark Overlay for badge readability */}
                <div className="absolute inset-0 bg-black/10" />
             </div>
           ))}
         </div>
 
-        {/* Photo Count Badge (Top Right) */}
         <div className="absolute top-4 right-4 md:top-8 md:right-8 bg-black/50 backdrop-blur-md text-white px-3 py-1.5 rounded-full flex items-center gap-2 text-xs md:text-sm border border-white/20 z-10">
           <ImageIcon size={14} />
           <span>{tour.images.length} Photos</span>
         </div>
 
-        {/* Gradient Text Overlay (Only Category Badge remains here) */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end pointer-events-none">
           <div className="w-full max-w-7xl mx-auto p-4 md:p-8 lg:px-8 pb-8">
             <Badge className="w-fit bg-orange-600/90 backdrop-blur-sm text-white border-none px-3 py-1 text-sm pointer-events-auto">
@@ -90,7 +101,7 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         </div>
       </div>
 
-      {/* ---------------- NEW HEADER SECTION (Title & Desc after image) ---------------- */}
+      {/* ---------------- HEADER SECTION ---------------- */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 pt-8 pb-4">
         <h1 className="text-gray-900 text-3xl md:text-5xl font-bold leading-tight mb-3">
             {tour.title}
@@ -101,12 +112,10 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         </p>
       </div>
 
-
-      {/* ---------------- MAIN CONTENT GRID (Unchanged layout) ---------------- */}
+      {/* ---------------- MAIN CONTENT GRID ---------------- */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           
-          {/* LEFT COLUMN (Details) */}
           <div className="lg:col-span-2 space-y-8 md:space-y-12">
             
             {/* Quick Stats Grid */}
@@ -178,7 +187,7 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 </ul>
               </div>
 
-              {tour.exclusions?.length > 0 && (
+              {tour.exclusions && tour.exclusions.length > 0 && (
                 <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                   <h3 className="font-bold text-lg mb-4 text-red-700 flex items-center gap-2">
                     <XCircle className="fill-red-100" /> What's Excluded
@@ -200,7 +209,7 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
               <h2 className="text-2xl font-bold mb-8 text-gray-900">Detailed Itinerary</h2>
               <div className="relative space-y-0">
-                {tour.itineraries.map((item, index) => (
+                {tour.itineraries.map((item) => (
                   <div key={item.id} className="relative pl-8 md:pl-10 pb-10 last:pb-0 border-l-2 border-dashed border-gray-200 last:border-0">
                     <div className="absolute -left-[11px] top-0 bg-white p-1">
                       <div className="w-4 h-4 rounded-full bg-orange-500 ring-4 ring-orange-100" />
@@ -211,6 +220,7 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                       </span>
                       <h3 className="font-bold text-lg text-gray-900">{item.title}</h3>
                     </div>
+                    {/* Sanity check on description length */}
                     {item.description.length > 0 && (
                       <p className="text-gray-600 text-sm md:text-base leading-relaxed">
                         {item.description}
@@ -221,8 +231,6 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
               </div>
             </div>
             )}
-
-            {/* Gallery Section REMOVED (Images are now in Hero) */}
           </div>
 
           {/* RIGHT COLUMN (Desktop Sidebar) */}
@@ -254,8 +262,8 @@ const TourPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                                 <MapPin size={12} className="text-orange-500"/> {opt.title}
                               </p>
                               <div className="space-y-1 pl-4 text-gray-600 text-xs">
-                                {opt.priceDoubleSharing && <div className="flex justify-between"><span>Double:</span> <span className="font-medium text-gray-900">₹{opt.priceDoubleSharing}</span></div>}
-                                {opt.priceTripleSharing && <div className="flex justify-between"><span>Triple:</span> <span className="font-medium text-gray-900">₹{opt.priceTripleSharing}</span></div>}
+                                {opt.priceDoubleSharing > 0 && <div className="flex justify-between"><span>Double:</span> <span className="font-medium text-gray-900">₹{opt.priceDoubleSharing}</span></div>}
+                                {opt.priceTripleSharing > 0 && <div className="flex justify-between"><span>Triple:</span> <span className="font-medium text-gray-900">₹{opt.priceTripleSharing}</span></div>}
                               </div>
                           </div>
                         ))}

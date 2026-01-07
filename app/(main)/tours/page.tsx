@@ -30,27 +30,36 @@ const page = async () => {
     );
   }
 
-  // ✅ Transform data
-  const formattedTours = tours.map((tour) => {
-    let minPrice = Infinity;
+// ✅ Transform data
+const formattedTours = tours.map((tour) => {
+  let minPrice = Infinity;
 
-    if (tour.pickupOptions && tour.pickupOptions.length > 0) {
-      tour.pickupOptions.forEach((opt) => {
-        if (opt.priceSingleSharing)
-          minPrice = Math.min(minPrice, opt.priceSingleSharing);
-        if (opt.priceDoubleSharing)
-          minPrice = Math.min(minPrice, opt.priceDoubleSharing);
-        if (opt.priceTripleSharing)
-          minPrice = Math.min(minPrice, opt.priceTripleSharing);
-      });
-    }
+  // 1. Clean up pickupOptions to ensure they are never null
+  const cleanedPickupOptions = tour.pickupOptions.map((opt) => {
+    const single = opt.priceSingleSharing ?? 0;
+    const double = opt.priceDoubleSharing ?? 0;
+    const triple = opt.priceTripleSharing ?? 0;
+
+    // Calculate minPrice for the tour while cleaning data
+    if (single > 0) minPrice = Math.min(minPrice, single);
+    if (double > 0) minPrice = Math.min(minPrice, double);
+    if (triple > 0) minPrice = Math.min(minPrice, triple);
 
     return {
-      ...tour,
-      category: tour.category as TourCategory, // Ensure category is typed correctly
-      price: minPrice === Infinity ? 0 : minPrice,
+      ...opt,
+      priceSingleSharing: single,
+      priceDoubleSharing: double,
+      priceTripleSharing: triple,
     };
   });
+
+  return {
+    ...tour,
+    category: tour.category as TourCategory,
+    price: minPrice === Infinity ? 0 : minPrice,
+    pickupOptions: cleanedPickupOptions, // 2. Pass the strictly typed options
+  };
+});
 
   return (
     <div>

@@ -54,7 +54,7 @@ export async function POST(req: Request) {
 
     switch (sharingType) {
       case "SINGLE":
-        pricePerPerson = pickupOption.priceSingleSharing;
+        pricePerPerson = pickupOption.priceSingleSharing ?? 0;
         break;
       case "DOUBLE":
         pricePerPerson = pickupOption.priceDoubleSharing ?? 0;
