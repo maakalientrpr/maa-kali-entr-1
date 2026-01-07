@@ -196,7 +196,7 @@ export type PickupOptionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 export type PickupOptionGroupByOutputType = {
   id: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing: number | null
   priceDoubleSharing: number | null
   priceTripleSharing: number | null
   tourPackageId: string
@@ -228,7 +228,7 @@ export type PickupOptionWhereInput = {
   NOT?: Prisma.PickupOptionWhereInput | Prisma.PickupOptionWhereInput[]
   id?: Prisma.StringFilter<"PickupOption"> | string
   title?: Prisma.StringFilter<"PickupOption"> | string
-  priceSingleSharing?: Prisma.FloatFilter<"PickupOption"> | number
+  priceSingleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   priceDoubleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   priceTripleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   tourPackageId?: Prisma.StringFilter<"PickupOption"> | string
@@ -239,7 +239,7 @@ export type PickupOptionWhereInput = {
 export type PickupOptionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  priceSingleSharing?: Prisma.SortOrder
+  priceSingleSharing?: Prisma.SortOrderInput | Prisma.SortOrder
   priceDoubleSharing?: Prisma.SortOrderInput | Prisma.SortOrder
   priceTripleSharing?: Prisma.SortOrderInput | Prisma.SortOrder
   tourPackageId?: Prisma.SortOrder
@@ -253,7 +253,7 @@ export type PickupOptionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PickupOptionWhereInput[]
   NOT?: Prisma.PickupOptionWhereInput | Prisma.PickupOptionWhereInput[]
   title?: Prisma.StringFilter<"PickupOption"> | string
-  priceSingleSharing?: Prisma.FloatFilter<"PickupOption"> | number
+  priceSingleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   priceDoubleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   priceTripleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   tourPackageId?: Prisma.StringFilter<"PickupOption"> | string
@@ -264,7 +264,7 @@ export type PickupOptionWhereUniqueInput = Prisma.AtLeast<{
 export type PickupOptionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  priceSingleSharing?: Prisma.SortOrder
+  priceSingleSharing?: Prisma.SortOrderInput | Prisma.SortOrder
   priceDoubleSharing?: Prisma.SortOrderInput | Prisma.SortOrder
   priceTripleSharing?: Prisma.SortOrderInput | Prisma.SortOrder
   tourPackageId?: Prisma.SortOrder
@@ -281,7 +281,7 @@ export type PickupOptionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PickupOptionScalarWhereWithAggregatesInput | Prisma.PickupOptionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"PickupOption"> | string
   title?: Prisma.StringWithAggregatesFilter<"PickupOption"> | string
-  priceSingleSharing?: Prisma.FloatWithAggregatesFilter<"PickupOption"> | number
+  priceSingleSharing?: Prisma.FloatNullableWithAggregatesFilter<"PickupOption"> | number | null
   priceDoubleSharing?: Prisma.FloatNullableWithAggregatesFilter<"PickupOption"> | number | null
   priceTripleSharing?: Prisma.FloatNullableWithAggregatesFilter<"PickupOption"> | number | null
   tourPackageId?: Prisma.StringWithAggregatesFilter<"PickupOption"> | string
@@ -290,7 +290,7 @@ export type PickupOptionScalarWhereWithAggregatesInput = {
 export type PickupOptionCreateInput = {
   id?: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing?: number | null
   priceDoubleSharing?: number | null
   priceTripleSharing?: number | null
   tourPackage: Prisma.TourPackageCreateNestedOneWithoutPickupOptionsInput
@@ -300,7 +300,7 @@ export type PickupOptionCreateInput = {
 export type PickupOptionUncheckedCreateInput = {
   id?: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing?: number | null
   priceDoubleSharing?: number | null
   priceTripleSharing?: number | null
   tourPackageId: string
@@ -310,7 +310,7 @@ export type PickupOptionUncheckedCreateInput = {
 export type PickupOptionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   tourPackage?: Prisma.TourPackageUpdateOneRequiredWithoutPickupOptionsNestedInput
@@ -320,7 +320,7 @@ export type PickupOptionUpdateInput = {
 export type PickupOptionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   tourPackageId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -330,7 +330,7 @@ export type PickupOptionUncheckedUpdateInput = {
 export type PickupOptionCreateManyInput = {
   id?: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing?: number | null
   priceDoubleSharing?: number | null
   priceTripleSharing?: number | null
   tourPackageId: string
@@ -339,7 +339,7 @@ export type PickupOptionCreateManyInput = {
 export type PickupOptionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
@@ -347,7 +347,7 @@ export type PickupOptionUpdateManyMutationInput = {
 export type PickupOptionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   tourPackageId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -449,14 +449,6 @@ export type PickupOptionUncheckedUpdateManyWithoutTourPackageNestedInput = {
   deleteMany?: Prisma.PickupOptionScalarWhereInput | Prisma.PickupOptionScalarWhereInput[]
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type NullableFloatFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -482,7 +474,7 @@ export type PickupOptionUpdateOneRequiredWithoutBookingsNestedInput = {
 export type PickupOptionCreateWithoutTourPackageInput = {
   id?: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing?: number | null
   priceDoubleSharing?: number | null
   priceTripleSharing?: number | null
   bookings?: Prisma.BookingCreateNestedManyWithoutPickupOptionInput
@@ -491,7 +483,7 @@ export type PickupOptionCreateWithoutTourPackageInput = {
 export type PickupOptionUncheckedCreateWithoutTourPackageInput = {
   id?: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing?: number | null
   priceDoubleSharing?: number | null
   priceTripleSharing?: number | null
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutPickupOptionInput
@@ -529,7 +521,7 @@ export type PickupOptionScalarWhereInput = {
   NOT?: Prisma.PickupOptionScalarWhereInput | Prisma.PickupOptionScalarWhereInput[]
   id?: Prisma.StringFilter<"PickupOption"> | string
   title?: Prisma.StringFilter<"PickupOption"> | string
-  priceSingleSharing?: Prisma.FloatFilter<"PickupOption"> | number
+  priceSingleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   priceDoubleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   priceTripleSharing?: Prisma.FloatNullableFilter<"PickupOption"> | number | null
   tourPackageId?: Prisma.StringFilter<"PickupOption"> | string
@@ -538,7 +530,7 @@ export type PickupOptionScalarWhereInput = {
 export type PickupOptionCreateWithoutBookingsInput = {
   id?: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing?: number | null
   priceDoubleSharing?: number | null
   priceTripleSharing?: number | null
   tourPackage: Prisma.TourPackageCreateNestedOneWithoutPickupOptionsInput
@@ -547,7 +539,7 @@ export type PickupOptionCreateWithoutBookingsInput = {
 export type PickupOptionUncheckedCreateWithoutBookingsInput = {
   id?: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing?: number | null
   priceDoubleSharing?: number | null
   priceTripleSharing?: number | null
   tourPackageId: string
@@ -572,7 +564,7 @@ export type PickupOptionUpdateToOneWithWhereWithoutBookingsInput = {
 export type PickupOptionUpdateWithoutBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   tourPackage?: Prisma.TourPackageUpdateOneRequiredWithoutPickupOptionsNestedInput
@@ -581,7 +573,7 @@ export type PickupOptionUpdateWithoutBookingsInput = {
 export type PickupOptionUncheckedUpdateWithoutBookingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   tourPackageId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -590,7 +582,7 @@ export type PickupOptionUncheckedUpdateWithoutBookingsInput = {
 export type PickupOptionCreateManyTourPackageInput = {
   id?: string
   title: string
-  priceSingleSharing: number
+  priceSingleSharing?: number | null
   priceDoubleSharing?: number | null
   priceTripleSharing?: number | null
 }
@@ -598,7 +590,7 @@ export type PickupOptionCreateManyTourPackageInput = {
 export type PickupOptionUpdateWithoutTourPackageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   bookings?: Prisma.BookingUpdateManyWithoutPickupOptionNestedInput
@@ -607,7 +599,7 @@ export type PickupOptionUpdateWithoutTourPackageInput = {
 export type PickupOptionUncheckedUpdateWithoutTourPackageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutPickupOptionNestedInput
@@ -616,7 +608,7 @@ export type PickupOptionUncheckedUpdateWithoutTourPackageInput = {
 export type PickupOptionUncheckedUpdateManyWithoutTourPackageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  priceSingleSharing?: Prisma.FloatFieldUpdateOperationsInput | number
+  priceSingleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceDoubleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   priceTripleSharing?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
@@ -715,7 +707,7 @@ export type $PickupOptionPayload<ExtArgs extends runtime.Types.Extensions.Intern
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
-    priceSingleSharing: number
+    priceSingleSharing: number | null
     priceDoubleSharing: number | null
     priceTripleSharing: number | null
     tourPackageId: string

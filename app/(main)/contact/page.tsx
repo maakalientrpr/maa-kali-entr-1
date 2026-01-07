@@ -32,7 +32,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import AnnouncementBar from "@/components/AnnouncementBar";
 import { submitContactForm } from "@/actions/contact";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -100,8 +99,6 @@ const ContactPage = () => {
 
   return (
     <div>
-      <AnnouncementBar />
-
       {/* Header */}
       <div className="text-center mt-12 flex flex-col gap-2 mb-12 px-4">
         <h1 className="text-orange-500 font-bold text-3xl md:text-4xl">

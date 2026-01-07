@@ -66,7 +66,8 @@ export const ModelName = {
   Passenger: 'Passenger',
   PromotionalPopup: 'PromotionalPopup',
   Album: 'Album',
-  Image: 'Image'
+  Image: 'Image',
+  Announcement: 'Announcement'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -309,6 +310,16 @@ export const ImageScalarFieldEnum = {
 } as const
 
 export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
+
+
+export const AnnouncementScalarFieldEnum = {
+  id: 'id',
+  text: 'text',
+  isActive: 'isActive',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AnnouncementScalarFieldEnum = (typeof AnnouncementScalarFieldEnum)[keyof typeof AnnouncementScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -661,6 +661,14 @@ export type EnumSharingTypeFieldUpdateOperationsInput = {
   set?: $Enums.SharingType
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type EnumBookingStatusFieldUpdateOperationsInput = {
   set?: $Enums.BookingStatus
 }

@@ -1,4 +1,3 @@
-import AnnouncementBar from "@/components/AnnouncementBar";
 import prisma from "@/lib/db";
 import PilgrimageGrid from "@/components/pilgrimages/pilgrimage-grid";
 import {
@@ -50,7 +49,6 @@ const PilgrimagePage = async () => {
   // 3. Render Page
   return (
     <div className="bg-orange-50/50">
-      <AnnouncementBar />
       {/* Hero Section */}
       <HeroSection />
 

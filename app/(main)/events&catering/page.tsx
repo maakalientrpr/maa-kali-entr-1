@@ -1,4 +1,3 @@
-import AnnouncementBar from "@/components/AnnouncementBar";
 import CateringServices from "@/components/events & catering/CateringServices";
 import EventsCateringCard from "@/components/events & catering/event-card";
 import { Button } from "@/components/ui/button";
@@ -55,7 +54,6 @@ const page = () => {
   ];
   return (
     <div className="bg-muted">
-      <AnnouncementBar />
       <div className="mt-12 text-center flex flex-col gap-2 mb-6">
         <h1 className="text-orange-500 font-bold text-4xl md:text-4xl">
           Events & Catering

@@ -6,7 +6,6 @@ import { headers } from "next/headers";
 import { Card, CardContent } from "@/components/ui/card";
 import PollControls from "@/components/poll components/poll-controls";
 import { cn } from "@/lib/utils";
-import AnnouncementBar from "@/components/AnnouncementBar";
 
 export const revalidate = 0; // Ensure realtime data
 
@@ -51,7 +50,6 @@ export default async function PollsPage({ searchParams }: { searchParams: Search
 
   return (
     <div className="min-h-screen bg-muted">
-      <AnnouncementBar />
       <div className="max-w-6xl mx-auto space-y-12 px-4 py-12">
         
         {/* Header Section */}

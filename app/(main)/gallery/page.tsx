@@ -3,8 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { AlbumCategory } from "@/prisma/generated/client";
-import { cn } from "@/lib/utils"; // Assuming you have a cn utility, if not, standard string interp is fine
-import AnnouncementBar from "@/components/AnnouncementBar";
 
 export const revalidate = 60; // Cache for 60 seconds
 
@@ -37,7 +35,6 @@ export default async function GalleryPage({
 
   return (
     <div className="min-h-screen bg-gray-50  ">
-      <AnnouncementBar />
       <div className="max-w-7xl mt-12 mx-auto space-y-12 px-4">
         {/* Header Section */}
         <div className="text-center space-y-4">

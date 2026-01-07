@@ -63,6 +63,11 @@ const links = [
     icon: ThumbsUpIcon,
   },
   {
+    label: "Announcement",
+    href: "/admin/announcement",
+    icon: MegaphoneIcon,
+  },
+  {
     label: "Users",
     href: "/admin/users",
     icon: Users,

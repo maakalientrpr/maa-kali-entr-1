@@ -183,7 +183,7 @@ export type ItineraryGroupByOutputType = {
   id: string
   day: number
   title: string
-  description: string
+  description: string | null
   tourPackageId: string
   _count: ItineraryCountAggregateOutputType | null
   _avg: ItineraryAvgAggregateOutputType | null
@@ -214,7 +214,7 @@ export type ItineraryWhereInput = {
   id?: Prisma.StringFilter<"Itinerary"> | string
   day?: Prisma.IntFilter<"Itinerary"> | number
   title?: Prisma.StringFilter<"Itinerary"> | string
-  description?: Prisma.StringFilter<"Itinerary"> | string
+  description?: Prisma.StringNullableFilter<"Itinerary"> | string | null
   tourPackageId?: Prisma.StringFilter<"Itinerary"> | string
   tourPackage?: Prisma.XOR<Prisma.TourPackageScalarRelationFilter, Prisma.TourPackageWhereInput>
 }
@@ -223,7 +223,7 @@ export type ItineraryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   day?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   tourPackageId?: Prisma.SortOrder
   tourPackage?: Prisma.TourPackageOrderByWithRelationInput
 }
@@ -235,7 +235,7 @@ export type ItineraryWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ItineraryWhereInput | Prisma.ItineraryWhereInput[]
   day?: Prisma.IntFilter<"Itinerary"> | number
   title?: Prisma.StringFilter<"Itinerary"> | string
-  description?: Prisma.StringFilter<"Itinerary"> | string
+  description?: Prisma.StringNullableFilter<"Itinerary"> | string | null
   tourPackageId?: Prisma.StringFilter<"Itinerary"> | string
   tourPackage?: Prisma.XOR<Prisma.TourPackageScalarRelationFilter, Prisma.TourPackageWhereInput>
 }, "id">
@@ -244,7 +244,7 @@ export type ItineraryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   day?: Prisma.SortOrder
   title?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   tourPackageId?: Prisma.SortOrder
   _count?: Prisma.ItineraryCountOrderByAggregateInput
   _avg?: Prisma.ItineraryAvgOrderByAggregateInput
@@ -260,7 +260,7 @@ export type ItineraryScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Itinerary"> | string
   day?: Prisma.IntWithAggregatesFilter<"Itinerary"> | number
   title?: Prisma.StringWithAggregatesFilter<"Itinerary"> | string
-  description?: Prisma.StringWithAggregatesFilter<"Itinerary"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Itinerary"> | string | null
   tourPackageId?: Prisma.StringWithAggregatesFilter<"Itinerary"> | string
 }
 
@@ -268,7 +268,7 @@ export type ItineraryCreateInput = {
   id?: string
   day: number
   title: string
-  description: string
+  description?: string | null
   tourPackage: Prisma.TourPackageCreateNestedOneWithoutItinerariesInput
 }
 
@@ -276,7 +276,7 @@ export type ItineraryUncheckedCreateInput = {
   id?: string
   day: number
   title: string
-  description: string
+  description?: string | null
   tourPackageId: string
 }
 
@@ -284,7 +284,7 @@ export type ItineraryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   day?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tourPackage?: Prisma.TourPackageUpdateOneRequiredWithoutItinerariesNestedInput
 }
 
@@ -292,7 +292,7 @@ export type ItineraryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   day?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tourPackageId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -300,7 +300,7 @@ export type ItineraryCreateManyInput = {
   id?: string
   day: number
   title: string
-  description: string
+  description?: string | null
   tourPackageId: string
 }
 
@@ -308,14 +308,14 @@ export type ItineraryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   day?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ItineraryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   day?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tourPackageId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -407,14 +407,14 @@ export type ItineraryCreateWithoutTourPackageInput = {
   id?: string
   day: number
   title: string
-  description: string
+  description?: string | null
 }
 
 export type ItineraryUncheckedCreateWithoutTourPackageInput = {
   id?: string
   day: number
   title: string
-  description: string
+  description?: string | null
 }
 
 export type ItineraryCreateOrConnectWithoutTourPackageInput = {
@@ -450,7 +450,7 @@ export type ItineraryScalarWhereInput = {
   id?: Prisma.StringFilter<"Itinerary"> | string
   day?: Prisma.IntFilter<"Itinerary"> | number
   title?: Prisma.StringFilter<"Itinerary"> | string
-  description?: Prisma.StringFilter<"Itinerary"> | string
+  description?: Prisma.StringNullableFilter<"Itinerary"> | string | null
   tourPackageId?: Prisma.StringFilter<"Itinerary"> | string
 }
 
@@ -458,28 +458,28 @@ export type ItineraryCreateManyTourPackageInput = {
   id?: string
   day: number
   title: string
-  description: string
+  description?: string | null
 }
 
 export type ItineraryUpdateWithoutTourPackageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   day?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ItineraryUncheckedUpdateWithoutTourPackageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   day?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ItineraryUncheckedUpdateManyWithoutTourPackageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   day?: Prisma.IntFieldUpdateOperationsInput | number
   title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -539,7 +539,7 @@ export type $ItineraryPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     id: string
     day: number
     title: string
-    description: string
+    description: string | null
     tourPackageId: string
   }, ExtArgs["result"]["itinerary"]>
   composites: {}

@@ -1,6 +1,5 @@
 export const dynamic = 'force-dynamic'
 
-import AnnouncementBar from "@/components/AnnouncementBar";
 import TourPackages from "@/components/tours/tour-packages"; // Ensure this path is correct
 import prisma from "@/lib/db";
 import { TourCategory } from "@/prisma/generated/enums";
@@ -24,7 +23,6 @@ const page = async () => {
   if (!tours || tours.length === 0) {
     return (
       <div className="min-h-screen flex flex-col">
-        <AnnouncementBar />
         <div className="flex-1 flex items-center justify-center">
           <p className="text-gray-500">No tours available at the moment.</p>
         </div>
@@ -56,7 +54,6 @@ const page = async () => {
 
   return (
     <div>
-      <AnnouncementBar />
       <div className="mt-12 text-center flex flex-col gap-2 mb-6">
         <h1 className="text-orange-500 font-bold text-4xl md:text-4xl">
           Tours & Travel

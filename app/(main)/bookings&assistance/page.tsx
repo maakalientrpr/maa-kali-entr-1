@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
-import AnnouncementBar from "@/components/AnnouncementBar";
 /* -----------------------------------------
                  PAGE DATA
 ------------------------------------------ */
@@ -97,7 +96,6 @@ const cardsData = [
 const page = () => {
   return (
     <div className="bg-muted  shadow ">
-      <AnnouncementBar />
       {/* Title */}
       <div className="text-center mt-12 flex flex-col gap-2 mb-12">
         <h1 className="text-orange-500 font-bold text-3xl md:text-4xl">

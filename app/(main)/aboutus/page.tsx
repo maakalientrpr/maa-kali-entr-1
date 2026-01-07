@@ -1,4 +1,3 @@
-import AnnouncementBar from "@/components/AnnouncementBar";
 import IndiaCircuitsMap from "@/components/IndiaMap";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -60,7 +59,6 @@ const Page = () => {
 
   return (
     <div className=" bg-muted min-h-screen">
-      <AnnouncementBar />
       {/* Heading */}
       <div className="mt-12 text-center flex flex-col gap-2 mb-12 px-4">
         <h1 className="text-orange-500 font-bold text-3xl md:text-4xl">

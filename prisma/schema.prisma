@@ -367,3 +367,10 @@ model Image {
 
   @@index([albumId])
 }
+
+model Announcement {
+  id        String   @id @default(cuid())
+  text      String
+  isActive  Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}

@@ -119,3 +119,8 @@ export type Album = Prisma.AlbumModel
  * 
  */
 export type Image = Prisma.ImageModel
+/**
+ * Model Announcement
+ * 
+ */
+export type Announcement = Prisma.AnnouncementModel

@@ -16,6 +16,7 @@ const navLinks = [
   { label: "Gallery", href: "/admin/gallery" },
   { label: "Vote", href: "/admin/vote" },
   { label: "Reviews", href: "/admin/reviews" },
+  { label: "Announcement", href: "/admin/announcement" },
   { label: "Users", href: "/admin/users" },
 ];
 
